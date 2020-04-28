@@ -1,4 +1,4 @@
-# bin-static-web
+# static-web
 
 静态的基础页面搭建脚手架,包含了常用的静态第三方库如vue，echarts等，并结合自用封装库bin-ui及gulp依赖
 
