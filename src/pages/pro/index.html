@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>title</title>
+  <!--基础库-->
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/utils/axios.min.js"></script>
+  <script src="https://cdn.bootcss.com/Swiper/4.5.1/js/swiper.min.js"></script>
+  <!--bin-ui-->
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <script src="../../js/lib/bin-ui/bin-ui.umd.min.js"></script>
+  <!--CSS-->
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link href="https://cdn.bootcss.com/Swiper/4.5.1/css/swiper.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles/header-footer.css">
+  <link rel="stylesheet" href="../../styles/index.css">
+</head>
+<body>
+<div id="app" v-cloak>
+<!--头部-->
+<div class="header">
+  <div class="login-wrapper">
+    <div class="inner-wrapper">
+      <div class="left">
+        <a href="javascript:;" class="link-item">
+          汉中市人民政府
+        </a>
+        <a href="javascript:;" class="link-item">
+          信用中国
+        </a>
+        <a href="javascript:;" class="link-item">
+          信用陕西
+        </a>
+      </div>
+      <div class="left">
+        <a href="javascript:;" class="link-item">
+          登录
+        </a>
+        <a href="javascript:;" class="link-item">
+          注册
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="banner-wrapper">
+    <div class="inner-wrapper">
+
+    </div>
+  </div>
+  <div class="nav-wrapper">
+    <div class="inner-wrapper">
+      <a class="nav-item" href="javascript:;">首页</a>
+      <a class="nav-item" href="javascript:;">信用动态</a>
+      <a class="nav-item" href="javascript:;">政策法规</a>
+      <a class="nav-item" href="javascript:;">信用研究</a>
+      <a class="nav-item" href="javascript:;">信用公式</a>
+      <a class="nav-item" href="javascript:;">信用监督</a>
+      <a class="nav-item" href="javascript:;">典型案例</a>
+      <a class="nav-item" href="javascript:;">信用承诺</a>
+      <a class="nav-item" href="javascript:;">信用服务</a>
+    </div>
+  </div>
+</div>
+<!--主体部分-->
+<div class="main">
+  <div class="inner-wrapper">
+    <div class="search-wrapper mt15">
+      <b-radio-group v-model="social">
+        <b-radio label="xyxx">
+          <span>信用信息</span>
+        </b-radio>
+        <b-radio label="xydm">
+          <span>统一社会信用代码</span>
+        </b-radio>
+        <b-radio label="znwz">
+          <span>站内文章</span>
+        </b-radio>
+      </b-radio-group>
+      <div class="search-input">
+        <span class="input-container">
+          <input type="text">
+        </span>
+        <span class="btn">
+          <i class="iconfont icon-ios-search"></i>
+        </span>
+      </div>
+    </div>
+    <div class="banner-wrapper swiper-container-1 mt15">
+      <div class="swiper-wrapper">
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/banner.jpg">
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/banner.jpg">
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/banner.jpg">
+        </a>
+      </div>
+      <div class="swiper-pagination pagination-1"></div>
+    </div>
+    <div class="banner-content-wrapper mt15">
+      <div class="left">
+        <div class="swiper-container-2">
+          <div class="swiper-wrapper">
+            <a href="javascript:;" class="swiper-slide">
+              <img class="" src="../../images/banner001.png">
+              <p class="ellipsis" title="标题一 内容测试长度进行省略号截取显示内容，鼠标悬浮显示对应全部内容">标题一内容测试长度进行省略号截取显示内容，鼠标悬浮显示对应全部内容</p>
+            </a>
+            <a href="javascript:;" class="swiper-slide">
+              <img class="" src="../../images/banner001.png">
+              <p class="ellipsis" title="标题二 内容测试长度进行省略号截取显示内容，鼠标悬浮显示对应全部内容">标题一内容测试长度进行省略号截取显示内容，鼠标悬浮显示对应全部内容</p>
+            </a>
+            <a href="javascript:;" class="swiper-slide">
+              <img class="" src="../../images/banner001.png">
+              <p class="ellipsis" title="标题三 内容测试长度进行省略号截取显示内容，鼠标悬浮显示对应全部内容">标题一内容测试长度进行省略号截取显示内容，鼠标悬浮显示对应全部内容</p>
+            </a>
+          </div>
+          <div class="swiper-pagination pagination-2"></div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="r-top">
+          <div class="title">
+            <img src="../../images/icon01.png" alt="">
+            <i>信用动态</i>
+          </div>
+          <div class="btns">
+            <div class="toggle-btn">
+              <div class="btn" :class="xydt==='hanzhong'?'active':''" @click="xydt='hanzhong'">汉中</div>
+              <div class="btn" :class="xydt==='shanxi'?'active':''" @click="xydt='shanxi'">陕西</div>
+              <div class="btn" :class="xydt==='guonei'?'active':''" @click="xydt='guonei'">国内</div>
+            </div>
+            <div class="more">
+              <a href="javascript:;">更多>></a>
+            </div>
+          </div>
+        </div>
+        <div class="r-bot">
+          <div class="news">
+            <div class="new-abstract">
+              <div class="title ellipsis">
+                最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部
+              </div>
+              <div class="content">
+                最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+              </div>
+            </div>
+            <ul class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="banner-bar mt15">
+    <div class="banner-wrapper swiper-container-3">
+      <div class="swiper-wrapper">
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon01.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon02.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon03.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon04.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon05.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon06.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+        <a class="swiper-slide" href="javascript:;">
+          <img src="../../images/b_icon07.jpg">
+          <p>行政许可、行政处罚</p>
+          <p>信息公示目录</p>
+        </a>
+      </div>
+      <div class="swiper-pagination pagination-1"></div>
+    </div>
+  </div>
+  <div class="inner-wrapper main-contents" style="margin-top: 15px">
+    <div class="contents-left">
+      <div class="contents-container">
+        <div class="l-top">
+          <div class="title" :class="rbNameList==='red'?'active':''" @click="rbNameList='red'">
+            <i>红名单</i>
+          </div>
+          <div class="title" :class="rbNameList==='black'?'active':''" @click="rbNameList='black'">
+            <i>黑名单</i>
+          </div>
+          <div class="btns">
+            <div class="more">
+              <a href="javascript:;">更多>></a>
+            </div>
+          </div>
+        </div>
+        <div class="l-bot">
+          <div class="news">
+            <ul v-show="rbNameList==='red'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">红名单-最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">红名单-最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+            <ul v-show="rbNameList==='black'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">黑名单-最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">黑名单-最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">黑名单-最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="contents-container">
+        <div class="l-top">
+          <div class="title" :class="rewardPunish==='reward'?'active':''" @click="rewardPunish='reward'">
+            <i>行政许可</i>
+          </div>
+          <div class="title" :class="rewardPunish==='punish'?'active':''" @click="rewardPunish='punish'">
+            <i>行政处罚</i>
+          </div>
+          <div class="btns">
+            <div class="more">
+              <a href="javascript:;">更多>></a>
+            </div>
+          </div>
+        </div>
+        <div class="l-bot">
+          <div class="news">
+            <ul v-show="rewardPunish==='reward'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+            <ul v-show="rewardPunish!=='reward'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="contents-container">
+        <div class="l-top">
+          <div class="title" :class="creditNotice==='credit'?'active':''" @click="creditNotice='credit'">
+            <i>信用公开</i>
+          </div>
+          <div class="title" :class="creditNotice==='notice'?'active':''" @click="creditNotice='notice'">
+            <i>通知公告</i>
+          </div>
+          <div class="btns">
+            <div class="more">
+              <a href="javascript:;">更多>></a>
+            </div>
+          </div>
+        </div>
+        <div class="l-bot">
+          <div class="news">
+            <ul v-show="creditNotice==='credit'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+            <ul v-show="creditNotice!=='credit'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="contents-container">
+        <div class="l-top">
+          <div class="title" :class="creditPolicy==='credit'?'active':''" @click="creditPolicy='credit'">
+            <i>政策法规</i>
+          </div>
+          <div class="title" :class="creditPolicy==='policy'?'active':''" @click="creditPolicy='policy'">
+            <i>信用研究</i>
+          </div>
+          <div class="btns">
+            <div class="more">
+              <a href="javascript:;">更多>></a>
+            </div>
+          </div>
+        </div>
+        <div class="l-bot">
+          <div class="news">
+            <ul v-show="creditPolicy==='credit'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+            <ul v-show="creditPolicy!=='credit'" class="list">
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+              <li class="item">
+                <a href="javascript:;">
+                  <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                  </p>
+                  <p class="time">2020-1-1</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contents-right">
+      <ul class="list">
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon01.png" alt="">
+            <i class="ellipsis">全国企业信用信息公示</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon02.png" alt="">
+            <i class="ellipsis">人民银行征信中心</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon03.png" alt="">
+            <i class="ellipsis">海关企业进出口信用信息</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon04.png" alt="">
+            <i class="ellipsis">严重失信黑名单</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon05.png" alt="">
+            <i class="ellipsis">证监会市场禁入信息公示</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon06.png" alt="">
+            <i class="ellipsis">建档服务机构</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+        <li class="item">
+          <a href="javascript:;">
+            <img src="../../images/icon07.png" alt="">
+            <i class="ellipsis">企业质量信用记录</i>
+            <i class="iconfont icon-ios-arrow-forward"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="inner-wrapper" style="height: 250px;">
+    <div class="mid-banner-top">
+      <div class="title">
+        <i>信用服务</i>
+      </div>
+      <div class="btns">
+        <div class="more">
+          <a href="javascript:;">更多>></a>
+        </div>
+      </div>
+    </div>
+    <div class="mid-banner-links mt15">
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon01.png" alt="">
+        </span>
+        <i class="link-name">信用名片</i>
+      </a>
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon07.png" alt="">
+        </span>
+        <i class="link-name">信用咨询</i>
+      </a>
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon03.png" alt="">
+        </span>
+        <i class="link-name">目录清单</i>
+      </a>
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon04.png" alt="">
+        </span>
+        <i class="link-name">建档服务</i>
+      </a>
+    </div>
+    <div class="mid-banner-links mt15">
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon05.png" alt="">
+        </span>
+        <i class="link-name">信用承诺</i>
+      </a>
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon06.png" alt="">
+        </span>
+        <i class="link-name">我的信用</i>
+      </a>
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon07.png" alt="">
+        </span>
+        <i class="link-name">信用异议</i>
+      </a>
+      <a class="link-square" href="javascript:;">
+        <span class="animate-icon">
+          <img src="../../images/service_icon08.png" alt="">
+        </span>
+        <i class="link-name">信用修复</i>
+      </a>
+    </div>
+  </div>
+  <div class="inner-wrapper bisect">
+    <div class="left">
+      <div class="mid-banner-top">
+        <div class="title">
+          <i>信用服务</i>
+        </div>
+        <div class="btns">
+          <div class="more">
+            <a href="javascript:;">更多>></a>
+          </div>
+        </div>
+      </div>
+      <div class="mid-banner-bot">
+        <div class="news">
+          <ul class="list">
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+            <li class="item">
+              <a href="javascript:;">
+                <p class="msg ellipsis">最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议司法解释 确保行政机关 测试标题省略号显示鼠标悬浮显示全部最高法发布行政协议...
+                </p>
+                <p class="time">2020-1-1</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="title">在线服务</div>
+      <div class="services">
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon01.png" alt="">
+          <span class="title-tip">
+            <p>全国信用信息 <br>共享平台（陕西）</p>
+          </span>
+        </a>
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon02.png" alt="">
+          <span class="title-tip">
+            <p>信用服务机构 <br>应用系统</p>
+          </span>
+        </a>
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon03.png" alt="">
+          <span class="title-tip">
+            <p>接口服务</p>
+          </span>
+        </a>
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon04.png" alt="">
+          <span class="title-tip">
+            <p>异议信息查询</p>
+          </span>
+        </a>
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon05.png" alt="">
+          <span class="title-tip">
+            <p>信用报告</p>
+          </span>
+        </a>
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon06.png" alt="">
+          <span class="title-tip">
+            <p>信用修复</p>
+          </span>
+        </a>
+        <a href="javascript:;" class="service-item">
+          <img src="../../images/oserv_icon07.png" alt="">
+          <span class="title-tip">
+            <p>政务诚信 <br>12345回音壁</p>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="departs-wrapper mt15">
+    <div class="inner-wrapper">
+      <div class="title">
+        <i class="title-content">汉中市社会信用体系建设 联席会议制度成员单位</i>
+      </div>
+      <ul class="departs-list">
+        <li class="depart"><a href="javascript:;">市编办</a></li>
+        <li class="depart"><a href="javascript:;">市文明办</a></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<div class="footer">
+
+</div>
+</div>
+
+<!--测试模拟请求-->
+<script src="../../js/lib/utils/mock.js"></script>
+<script>
+	var vm = new Vue({
+      el:"#app",
+      data: function () {
+        return {
+          social: 0,
+          xydt: 'hanzhong',
+          rbNameList: 'red',
+          rewardPunish: 'reward',
+          creditNotice: 'credit',
+          creditPolicy: 'credit',
+        }
+      },
+      mounted: function () {
+        this.createSwiper()
+      },
+      created:function () {
+        // 初始化事件
+      },
+      methods:{
+        createSwiper:function () {
+          var swiper1 = new Swiper('.swiper-container-1', {
+            autoplay: true,//可选选项，自动滑动
+            loop : true,
+            pagination: {
+              el: '.pagination-1',
+              clickable: true,
+              bulletClass : 'my-bullet',
+              bulletActiveClass: 'my-bullet-active',
+              renderBullet: function (index, className) {
+                return '<span class="' + className + '">' + (index + 1) + '</span>';
+              },
+            },
+          })
+          var swiper2 = new Swiper('.swiper-container-2', {
+            autoplay: true,//可选选项，自动滑动
+            loop : true,
+            pagination: {
+              el: '.pagination-2',
+              clickable: true,
+            },
+          })
+          var swiper3 = new Swiper('.swiper-container-3', {
+            autoplay: true,//可选选项，自动滑动
+            loop : true,
+            slidesPerView: 7
+          })
+        }
+      }
+    })
+</script>
+</body>
+</html>

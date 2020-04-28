@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+    <style>
+        body{
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<div id="cvsBox">
+<!--<canvas id="cvs"></canvas>-->
+</div>
+<div id="testCvs">
+    <canvas id="myCvs"></canvas>
+</div>
+<script>
+    function drawProgressCir(w, h) {
+        var cvs = document.getElementById('myCvs');
+        cvs.width = w;
+        cvs.height = h;
+        var l = 0
+    }
+    var cvs  = document.getElementById('myCvs');
+    cvs.width = 900;
+    cvs.height = 200;
+    var l = 0;
+    var limit = 100;
+    function step(){
+        l++;
+	    var ctx = cvs.getContext("2d");
+	    for(var i = 1; i<5; i++){
+		    ctx.clearRect(0,0,150*(i-1),100);
+            // ctx.save();
+		    ctx.beginPath();
+		    ctx.arc(150*i, 100, 60, 0, Math.PI*2*(l/limit), false);
+		    ctx.lineTo(150*i, 100);
+		    ctx.closePath();
+		    ctx.fillStyle="rgba(255, 255, 255, 1)";
+		    // ctx.fill();
+		    var gradient = ctx.createLinearGradient(0,0,900,200)
+		    gradient.addColorStop("0","green");
+		    gradient.addColorStop("0.5","blue");
+		    gradient.addColorStop("1.0","red");
+		    ctx.strokeStyle = gradient;
+            ctx.stroke();
+		    ctx.restore();
+		    // ctx.clearRect(0,0,900,200);
+	    }
+        if( l<=100 ){
+            window.requestAnimationFrame(step)
+        }else{
+            l = 0;
+	        ctx.clearRect(0, 0, 900, 200);
+            window.requestAnimationFrame(step)
+        }
+    }
+    window.requestAnimationFrame(step);
+</script>
+</body>
+</html>

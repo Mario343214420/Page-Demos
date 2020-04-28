@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 01.03 - Materials and light</title>
+    <script type="text/javascript" src="../js/lib/three.min.js"></script>
+    <script type="text/javascript" src="../js/lib/jquery.min.js"></script>
+<!--    <script type="text/javascript" src="../libs/stats.js"></script>-->
+<!--    <script type="text/javascript" src="../libs/dat.gui.js"></script>-->
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+	// once everything is loaded, we run our Three.js stuff.
+	$(function () {
+
+		// create a scene, that will hold all our elements such as objects, cameras and lights.
+		var scene = new THREE.Scene();
+
+		// create a camera, which defines where we're looking at.
+		var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+		// create a render and set the size
+		var renderer = new THREE.WebGLRenderer();
+
+		renderer.setClearColor(0xEEEEEE, 1.0);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.shadowMapEnabled = true;//告诉渲染器我们想要阴影。设置shadowMapEnabled（允许阴影映射）的值为true
+
+		// create the ground plane
+		var planeGeometry = new THREE.PlaneGeometry(60,20);
+		var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});//改为受光影响的材质MeshLambertMaterialI
+		var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+		plane.receiveShadow  = true;//要得到阴影，对这些对象的相应属性设置为true
+
+		// rotate and position the plane
+		plane.rotation.x=-0.5*Math.PI;
+		plane.position.x=15
+		plane.position.y=0
+		plane.position.z=0
+
+		// add the plane to the scene
+		scene.add(plane);
+
+		// create a cube
+		var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+		var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+		var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+		cube.castShadow = true;//将方块的阴影投射到地面上
+
+		// position the cube
+		cube.position.x=-4;
+		cube.position.y=3;
+		cube.position.z=0;
+
+		// add the cube to the scene
+		scene.add(cube);
+
+		var sphereGeometry = new THREE.SphereGeometry(4,20,20);
+		var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+		var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+
+		// position the sphere
+		sphere.position.x=20;
+		sphere.position.y=4;
+		sphere.position.z=2;
+		sphere.castShadow=true;//将球体的阴影投射到地面上
+
+		// add the sphere to the scene
+		scene.add(sphere);
+
+		// position and point the camera to the center of the scene
+		camera.position.x = -30;
+		camera.position.y = 40;
+		camera.position.z = 30;
+		camera.lookAt(scene.position);
+
+		// add spotlight for the shadows 通过spotlight()函数创建光源
+		var spotLight = new THREE.SpotLight( 0xffffff );
+		spotLight.position.set( -40, 60, -10 );//SpotLight()方法从它的位置（spotLight.position.set( -40, 60, -10 )）照亮我们的场景
+		spotLight.castShadow = true;//要定义哪些光源会产生阴影。使用的SpotLight()可以产生影子。设置正确的属性，阴影最终就会被渲染出来。
+		scene.add( spotLight );
+
+		// add the output of the renderer to the html element
+		$("#WebGL-output").append(renderer.domElement);
+
+		// call the render function
+		renderer.render(scene, camera);
+	});
+
+
+
+</script>
+</body>
+</html>

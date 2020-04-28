@@ -1,0 +1,278 @@
+$mainFontColor = #1b131a
+$mainRed = #da2a2c
+#app
+  background-color: #f6f6f6
+  .ellipsis
+    overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+  [flex]
+    display flex
+  [flex~="justify:space-between"]
+    justify-content space-between
+  [flex~="justify:space-around"]
+    justify-content space-around
+
+  .red-text
+    color $mainRed
+  .main
+    width: 1200px
+    margin: 0 auto
+    .content-title
+      margin: 40px 0
+      .title-img
+        width: 1200px
+        height: auto
+    .contents-msg
+      width: 500px
+      .msg
+        margin 16px 0
+        display block
+        &:nth-child(n-2)
+          .msg-title
+            font-size: 24px
+        &:nth-child(n+3)
+          .msg-title
+            font-size: 16px
+            &::before
+              content '>'
+              font-weight: 700
+              display inline-block
+              color $mainRed
+              transform scaleX(.6)
+              margin-right 5px
+        .msg-title
+          color $mainFontColor
+          font-size: 16px
+          line-height: 40px
+        .msg-abstract
+          color #8f8887
+          line-height: 30px
+    .banner
+      overflow hidden
+      width: 680px
+      .swiper-wrapper
+        .swiper-slide
+          position relative
+          a
+            height: 400px
+            overflow hidden
+          img
+            width: 680px
+            height: 400px
+            display block
+          .info
+            width: 680px
+            position absolute
+            bottom: 40px
+            background-color: rgba(0,0,0,.5)
+            left: 0
+            line-height: 40px
+            color #fff
+    .atlas
+      padding-bottom: 40px
+      .info
+        width: 1100px
+        position absolute
+        bottom: -40px
+        line-height: 40px
+      .swiper-slide
+        img
+          width: 1200px
+          height auto
+    .hot-spot
+      width: 24%
+      .hot-spot-img
+        display block
+        width: 100%
+        text-align center
+        margin 10px 0
+        img
+          width: 90%
+      .hot-spot-title
+        line-height: 40px
+        font-size: 16px
+        background-color: #dc2c2c
+        margin 0 auto
+        width: 60%
+        text-align center
+        color: #fff
+        margin-bottom: 20px
+      .hot-spot-msg
+        font-size: 14px
+        position relative
+        display block
+        padding: 6px 10px 6px 30px
+        color #011115
+        line-height: 20px
+        &::before
+          position absolute
+          top 50%
+          left: 10px
+          transform translateY(-50%)
+          content: ''
+          display inline-block
+          background-color: #dc2c2c
+          width 6px
+          height: 6px
+          -webkit-border-radius: 50%
+          -moz-border-radius: 50%
+          border-radius: 50%
+
+    .contents-build
+      width: 20%
+      &:nth-child(odd)
+        width: 38%
+      &.cb-img
+        text-align center
+        height: 100%
+        width: auto
+      .msg
+        .msg-content-top
+          .msg-content-top-title
+            color $mainFontColor
+            font-size: 18px
+            padding: 10px 0
+            &::before
+              content: ''
+              display inline-block
+              -webkit-border-radius: 2px
+              -moz-border-radius: 2px
+              border-radius: 2px
+              width 12px
+              height: 12px
+              border: 4px solid $mainRed
+              margin 0 8px
+        .msg-content-top-content
+          color #8f8887
+          line-height: 22px
+          text-indent 2em
+        .msg-content-bot
+          .msg-content-bot-title
+            color #fff
+            font-size: 18px
+            padding 20px 0
+            position relative
+            &::after
+              content: ''
+              position absolute
+              height: 1px
+              width: 100%
+              background-color: #e2e2e2
+              top 50%
+              transform translateY(-50%)
+              left: 0
+              z-index 1
+            i
+              background-color: $mainRed
+              text-align center
+              padding 4px 12px
+              position relative
+              z-index 2
+          .msg-content-bot-content
+            line-height: 24px
+            color $mainFontColor
+            .content-item
+              position relative
+              padding-left: 30px
+              display block
+              &::before
+                content ''
+                position absolute
+                width: 6px
+                height: 6px
+                display inline-block
+                background-color: $mainRed
+                -webkit-border-radius: 3px
+                -moz-border-radius: 3px
+                border-radius: 3px
+                top: 50%
+                left: 4px
+                transform translateY(-50%)
+    .content-body
+      .content-toggle-wrapper
+        width: 800px
+        margin 0 auto
+        color #333
+        .btn-box
+          width: 160px
+          cursor pointer
+          line-height: 20px
+          margin-bottom: 20px
+          .check-btn
+            display inline-block
+            text-align center
+            width: 20px
+            margin-right: 6px
+            .active
+              background-color: #da2a2c; color: #fff
+            .default
+              background-color: #dddddd; color: transparent
+            i
+              display block
+              width: 20px
+      .content-rb-wrapper
+        .content-rb
+          width: 50%
+          padding-left: 150px
+          &:first-child
+            background: url(../images/wlx/cx05_red.png) no-repeat
+            background-position: 20px 15px
+          &:last-child
+            background: url(../images/wlx/cx05_black.png) no-repeat
+            background-position: 20px 15px
+          .content
+            width: 440px
+            border: 2px solid #333333
+            margin 16px 0
+            display block
+            padding 20px
+            .msg
+              .msg-title
+                font-size: 16px
+                color $mainFontColor
+                line-height: 36px
+                &::before
+                  content '>'
+                  font-weight: 700
+                  display inline-block
+                  color $mainRed
+                  transform scaleX(.6)
+                  margin-right 5px
+      .qr-img
+        width: 600px
+        text-align center
+        img
+          height: 500px
+          width: auto
+      .questionnaire
+        width: 600px
+        height: 500px
+        position relative
+        .questionnaire-inner
+          width: 500px
+          position absolute
+          top 50%
+          left: 50%
+          transform translate(-50%, -50%)
+        .questionnaire-dept
+          font-size: 18px
+          color $mainFontColor
+          font-weight: 700
+          display inline-block
+          line-height: 28px
+          border-bottom: 3px solid $mainRed
+        .questionnaire-title
+          color $mainFontColor
+          h2
+            font-size: 28px
+            transform scaleY(.8)
+            line-height: 40px
+            padding 20px 0 0
+            i
+              font-size: 22px
+          h1
+            font-size: 32px
+            font-weight: 700
+            padding 0 0 20px
+        .questionnaire-content
+          color #8c939d
+          line-height: 26px

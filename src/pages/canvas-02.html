@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+</head>
+<body>
+<div id="cvsBox"></div>
+<script>
+    var a = "#fff"
+    function Canvas(){
+    	this.pos = [];
+    	this.width = window.innerWidth;
+    	this.height = window.innerHeight;
+    	this.limit = 6
+    }
+    Canvas.prototype.setCir = function () {
+        var color;
+        var xSpace = this.width / this.limit;
+        var ySpace = this.height / this.limit;
+        for (var i = 0; i < this.limit; i++){
+        	var random = Math.random();
+        	// var angle =
+            color = 'rgba(' + parseInt(random*255) + ',' + parseInt(random*255) + ',' + parseInt(random*255) + ',' + ')';
+        	this.pos[i] = {
+        		x: xSpace*i,
+        		y: ySpace*i,
+                color: color
+            }
+        }
+    };
+    Canvas.prototype.draw = function (x, y, r, color) {
+        this.cxt.save();
+        this.cxt.beginPath();
+        this.cxt.fillStyle = color;
+        this.cxt.arc(x, y, r, 0, Math.Pi*2, true);
+        this.cxt.fill();
+        this.cxt.restore();
+    }
+</script>
+</body>
+</html>

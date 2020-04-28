@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../styles/reset.css">
+    <link rel="stylesheet" href="../../styles/shixun-set-pro.css">
+</head>
+<body>
+<div class="base">
+    <div class="batch-set">
+        <div class="title">批量新建项目</div>
+        <div class="main-view">
+            <div class="custom-form">
+                <div class="ipt-box">
+                    <i class="red-font">*</i>
+                    <span class="ipt-title">项目启动日期</span>
+                    <label>
+                        <input type="text">
+                    </label>
+                </div>
+                <div class="ipt-box">
+                    <i class="red-font">*</i>
+                    <span class="ipt-title">结束日期</span>
+                    <label>
+                        <input type="text">
+                    </label>
+                </div>
+                <div class="ipt-box">
+                    <i class="red-font">*</i>
+                    <span class="ipt-title">授信额度</span>
+                    <label>
+                        <input type="text">
+                    </label>
+                    <i class="unit">万</i>
+                </div>
+                <div class="ipt-box">
+                    <i class="red-font">*</i>
+                    <span class="ipt-title">授信周期</span>
+                    <label>
+                        <input type="text">
+                    </label>
+                    <i class="unit">月</i>
+                </div>
+                <div class="ipt-box">
+                    <i class="red-font">*</i>
+                    <span class="ipt-title">所属班级</span>
+                    <label>
+                        <input type="text" class="read-only" readonly="readonly">
+                    </label>
+                    <span id="classSelectBtn" class="select">选择</span>
+                    <span class="select-modal modal" id="classSelect">
+                        <span class="modal-inner">
+                            <span class="close-btn" id="classCloseBtn">x</span>
+                        </span>
+                    </span>
+                </div>
+                <div class="ipt-box">
+                    <i class="red-font">*</i>
+                    <span class="ipt-title">审核教师</span>
+                    <label>
+                        <input type="text" class="read-only" readonly="readonly">
+                    </label>
+                    <span id="teacherSelectBtn" class="select">选择</span>
+                    <span class="select-modal modal" id="teacherSelect">
+                        <span class="modal-inner">
+                            <span class="close-btn" id="teacherCloseBtn">x</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-title">
+            <span>新增项目信息</span>
+            <span class="add-group" id="addGroupBtn">添加分组</span>
+        </div>
+        <div class="main-view">
+            <div class="custom-table">
+                <div class="table">
+                    <table id="groupList">
+                        <tr>
+                            <th>
+                                <span class="serial">序号</span>
+                            </th>
+                            <th>
+                                <span class="name">项目名称</span>
+                            </th>
+                            <th>
+                                <span class="receptor">受评价体</span>
+                            </th>
+                            <th>
+                                <span class="describe">项目描述</span>
+                            </th>
+                            <th>
+                                <span class="operate">操作</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td><span class="serial">1</span></td>
+                            <td>
+                                <label>
+                                    <input type="text">
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="text" class="read-only" readonly="readonly">
+                                </label>
+                            </td>
+                            <td>
+                                <span></span>
+                            </td>
+                            <td>
+                                <a class="operate-btn" href="javascript:;">删除</a>
+                                <a class="operate-btn" href="javascript:;">选择企业</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../js/lib/jquery.min.js"></script>
+<script>
+	$("#classSelectBtn").on('click',function () {
+		$("#classSelect").fadeIn()
+    })
+	$("#teacherSelectBtn").on('click',function () {
+		$("#teacherSelect").fadeIn()
+    })
+    $("#classCloseBtn").on('click',function () {
+	    $("#classSelect").fadeOut()
+    })
+    $("#teacherCloseBtn").on('click',function () {
+	    $("#teacherSelect").fadeOut()
+    })
+	var index = 1
+    $("#addGroupBtn").on('click',function () {
+	    index++
+        $("#groupList").append(
+        	"<tr>\n" +
+	        "                            <td><span class=\"serial\">" + index + "</span></td>\n" +
+	        "                            <td>\n" +
+	        "                                <label>\n" +
+	        "                                    <input type=\"text\">\n" +
+	        "                                </label>\n" +
+	        "                            </td>\n" +
+	        "                            <td>\n" +
+	        "                                <label>\n" +
+	        "                                    <input type=\"text\" class=\"read-only\" readonly=\"readonly\">\n" +
+	        "                                </label>\n" +
+	        "                            </td>\n" +
+	        "                            <td>\n" +
+	        "                                <span></span>\n" +
+	        "                            </td>\n" +
+	        "                            <td>\n" +
+	        "                                <a class=\"operate-btn\" href=\"javascript:;\">删除</a>\n" +
+	        "                                <a class=\"operate-btn\" href=\"javascript:;\">选择企业</a>\n" +
+	        "                            </td>\n" +
+	        "                        </tr>"
+        )
+    })
+</script>
+</body>
+</html>

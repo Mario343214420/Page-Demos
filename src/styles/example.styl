@@ -1,0 +1,139 @@
+body
+  background-image: url('../images/example/background1.jpg')
+html,body
+  height: 100%
+  width: 100%
+  box-sizing border-box
+#app
+  width: 100%
+  height: 100%
+  position relative
+  box-sizing border-box
+  overflow hidden
+  .position-center
+    position absolute
+    left: 50%
+    top: 50%
+    transform translate(-50%, -50%)
+    width: 701px
+    height: 701px
+    z-index 15
+    .img-wrapper
+      position absolute
+      left: 50%
+      top: 50%
+      transform translate(-50%, -50%)
+      width: 100%
+      height: 100%
+      overflow hidden
+      img
+        position absolute
+        display block
+        left: 50%
+        top: 50%
+        transform translate(-50%, -50%)
+        opacity .5
+        &:nth-child(1)
+          animation ease-in-out rotate1 infinite 5s
+        &:nth-child(2)
+          animation ease-in-out rotate2 infinite 4s
+        &:nth-child(3)
+          animation ease-in-out rotate3 infinite 3s
+        &:nth-child(4)
+          animation ease-in-out rotate1 infinite 5s
+        &:nth-child(5)
+          animation ease-in-out rotate2 infinite 4s
+        &:nth-child(6)
+          animation ease-in-out rotate3 infinite 3s
+
+    .title-wrapper
+      position absolute
+      top: 50%
+      animation shine ease-in-out infinite 10s
+      .star
+        position absolute
+        width: auto
+        height: 36px
+        left: 0
+        top: 20%
+        animation shine2 infinite 20s
+    .links
+      display flex
+      width: 650px
+      height: 40px
+      justify-content space-between
+      background-color: transparent
+      position absolute
+      top: 65%
+      left: 50%
+      transform translateX(-50%)
+      z-index 20
+      a
+        height: 40px
+        line-height: 40px
+        text-align center
+        width: 125px
+        display block
+        background-color: rgba(7,35,74,.7)
+        color #fff
+        transition background-color ease-in-out .4s
+        &:hover
+          background-color: rgba(15,74,139,1)
+
+  .cvs-wrapper
+    position absolute
+    right: 0
+    top: 0
+    z-index 10
+    opacity .4
+  .particles-wrapper
+    position absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    z-index 12
+  .scroll-earth
+    width 4000px
+    height: 4000px
+    position absolute
+    left: 75%;
+    bottom: -90%;
+    img
+      width: 100%
+      height: 100%
+      opacity .6
+      animation rotate4 linear infinite 360s
+@keyframes rotate1{
+  0%   {transform:translate(-50%, -50%) rotate(0);opcity:.4}
+  100% {transform:translate(-50%, -50%) rotate(-360deg);opcity:.5}
+  // 100% {transform:translate(-50%, -50%) rotate(0deg)}
+}
+@keyframes rotate2{
+  0%   {transform:translate(-50%, -50%) rotate(-40deg)}
+  100% {transform:translate(-50%, -50%) rotate(320deg)}
+  // 100% {transform:translate(-50%, -50%) rotate(0deg)}
+}
+@keyframes rotate3{
+  0%   {transform:translate(-50%, -50%) rotate(80deg)}
+  100% {transform:translate(-50%, -50%) rotate(-280deg)}
+}
+@keyframes rotate4{
+  0%   {transform: rotate(0);}
+  25% {transform: rotate(90deg);}
+  50% {transform: rotate(180deg);}
+  75% {transform: rotate(270deg);}
+  100% {transform: rotate(360deg);}
+}
+@keyframes shine{
+  0% {opacity:1;transform translateY(-50%) scale(1.01)}
+  25% {opacity:1;transform translateY(-50%) scale(1.0)}
+  50% {opacity:1;transform translateY(-50%) scale(1.01)}
+  75% {opacity:1;transform translateY(-50%) scale(1.0)}
+  100% {opacity:1;transform translateY(-50%) scale(1.01)}
+}
+@keyframes shine2{
+  0% {opacity:.1;transform translateX(0) scale(1.01)}
+  50% {opacity:1;transform translateX(350px) scale(1.00)}
+  100% {opacity:.1;transform translateX(700px) scale(1.01)}
+}

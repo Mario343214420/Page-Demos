@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>title</title>
+  <!--基础库-->
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/utils/axios.min.js"></script>
+  <script src="https://cdn.bootcss.com/Swiper/4.5.1/js/swiper.min.js"></script>
+  <!--bin-ui-->
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <script src="../../js/lib/bin-ui/bin-ui.umd.min.js"></script>
+  <!--CSS-->
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link href="https://cdn.bootcss.com/Swiper/4.5.1/css/swiper.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles/header-footer-hanzhong.css">
+  <link rel="stylesheet" href="../../styles/index-hanzhong.css">
+</head>
+<body>
+<div id="app" v-cloak>
+  <!--头部-->
+  <div class="header">
+    <div class="login-wrapper">
+      <div class="inner-wrapper">
+        <div class="left">
+          <a href="javascript:;" class="link-item">
+            汉中市人民政府
+          </a>
+          <a href="javascript:;" class="link-item">
+            信用中国
+          </a>
+          <a href="javascript:;" class="link-item">
+            信用陕西
+          </a>
+        </div>
+        <div class="left">
+          <a href="javascript:;" class="link-item">
+            登录
+          </a>
+          <a href="javascript:;" class="link-item">
+            注册
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="banner-wrapper">
+      <div class="inner-wrapper">
+
+      </div>
+    </div>
+<!--    <div class="nav-wrapper">-->
+<!--      <div class="inner-wrapper">-->
+<!--        <a class="nav-item" href="javascript:;">首页</a>-->
+<!--        <a class="nav-item" href="javascript:;">信用动态</a>-->
+<!--        <a class="nav-item" href="javascript:;">政策法规</a>-->
+<!--        <a class="nav-item" href="javascript:;">信用研究</a>-->
+<!--        <a class="nav-item" href="javascript:;">信用公式</a>-->
+<!--        <a class="nav-item" href="javascript:;">信用监督</a>-->
+<!--        <a class="nav-item" href="javascript:;">典型案例</a>-->
+<!--        <a class="nav-item" href="javascript:;">信用承诺</a>-->
+<!--        <a class="nav-item" href="javascript:;">信用服务</a>-->
+<!--      </div>-->
+<!--    </div>-->
+  </div>
+  <!--主体-->
+  <div class="main">
+    <div class="fixed-tip">
+        <img src="../images/hanzhong " alt="">
+    </div>
+    <div class="content">
+      <div class="content-title">
+        <img class="title-img" src="../../images/wlx/title01.jpg" alt="">
+      </div>
+      <div class="content-body" flex="justify:space-between">
+        <div class="swiper-container banner">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <a href="javascript:;">
+                <img src="../../images/wlx/3e0046862abd82e_size77_w250_h160.jpg" alt="">
+                <div class="info ellipsis">模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容</div>
+              </a>
+            </div>
+            <div class="swiper-slide">
+              <a href="javascript:;">
+                <img src="../../images/wlx/4a6420b90f24365698d687b542728160_size90_w250_h160.png" alt="">
+                <div class="info ellipsis">模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容</div>
+              </a>
+            </div>
+          </div>
+          <!-- 如果需要导航按钮 -->
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+        <div class="contents-msg">
+          <a class="msg" href="javascript:;">
+            <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+            <div class="msg-abstract ellipsis">2020年4月19日，测试省略号显示内容测试省略号显示内容测试省略号显示内容</div>
+            <i class="red-text">[详细]</i>
+          </a>
+          <a class="msg" href="javascript:;">
+            <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+            <div class="msg-abstract ellipsis">2020年4月19日，测试省略号显示内容测试省略号显示内容测试省略号显示内容</div>
+            <i class="red-text">[详细]</i>
+          </a>
+          <a class="msg" href="javascript:;">
+            <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+          </a>
+          <a class="msg" href="javascript:;">
+            <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+          </a>
+          <a class="msg" href="javascript:;">
+            <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+          </a>
+          <a class="msg" href="javascript:;">
+            <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-title">
+        <img class="title-img" src="../../images/wlx/title02.jpg" alt="">
+      </div>
+      <div class="content-body" flex="justify:space-between">
+        <div class="hot-spot">
+          <div class="hot-spot-title">信用建设大家谈</div>
+          <a href="javascript:;" class="hot-spot-img">
+            <img src="../../images/wlx/3e0046862abd82e_size77_w250_h160.jpg" alt="">
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+        </div>
+        <div class="hot-spot">
+          <div class="hot-spot-title">信用建设大家谈</div>
+          <a href="javascript:;" class="hot-spot-img">
+            <img src="../../images/wlx/3e0046862abd82e_size77_w250_h160.jpg" alt="">
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+        </div>
+        <div class="hot-spot">
+          <div class="hot-spot-title">信用建设大家谈</div>
+          <a href="javascript:;" class="hot-spot-img">
+            <img src="../../images/wlx/3e0046862abd82e_size77_w250_h160.jpg" alt="">
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+        </div>
+        <div class="hot-spot">
+          <div class="hot-spot-title">信用建设大家谈</div>
+          <a href="javascript:;" class="hot-spot-img">
+            <img src="../../images/wlx/3e0046862abd82e_size77_w250_h160.jpg" alt="">
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+          <a href="javascript:;" class="hot-spot-msg">
+            <i>模拟数据内容，高度自适应，多行无法省略号显示，需后台控制内容长度及省略号需求</i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-title">
+        <img class="title-img" src="../../images/wlx/title03.jpg" alt="">
+      </div>
+      <div class="content-body" flex="justify:space-between">
+        <div class="contents-build">
+          <div class="msg">
+            <div class="msg-content-top">
+              <div class="msg-content-top-title">
+                <i>组织机构</i>
+              </div>
+              <div class="msg-content-top-content">
+                <i>
+                  新冠肺炎疫情发生以来，全市市场监管执法人员坚守岗位，冲锋在先，认真落实联防联控措施，连续开展了市场价格监督检查、交易行为规范、食品药品安全监管和投诉举报处置等工作，迅速稳定维护了市场秩序，保障了防疫物资质量安全。
+                </i>
+              </div>
+            </div>
+            <div class="msg-content-bot">
+              <div class="msg-content-bot-title">
+                <i>信用动态</i>
+              </div>
+              <div class="msg-content-bot-content">
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示</a>
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示</a>
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示</a>
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="contents-build cb-img">
+          <img src="../../images/wlx/4cd7c97345b2f0d9923e9e80aee2b259_size183_w220_h350.jpg" alt="">
+        </div>
+        <div class="contents-build">
+          <div class="msg">
+            <div class="msg-content-top">
+              <div class="msg-content-top-title">
+                <i>组织机构</i>
+              </div>
+              <div class="msg-content-top-content">
+                <i>
+                  新冠肺炎疫情发生以来，全市市场监管执法人员坚守岗位，冲锋在先，认真落实联防联控措施，连续开展了市场价格监督检查、交易行为规范、食品药品安全监管和投诉举报处置等工作，迅速稳定维护了市场秩序，保障了防疫物资质量安全。
+                </i>
+                <a href="javascript:;">
+                  <i class="red-text">[更多]</i>
+                </a>
+              </div>
+            </div>
+            <div class="msg-content-bot">
+              <div class="msg-content-bot-title">
+                <i>信用动态</i>
+              </div>
+              <div class="msg-content-bot-content">
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示，测试省略号显示</a>
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示，测试省略号显示</a>
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示，测试省略号显示</a>
+                <a class="content-item ellipsis" href="javascript:;">模拟省略号显示单行信息标题，测试省略号显示，测试省略号显示，测试省略号显示</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-title">
+        <img class="title-img" src="../../images/wlx/title04.jpg" alt="">
+      </div>
+      <div class="content-body">
+        <div class="content-toggle-wrapper" flex="justify:space-around">
+          <div class="btn-box" @click="toggleBtn = true">
+            <span class="check-btn">
+              <i :class="toggleBtn ? 'active' : 'default'">✔</i>
+            </span>
+            <span>
+              <i>法人及其他组织信息</i>
+            </span>
+          </div>
+          <div class="btn-box" @click="toggleBtn = false">
+            <span class="check-btn">
+              <i :class="!toggleBtn ? 'active' : 'default'">✔</i>
+            </span>
+            <span>
+              <i>自然人信息</i>
+            </span>
+          </div>
+          <div class="btn-box link-home">
+            <a href="javascript:;"><img src="../../images/wlx/cx05_gw.png" alt=""></a>
+          </div>
+        </div>
+        <div v-show="toggleBtn" class="content-rb-wrapper" flex="justify:space-between">
+          <div class="content-rb">
+            <div class="content">
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+            </div>
+          </div>
+          <div class="content-rb">
+            <div class="content">
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div v-show="!toggleBtn" class="content-rb-wrapper" flex="justify:space-between">
+          <div class="content-rb">
+            <div class="content">
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+              <a class="msg" href="javascript:;">
+                <div class="msg-title ellipsis">原创手绘视频|践行“4.19”测试省略号显示效果测试省略号显示效果测试省略号显示效果测试省略号显示效果</div>
+              </a>
+            </div>
+          </div>
+          <div class="content-rb">
+            <div class="content">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-title">
+        <img class="title-img" src="../../images/wlx/title05.jpg" alt="">
+      </div>
+      <div class="content-body" flex="justify:space-around">
+        <div class="qr-img">
+          <img src="../../images/wlx/659915d07b7efb8size29_w300_h560.png" alt="">
+        </div>
+        <div class="questionnaire">
+          <div class="questionnaire-inner">
+            <div class="questionnaire-dept">
+              <i>陕西省社会信用体系建设联席会议办公室</i>
+            </div>
+            <div class="questionnaire-title">
+              <h2>信<i>/</i>用<i>/</i>建<i>/</i>设</h2>
+              <h1>问卷调差有奖答题</h1>
+            </div>
+            <div class="questionnaire-content">
+              <i>
+                信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识信用知识
+              </i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-title" style="margin-bottom: 10px;">
+        <img class="title-img" src="../../images/wlx/title06.jpg" alt="">
+      </div>
+      <div class="content-body" flex="justify:space-between">
+        <div class="swiper-container atlas ">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <a href="javascript:;">
+                <img src="../../images/wlx/3e0046862abd82e_size77_w250_h160.jpg" alt="">
+                <div class="info ellipsis">模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容</div>
+              </a>
+            </div>
+            <div class="swiper-slide">
+              <a href="javascript:;">
+                <img src="../../images/wlx/4a6420b90f24365698d687b542728160_size90_w250_h160.png" alt="">
+                <div class="info ellipsis">模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容模拟图片标题内容</div>
+              </a>
+            </div>
+          </div>
+          <!-- 如果需要分页器 -->
+          <div class="swiper-pagination" style="text-align: right"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<script src="../js/float_tip.js"></script>-->
+<!--测试模拟请求-->
+<script src="../../js/lib/utils/mock.js"></script>
+<script>
+	var vm = new Vue({
+      el:"#app",
+      data: function () {
+        return {
+          toggleBtn: true
+        }
+      },
+      mounted: function () {
+        this.createSwiper1()
+        this.createSwiper2()
+      },
+      methods:{
+        createSwiper1: function () {
+          var swiper1 = new Swiper('.banner', {
+            autoplay: true,//可选选项，自动滑动
+            loop : true,
+            pagination: {},
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+          })
+        },
+        createSwiper2: function () {
+          var swiper1 = new Swiper('.atlas', {
+            autoplay: true,//可选选项，自动滑动
+            loop : true,
+            pagination: {
+              el: '.swiper-pagination',
+              type: 'fraction'
+            }
+          })
+        }
+      }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+    <style>
+        body{
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<div id="cvsBox">
+<!--<canvas id="cvs"></canvas>-->
+</div>
+<div id="testCvs">
+    <canvas id="myCvs" globalAlpha="0.1"></canvas>
+</div>
+<script>
+    var cvs  = document.getElementById('myCvs');
+    cvs.width = 900;
+    cvs.height = 200;
+    var l = 0;
+
+    function step(){
+        l++;
+	    var cxt = cvs.getContext("2d");
+	    for(var i = 1;i<4;i++){
+            cxt.save();
+            cxt.beginPath();
+            cxt.arc(100*i,100,40,0,(l/16),false);
+		    cxt.fillStyle="rgba(255,165,0,.1)";
+            cxt.fill();
+            cxt.stroke();
+            cxt.restore();
+	    }
+        if( l<=100 ){
+            window.requestAnimationFrame(step)
+        }else{
+            l = 0;
+	        cxt.clearRect(0,0,900,200);
+            window.requestAnimationFrame(step)
+        }
+    }
+
+
+    window.requestAnimationFrame(step);
+    // ctx.rect(40,80,10,10);
+
+    (function () {
+	    var cvs = document.getElementById('cvs');
+	    var canvas = new Canvas();
+        function Canvas() {
+            this.pos = [];
+            this.numMax = 800;
+            this.width = window.innerWidth;
+            this.height = window.innerHeight;
+            this.rx = this.width/2;
+            this.ry = this.height/2;
+            this.v = 1.25;
+            this.dcolor = 2;
+        }
+        Canvas.prototype.createEle = function (id) {
+            var ele = document.createElement("canvas");
+            var box = document.getElementById(id);
+            ele.value = "please update your browser to support canvas.";
+            ele.width = this.width;
+            ele.height = this.height;
+	        this.cxt = ele.getContext('2d');
+	        box.appendChild(ele);
+        };
+	    Canvas.prototype.setCircle = function(){
+		    var color, flag;
+		    for(var i=0; i<this.numMax;i++){
+			    var r = ((i/128))*40; //距离圆心初始半径，一共6层
+			    var rotate = (i%128)*2.8125*(Math.PI/180); //一层128个，夹角2.8125
+			    flag = i/128;
+			    if( 0 <= flag && flag < 1.0){
+				    color = 'rgb(255,0,'+(i%128)*canvas.dcolor+',.4)';
+			    }else if(1.0 <= flag && flag < 2.0){
+				    color = 'rgb('+(255-(i%128)*canvas.dcolor)+',0,255,.4)';
+			    }else if(2.0 <= flag && flag < 3){
+				    color = 'rgb(0,'+(i%128)*canvas.dcolor+',255,.4)';
+			    }else if(3 <= flag && flag < 4){
+				    color = 'rgb(0,255,'+(255-(i%128)*canvas.dcolor)+',.4)';
+			    }else if(4 <= flag && flag < 5){
+				    color = 'rgb('+(i%128)*canvas.dcolor+',255,0,.4)';
+			    }else if(5 <= flag && flag < 6){
+				    color = 'rgb(255,'+(255-(i%128)*canvas.dcolor)+',0,.4)';
+			    }
+			    this.pos[i] = {
+				    r_max: 240, //6层间隔50,最大300
+				    rotate: rotate,//所在点的相对角度
+				    x: r*Math.cos(rotate)+this.width/2,
+				    y: r*Math.sin(rotate)+this.height/2,
+				    color: color,
+			    }
+		    }
+	    };
+	    Canvas.prototype.draw = function(x,y,r,color){
+		    this.cxt.save();
+		    this.cxt.beginPath();
+		    this.cxt.fillStyle = color;
+		    this.cxt.arc(x, y, r, 0, Math.PI*2, true);
+		    this.cxt.fill();
+		    this.cxt.restore();
+	    };
+	    Canvas.prototype.animate = function(){
+		    var dx;
+		    canvas.cxt.clearRect(0,0,canvas.width,canvas.height);
+		    for( var i=0; i<canvas.pos.length-1; i++ ){
+			    dx = Math.sqrt(Math.pow(canvas.ry - canvas.pos[i].y, 2)+Math.pow(canvas.rx - canvas.pos[i].x, 2));
+			    if( dx < 1 || dx > 300){
+                    // 重置位置
+				    canvas.pos[i].x = canvas.pos[i].r_max*Math.cos(canvas.pos[i].rotate)+canvas.width/2;
+				    canvas.pos[i].y = canvas.pos[i].r_max*Math.sin(canvas.pos[i].rotate)+canvas.height/2;
+			    }
+                //速度
+			    canvas.pos[i].vx = -canvas.v*Math.cos(canvas.pos[i].rotate);
+			    canvas.pos[i].vy = -canvas.v*Math.sin(canvas.pos[i].rotate);
+                // 移动
+			    canvas.pos[i].x += canvas.pos[i].vx;
+			    canvas.pos[i].y += canvas.pos[i].vy;
+			    // 大小渐变
+			    canvas.pos[i].r = Math.sqrt(Math.pow(canvas.ry - canvas.pos[i].y, 2)+Math.pow(canvas.rx - canvas.pos[i].x, 2))/80;
+			    canvas.draw(canvas.pos[i].x, canvas.pos[i].y, canvas.pos[i].r, canvas.pos[i].color);
+		    }
+		    window.requestAnimationFrame(canvas.animate);
+	    };
+	    Canvas.prototype.changeV = function(){
+		    var count = 1;
+		    setInterval(function(){
+			    canvas.v = 1.25 * Math.pow(2, count);
+			    if(count++ > 3) {count = 1;}
+		    },5000);
+	    };
+	    function createCvs(){
+		    canvas.createEle('cvsBox');
+		    canvas.setCircle();
+		    canvas.animate();
+		    canvas.changeV();
+        }
+	    // window.onload = createCvs;
+	    // window.onresize = createCvs;
+    })()
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+.bin-radio-inner:after {
+  background-color: #e13a41;
+}
+.bin-radio-checked .bin-radio-inner {
+  border-color: #e13a41;
+}
+.mt15 {
+  margin-top: 15px;
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.msg {
+  text-indent: 4px;
+}
+#app .main {
+  width: 1200px;
+  margin: 0 auto 20px;
+}
+#app .main .link-item {
+  padding-left: 10px;
+  line-height: 40px;
+}
+#app .main .company-info .company-name {
+  font-weight: 700;
+  text-align: center;
+  font-size: 28px;
+  line-height: 80px;
+}
+#app .main .company-info .company-info-date {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 6px 0;
+}
+#app .main .company-info .company-info-date i {
+  margin: 0 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+#app .main .company-info .company-info-date .share-link {
+  vertical-align: middle;
+  display: inline-block;
+}
+#app .main .company-info .company-info-date .share-link img {
+  height: 30px;
+  width: auto;
+}
+#app .main .company-info .table-wrapper {
+  width: 1000px;
+  margin: 30px auto;
+}
+#app .main .company-info .table-wrapper .company-table {
+  border-top: 1px solid #e5e5e5;
+  border-left: 1px solid #e5e5e5;
+  width: 100%;
+}
+#app .main .company-info .table-wrapper .company-table th {
+  font-weight: 400;
+  background-color: #f5f5f5;
+}
+#app .main .company-info .table-wrapper .company-table th,
+#app .main .company-info .table-wrapper .company-table td {
+  border-bottom: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+  padding: 16px 8px 6px;
+  line-height: 26px;
+}
+#app .main .company-info .table-wrapper .company-table th input,
+#app .main .company-info .table-wrapper .company-table td input {
+  width: 800px;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  outline: none;
+  box-shadow: none;
+  padding: 4px 6px;
+}
+#app .main .company-info .table-wrapper .company-table th:nth-child(1),
+#app .main .company-info .table-wrapper .company-table td:nth-child(1) {
+  width: 180px;
+  text-align: center;
+}
+@-moz-keyframes iconRoate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes iconRoate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@-o-keyframes iconRoate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes iconRoate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

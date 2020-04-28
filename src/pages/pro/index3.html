@@ -1,0 +1,163 @@
+
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <style>
+        .logo {
+            width: 50px;
+            float: left;
+            height: 80px;
+            padding-left: 30px;
+            padding-top: 30px;
+            padding-right: 30px;
+        }
+
+        .logo img {
+            width: 40px;
+            left: 31px;
+            top: 31px;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        hr.clear {
+            margin: 0;
+        }
+
+        .gather-box {
+            float: left;
+            border: solid 1pt #e6e6e6;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            margin: 2pt;
+            width: 240pt;
+            transition: box-shadow ease-in-out .5s;
+        }
+        .gather-box:hover {
+            box-shadow:2px 2px 8px #e6e6e6;
+        }
+
+        .template-operations {
+            float: right;
+        }
+
+        .processing {
+            background-color: #e6fff0;
+            color: #43cf7c;
+            height: 30px;
+            padding: 4px 10px;
+            text-align: center;
+            -webkit-border-radius: 15px 0 0 15px;
+            -moz-border-radius: 15px 0 0 15px;
+            border-radius: 15px 0 0 15px;
+            font-size: 14px;
+        }
+
+        .ended {
+            font-size: 14px;
+            background-color: #eee;
+            color: #6c6c6c;
+            padding: 4px 10px;
+            text-align: center;
+            -webkit-border-radius: 15px 0 0 15px;
+            -moz-border-radius: 15px 0 0 15px;
+            border-radius: 15px 0 0 15px;
+        }
+
+        .projTime{
+            margin: 10px 0;
+        }
+
+        .gather-operations {
+            display: block;
+            padding: 4pt 2pt;
+            height: 18pt;
+            overflow: hidden;
+            text-align: center;
+            background-color: #fafafa;
+        }
+        .gather-operations a{
+            color: #02a0ea;
+            text-decoration: none;
+        }
+
+        .gather-search {
+            width: 800px;
+            margin: 0 auto;
+            height: 40px;
+            padding: 10px 0;
+        }
+
+        .gather-search input {
+            width: 600px;
+            border: #c5cad5 solid 1px;
+            height: 35px;
+            line-height: 35px;
+            float: left;
+        }
+
+        .gather-search button {
+            background-color: #02a0ea;
+            height: 39px;
+            width: 80px;
+            float: left;
+            border: none;
+            background-image: url(${basePath}images/gather-search.png);
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+    </style>
+    <script type="text/javascript">
+			function doFilter() {
+				var filterText = $("#filter").val().trim();
+				$(".gather-box").each(function (i, elem) {
+					var box = $(elem);
+					var resourceName = box.find(".resource-name").text().trim();
+					if (resourceName.includes(filterText)) {
+						box.removeClass("hidden");
+					} else {
+						box.addClass("hidden");
+					}
+				});
+			}
+
+			function filterEnter(e) {
+				e = e || window.event;
+				if (e.keyCode == 13) {
+					doFilter();
+				}
+			}
+    </script>
+</head>
+<body>
+<div class="gather-search">
+    <input type="text" id="filter" placeholder="请输入项目标题查询" onchange="doFilter()" onkeydown="filterEnter(event)">
+    <button onclick="doFilter()"></button>
+</div>
+<div class="clear"></div>
+<c:forEach items="${projectList}" var="dataRow">
+    <div class="gather-box">
+        <div class="logo">
+            <img src="${basePath}images/projectIcon.png"/>
+        </div>
+        <h4 class="resource-name" style="white-space: nowrap; text-overflow: ellipsis;overflow: hidden;-o-text-overflow:ellipsis;">${dataRow.name}</h4>
+        <span class="template-operations">
+                <c:choose>
+                    <c:when test="${dataRow.status=='processing'}"><span class="processing">正在进行中</span></c:when>
+                    <c:otherwise><span class="ended">已结束</span></c:otherwise>
+                </c:choose>
+        </span>
+        <h6 class="projTime">项目启动时间:<fmt:formatDate value="${dataRow.beginDate}" pattern="yyyy-MM-dd"/></h6>
+        <h6 class="projTime">项目结束时间:<fmt:formatDate value="${dataRow.endDate}" pattern="yyyy-MM-dd"/></h6>
+        <hr class="clear" style="border-top: none"/>
+        <div class="gather-operations">
+            <a href="${basePath}stu/ratingAnaly_toDetail?proId=${dataRow.id}">查看</a>
+        </div>
+    </div>
+</c:forEach>
+</body>
+</html>

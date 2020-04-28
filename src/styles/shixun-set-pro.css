@@ -1,0 +1,180 @@
+.base {
+  padding: 15px;
+  background-color: #f0f2f5;
+}
+.batch-set {
+  background-color: #fff;
+  line-height: 30px;
+  font-size: 14px;
+  min-width: 970px;
+  color: #383838;
+}
+.batch-set input.read-only {
+  background-color: #f5f5f5;
+}
+.batch-set .title {
+  border-bottom: 1px solid #f0f2f5;
+  font-size: 16px;
+  font-weight: 700;
+  padding-left: 40px;
+  line-height: 50px;
+}
+.batch-set .main-view {
+  padding: 10px 40px;
+}
+.batch-set .custom-form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.batch-set .ipt-box {
+  width: 50%;
+  margin: 10px 0;
+  position: relative;
+}
+.batch-set .ipt-box .select-modal {
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 0;
+  height: 100px;
+  width: 400px;
+  background-color: #fff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.batch-set .ipt-box .modal {
+  display: none;
+  box-shadow: 0 0 3px #bbb;
+}
+.batch-set .ipt-box .modal-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+.batch-set .ipt-box .modal-inner .close-btn {
+  position: absolute;
+  right: 10px;
+  top: -4px;
+  cursor: pointer;
+}
+.batch-set .ipt-box .unit {
+  padding-left: 8px;
+}
+.batch-set .ipt-box input {
+  border: 1px solid #ebebeb;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  padding: 6px;
+  width: 220px;
+  height: 30px;
+  vertical-align: middle;
+}
+.batch-set .ipt-box label {
+  display: inline-block;
+}
+.batch-set .ipt-title {
+  display: inline-block;
+  width: 120px;
+}
+.batch-set .red-font {
+  color: #ff4d4f;
+  padding: 4px;
+}
+.batch-set .select {
+  width: 60px;
+  height: 30px;
+  border: 1px solid #ebebeb;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding: 6px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 18px;
+  text-align: center;
+  color: #398af7;
+  background-color: #fff;
+  margin-left: 10px;
+  transition: all ease-in-out 0.2s;
+}
+.batch-set .select:hover {
+  background-color: #398af7;
+  color: #fff;
+  cursor: pointer;
+}
+.batch-set .custom-table {
+  padding: 10px;
+}
+.batch-set .table-title {
+  border-left: 4px solid #1f7af6;
+  padding-left: 36px;
+  font-size: 16px;
+  margin: 15px 0;
+}
+.batch-set .table-title .add-group {
+  float: right;
+  margin-right: 50px;
+  font-size: 14px;
+  padding: 2px 20px;
+  border: 1px solid #f5f5f5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  transition: all ease-in-out 0.2s;
+}
+.batch-set .table-title .add-group:hover {
+  background-color: #398af7;
+  color: #fff;
+  cursor: pointer;
+}
+.batch-set .table {
+  width: 100%;
+}
+.batch-set .table table {
+  width: 100%;
+}
+.batch-set .table table th {
+  background-color: #fafafa;
+}
+.batch-set .table table td,
+.batch-set .table table th {
+  height: 40px;
+  padding: 10px 0;
+}
+.batch-set .table span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.batch-set .table input {
+  border: 1px solid #ebebeb;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  padding: 6px;
+  height: 30px;
+  vertical-align: middle;
+}
+.batch-set .table .serial {
+  width: 60px;
+  text-align: center;
+}
+.batch-set .table .receptor {
+  width: 200px;
+}
+.batch-set .table .name {
+  width: 200px;
+}
+.batch-set .table .describe {
+  width: 240px;
+}
+.batch-set .table .operate {
+  width: 100px;
+  text-align: center;
+}
+.batch-set .table .operate-btn {
+  color: #1f7af6;
+  padding: 0 10px;
+}

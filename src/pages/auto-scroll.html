@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+    <script src="../js/lib/vue.min.js"></script>
+    <style>
+        .m-scroll-list{
+            width: 400px;
+            margin: 0 auto;
+            border-top: 1px solid #000;
+            border-left: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+        .m-scroll-list li{
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="m-scroll-list">
+        <div id="mScrollBox">
+            <ul class="m-scroll" style="line-height: 30px;height: 248px;">
+                <li>scroll</li>
+                <li>scroll</li>
+                <li>scroll</li>
+                <li>scroll</li>
+                <li>scroll</li>
+                <li>scroll</li>
+                <li>scroll</li>
+                <li>scroll</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="../js/autoScroll.js"></script>
+<script>
+    // 无需配置样式属性，自动添加外层遮盖
+    new Vue({
+        el: '#app',
+        mounted(){
+        	autoScroll('mScrollBox')
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../styles/reset.css">
+    <link rel="stylesheet" href="../../js/lib/swiper/swiper.min.css">
+    <link rel="stylesheet" href="../../styles/header-footer-qufu.css">
+    <link rel="stylesheet" href="../../styles/index-qufu.css">
+    <script src="../../js/lib/vue.min.js"></script>
+    <script src="../../js/lib/swiper/swiper.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="header-wrapper">
+        <div class="login-wrapper">
+            <div class="inner-wrapper">
+                <div class="left">
+                    <a href="javascript:;" class="link-item">
+                        信用中国
+                    </a>
+                    <a href="javascript:;" class="link-item">
+                        信用山东
+                    </a>
+                </div>
+                <div class="left">
+                    <a href="javascript:;" class="link-item">
+                        登录
+                    </a>
+                    <a href="javascript:;" class="link-item">
+                        注册
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="banner-wrapper">
+            <div class="inner-wrapper">
+                <div class="search-wrapper">
+                    <div class="logo">
+                        <a href="javascript:;" class="emblem">
+                            <img src="../../images/lushan/emblem.png">
+                            <div>
+                                <p class="location">信用中国（山东曲阜）</p>
+                                <p class="website">XINYONG.HNLS.GOV.CN</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-wrapper">
+            <div class="inner-wrapper">
+                <a class="nav-item" href="javascript:;">首页</a>
+                <a class="nav-item" href="javascript:;">信用动态</a>
+                <a class="nav-item" href="javascript:;">政策法规</a>
+                <a class="nav-item" href="javascript:;">信用研究</a>
+                <a class="nav-item" href="javascript:;">信用公式</a>
+                <a class="nav-item" href="javascript:;">信用监督</a>
+                <a class="nav-item" href="javascript:;">典型案例</a>
+                <a class="nav-item" href="javascript:;">信用承诺</a>
+                <a class="nav-item" href="javascript:;">信用服务</a>
+            </div>
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="news-wrapper" flex="between">
+                <div class="swiper-container news-swiper w590px" style="margin-right: 20px;">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="../../images/qufu/swiper.png" alt="">
+                            <p class="new-title ellipsis">测试省略号显示标题内容，测试省略号显示标题内容，测试省略号显示标题内容，</p>
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="../../images/qufu/swiper.png" alt="">
+                            <p class="new-title ellipsis">测试省略号显示标题内容，测试省略号显示标题内容，测试省略号显示标题内容，</p>
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="../../images/qufu/swiper.png" alt="">
+                            <p class="new-title ellipsis">测试省略号显示标题内容，测试省略号显示标题内容，测试省略号显示标题内容，</p>
+                        </div>
+                    </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
+
+                    <!-- 如果需要导航按钮 -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+                <div class="news-content w590px">
+                    <div class="btns-wrapper" flex="between">
+                        <span class="btn" :class="newsFlag === 0 ? 'active' : 'default'" @click="newsFlag = 0">
+                            曲阜新闻
+                        </span>
+                        <span class="btn" :class="newsFlag === 1 ? 'active' : 'default'" @click="newsFlag = 1">
+                            省内动态
+                        </span>
+                        <span class="btn" :class="newsFlag === 2 ? 'active' : 'default'" @click="newsFlag = 2">
+                            国内要闻
+                        </span>
+                        <span class="btn" :class="newsFlag === 3 ? 'active' : 'default'" @click="newsFlag = 3">
+                            通知公告
+                        </span>
+                    </div>
+                    <div class="contents-wrapper" v-show="newsFlag === 0">
+                        <div class="new-item">
+                            <a href="javascript:;">
+                                <div class="item-title ellipsis">曲阜新闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-more">查看详情></div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">曲阜新闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">曲阜新闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">曲阜新闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">曲阜新闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">曲阜新闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contents-wrapper" v-show="newsFlag === 1">
+                        <div class="new-item">
+                            <a href="javascript:;">
+                                <div class="item-title ellipsis">省内动态-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-more">查看详情></div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">省内动态-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">省内动态-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">省内动态-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">省内动态-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">省内动态-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contents-wrapper" v-show="newsFlag === 2">
+                        <div class="new-item">
+                            <a href="javascript:;">
+                                <div class="item-title ellipsis">国内要闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-more">查看详情></div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">国内要闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">国内要闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">国内要闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">国内要闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">国内要闻-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contents-wrapper" v-show="newsFlag === 3">
+                        <div class="new-item">
+                            <a href="javascript:;">
+                                <div class="item-title ellipsis">通知公告-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-more">查看详情></div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">通知公告-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">通知公告-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">通知公告-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">通知公告-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                        <div class="new-item">
+                            <a href="javascript:;" flex="between">
+                                <div class="item-title ellipsis">通知公告-模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，模拟标题内容，</div>
+                                <div class="item-date font-color-gray">2020-01-05</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="banner-wrapper" flex="between">
+                <div class="banner-item">
+                    <a href="javascript:;" flex="column">
+                        <img src="../../images/qufu/icon01.png" alt="">
+                        <p class="title">统一社会信用代码查询</p>
+                    </a>
+                </div>
+                <div class="banner-item">
+                    <a href="javascript:;" flex="column">
+                        <img src="../../images/qufu/icon02.png" alt="">
+                        <p class="title">企业信用查询</p>
+                    </a>
+                </div>
+                <div class="banner-item">
+                    <a href="javascript:;" flex="column">
+                        <img src="../../images/qufu/icon03.png" alt="">
+                        <p class="title">红黑名单查询</p>
+                    </a>
+                </div>
+                <div class="banner-item">
+                    <a href="javascript:;" flex="column">
+                        <img src="../../images/qufu/icon04.png" alt="">
+                        <p class="title">个人信用积分查询</p>
+                    </a>
+                </div>
+                <div class="banner-item">
+                    <a href="javascript:;" flex="column">
+                        <img src="../../images/qufu/icon05.png" alt="">
+                        <p class="title">重点人群查询</p>
+                    </a>
+                </div>
+                <div class="banner-item">
+                    <a href="javascript:;" flex="column">
+                        <img src="../../images/qufu/icon06.png" alt="">
+                        <p class="title">重点领域信用信息公示</p>
+                    </a>
+                </div>
+            </div>
+            <div class="layout-wrapper lr" flex="between">
+                <div class="left" style="width: 880px;margin-right: 20px;">
+                    <div class="layout-inner">
+                        <div class="title-img">
+                            <img src="../../images/qufu/banner01.jpg">
+                        </div>
+                        <div class="half-wrapper" flex="between">
+                            <div class="half">
+                                <div class="top-bar" flex>
+                                    <span class="btn"
+                                          @click="rewardPunishFlag = 0"
+                                          :class="rewardPunishFlag === 0 ? 'active' : 'default'">
+                                        行政许可
+                                    </span>
+                                    <span class="btn"
+                                          @click="rewardPunishFlag = 1"
+                                          :class="rewardPunishFlag === 1 ? 'active' : 'default'">
+                                        行政处罚
+                                    </span>
+                                    <span class="more-btn">
+                                        <a href="javascript:;">更多+</a>
+                                    </span>
+                                </div>
+                                <div class="content-list" v-show="rewardPunishFlag === 0">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            许可-新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                                <div class="content-list" v-show="rewardPunishFlag === 1">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            处罚-新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="half">
+                                <div class="top-bar" flex>
+                                    <span class="btn active">
+                                        信用承诺
+                                    </span>
+                                    <span class="more-btn">
+                                        <a href="javascript:;">更多+</a>
+                                    </span>
+                                </div>
+                                <div class="content-list">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layout-inner">
+                        <div class="title-img">
+                            <img src="../../images/qufu/banner02.jpg">
+                        </div>
+                        <div class="half-wrapper" flex="between">
+                            <div class="half">
+                                <div class="top-bar" flex>
+                                    <span class="btn"
+                                          @click="creditFlag = 0"
+                                          :class="creditFlag === 0 ? 'active' : 'default'">
+                                        诚信案例
+                                    </span>
+                                    <span class="btn"
+                                          @click="creditFlag = 1"
+                                          :class="creditFlag === 1 ? 'active' : 'default'">
+                                        失信案例
+                                    </span>
+                                    <span class="more-btn">
+                                        <a href="javascript:;">更多+</a>
+                                    </span>
+                                </div>
+                                <div class="content-list" v-show="creditFlag === 0">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            诚信-新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                                <div class="content-list" v-show="creditFlag === 1">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            失信-新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="half">
+                                <div class="top-bar" flex>
+                                    <span class="btn active">
+                                        信用监管
+                                    </span>
+                                    <span class="more-btn">
+                                        <a href="javascript:;">更多+</a>
+                                    </span>
+                                </div>
+                                <div class="content-list">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="qr-bar">
+                        <img src="../../images/qufu/link.jpg" alt="">
+                    </div>
+                    <div class="credit-build">
+                        <div class="middle-title"><i>信用建设</i></div>
+                        <div class="credit-links" flex="column between">
+                            <a href="javascript:;">
+                                <img src="../../images/qufu/zwxy.jpg">
+                            </a>
+                            <a href="javascript:;">
+                                <img src="../../images/qufu/hyxy.jpg">
+                            </a>
+                            <a href="javascript:;">
+                                <img src="../../images/qufu/zjxy.jpg">
+                            </a>
+                            <a href="javascript:;">
+                                <img src="../../images/qufu/sqxy.jpg">
+                            </a>
+                            <a href="javascript:;">
+                                <img src="../../images/qufu/ncxy.jpg">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div flex="between">
+                <a href="javascript:;">
+                    <img src="../../images/qufu/banner_zxzl.jpg" alt="">
+                </a>
+                <a href="javascript:;">
+                    <img src="../../images/qufu/banner_xyj.jpg" alt="">
+                </a>
+                <a href="javascript:;">
+                    <img src="../../images/qufu/banner_xyfw.jpg" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="full-wrapper">
+        <div class="banner-wrapper" flex="between">
+            <div class="banner-item">
+                <a href="javascript:;" flex="column">
+                    <img src="../../images/qufu/icon06.png" alt="">
+                    <p class="title">营商环境</p>
+                </a>
+            </div>
+            <div class="banner-item">
+                <a href="javascript:;" flex="column">
+                    <img src="../../images/qufu/icon07.png" alt="">
+                    <p class="title">信用信息共享平台</p>
+                </a>
+            </div>
+            <div class="banner-item">
+                <a href="javascript:;" flex="column">
+                    <img src="../../images/qufu/icon08.png" alt="">
+                    <p class="title">联合奖惩</p>
+                </a>
+            </div>
+            <div class="banner-item">
+                <a href="javascript:;" flex="column">
+                    <img src="../../images/qufu/icon09.png" alt="">
+                    <p class="title">行政许可行政处罚双公示</p>
+                </a>
+            </div>
+            <div class="banner-item">
+                <a href="javascript:;" flex="column">
+                    <img src="../../images/qufu/icon10.png" alt="">
+                    <p class="title">红黑名单</p>
+                </a>
+            </div>
+            <div class="banner-item">
+                <a href="javascript:;" flex="column">
+                    <img src="../../images/qufu/icon11.png" alt="">
+                    <p class="title">企业亮信用</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="layout-wrapper lr" flex="between">
+                <div class="left" style="width: 880px;margin-right: 20px;">
+                    <div class="layout-inner">
+                        <div class="half-wrapper" flex="between">
+                            <div class="half">
+                                <div class="top-bar" flex>
+                                    <span class="btn active">
+                                        政策法规
+                                    </span>
+                                    <span class="more-btn">
+                                        <a href="javascript:;">更多+</a>
+                                    </span>
+                                </div>
+                                <div class="content-list">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6,7]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            诚信-新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="half">
+                                <div class="top-bar" flex>
+                                    <span class="btn active">
+                                        风险提示
+                                    </span>
+                                    <span class="more-btn">
+                                        <a href="javascript:;">更多+</a>
+                                    </span>
+                                </div>
+                                <div class="content-list">
+                                    <div class="content-list-item" v-for="(item, index) in [1,2,3,4,5,6,7]" :key="index" flex="between">
+                                        <div class="content-info ellipsis">
+                                            新闻信息内容，测试省略号显示超长部分内容，新闻信息内容，测试省略号显示超长部分内容
+                                        </div>
+                                        <div class="content-date font-color-gray">2020-03-24</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right" style="width: 300px">
+                    <div class="middle-title" style="margin: 11px 0 0;"><i>数据上报</i></div>
+                    <div>
+                        <div class="dept-list">
+                            <ul>
+                                <li class="table-title" flex="around">
+                                    <span>单位</span>
+                                    <span>数据数量</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="m-scroll-list">
+                        <div id="mScrollBox" class="dept-list">
+                            <ul class="m-scroll" style="height: 207px;">
+                                <li flex="around" v-for="(item, index) in [1,2,3,4,5,6]">
+                                    <span>{{index}}公安局</span>
+                                    <span>9000</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="link-wrap" flex>
+                <div class="left" flex="between wrap" style="padding-right: 15px;">
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/zxzx.jpg" alt="">
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/tvxy.jpg" alt="">
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/xyyy.jpg" alt="">
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/tjxy.jpg" alt="">
+                    </a>
+                </div>
+                <div class="right" flex="between wrap">
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/tsjb.jpg" alt="">
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/yycl.jpg" alt="">
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../../images/qufu/xyxf.jpg" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="full-wrapper" style="padding: 0 0 20px;">
+        <div class="full-inner-wrapper">
+            <div class="inner-title" style="padding-left: 10px; letter-spacing: 6px">友情链接</div>
+        </div>
+        <div class="full-inner-wrapper friend-link" flex="between">
+            <a href="javascript:;" v-for="(index, item) in [1,2,3,4,5,6,7]" :key="index">
+                <img src="../../images/qufu/example.png">
+            </a>
+        </div>
+    </div>
+    <div class="footer-wrapper">
+        <p><a href="javascript:;">网站声明</a></p>
+        <p><a href="javascript:;">主办单位：曲阜市社会信用中心 联系电话：0000-00000000</a></p>
+        <p><a href="javascript:;">Copyright @2019 All Rights Reserved Copyright @2019 All Rights Reserved Copyright @2019 All Rights Reserved </a></p>
+        <p><a href="javascript:;">网站备案编号：鲁工网安备 37108202000100号</a></p>
+    </div>
+</div>
+<script src="../../js/autoScroll.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: function () {
+            return {
+	            newsFlag: 0,
+	            rewardPunishFlag: 0,
+	            creditFlag: 0,
+            }
+        },
+        mounted: function(){
+        	this.createSwiper('.news-swiper')
+            // this.createSwiperTable('.swiper-table')
+	        autoScroll('mScrollBox')
+        },
+        methods: {
+        	createSwiper: function(id){
+		        new Swiper (id, {
+			        direction: 'horizontal',
+			        loop: true,
+
+			        // 如果需要分页器
+			        pagination: {
+                        el: '.swiper-pagination',
+			        },
+
+			        // 如果需要前进后退按钮
+			        navigation: {
+				        nextEl: '.swiper-button-next',
+				        prevEl: '.swiper-button-prev',
+			        }
+		        })
+	        },
+	        createSwiperTable:  function(id){
+		        new Swiper (id, {
+			        direction: 'vertical',
+			        loop: true,
+			        slidesPerView :6,
+                    autoplay:true
+		        })
+	        },
+        }
+    })
+</script>
+</body>
+</html>
