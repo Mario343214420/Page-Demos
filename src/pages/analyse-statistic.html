@@ -14,14 +14,34 @@
 <div id="app">
     <div class="app-wrapper">
         <div class="top-wrapper">
-
+            <span @click="tab = 0" :class="(tab === 0 && value === '') ? 'active' : ''">
+                今日
+            </span>
+            <span @click="tab = 1" :class="(tab === 1 && value === '') ? 'active' : ''">
+                本周
+            </span>
+            <span @click="tab = 2" :class="(tab === 2 && value === '') ? 'active' : ''">
+                本月
+            </span>
+            <span @click="tab = 3" :class="(tab === 3 && value === '') ? 'active' : ''">
+                全年
+            </span>
+            <span>
+                <el-date-picker
+                        v-model="value"
+                        type="daterange"
+                        range-separator="~"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                </el-date-picker>
+            </span>
         </div>
         <div class="count-wrapper">
             <div class="count-wrapper-item">
                 <div class="inner-left">
                     <p>奖惩查询（次）</p>
                     <p class="num">126,560</p>
-                    <p>累计 88,</p>
+                    <p>累计 88,48</p>
                 </div>
                 <div class="inner-right">
                     <img src="../images/analyse-statistic/data.png" alt="">
@@ -31,7 +51,7 @@
                 <div class="inner-left">
                     <p>奖惩查询（次）</p>
                     <p class="num">126,560</p>
-                    <p>累计 88,</p>
+                    <p>累计 88,48</p>
                 </div>
                 <div class="inner-right">
                     <img src="../images/analyse-statistic/data.png" alt="">
@@ -41,7 +61,7 @@
                 <div class="inner-left">
                     <p>奖惩查询（次）</p>
                     <p class="num">126,560</p>
-                    <p>累计 88,</p>
+                    <p>累计 88,48</p>
                 </div>
                 <div class="inner-right">
                     <div id="punishPie"></div>
@@ -51,7 +71,7 @@
                 <div class="inner-left">
                     <p>奖惩查询（次）</p>
                     <p class="num">126,560</p>
-                    <p>累计 88,</p>
+                    <p>累计 88,48</p>
                 </div>
                 <div class="inner-right">
                     <div id="rewardPie"></div>
@@ -65,6 +85,7 @@
                 <el-table
                         :data="tableData"
                         :header-cell-style="{'background': '#f2f5fa', 'color': '#333333'}"
+                        @row-click="handleRow"
                         stripe
                         height="280"
                         style="width: 100%">
@@ -77,11 +98,16 @@
                     <el-table-column
                             prop="name"
                             label="备忘录名称">
+                        <template slot-scope="scope">
+                            <span class="table-btn" @click="handle(scope.$index)">
+                                {{ scope.row.name }}
+                            </span>
+                        </template>
                     </el-table-column>
-<!--                    <el-table-column-->
-<!--                            prop="query"-->
-<!--                            label="查询次数">-->
-<!--                    </el-table-column>-->
+                    <!--                    <el-table-column-->
+                    <!--                            prop="query"-->
+                    <!--                            label="查询次数">-->
+                    <!--                    </el-table-column>-->
                     <el-table-column
                             prop="trigger"
                             label="触发次数">
@@ -90,7 +116,7 @@
             </div>
         </div>
         <div flex="jus">
-            <div class="card-wrapper" style="flex: 1">
+            <div class="card-wrapper" style="flex: 1; margin-right: 20px;">
                 <div class="card-title-bar"><i class="el-icon-s-data"></i><i>部门执行情况统计分析</i></div>
                 <div id="analysisBar"></div>
             </div>
@@ -106,6 +132,8 @@
 		el: '#app',
 		data: function () {
 			return {
+				tab: 0,
+				value: '',
 				punishPieData: [
 					{value: 335, name: '直接访问'},
 					{value: 310, name: '邮件营销'}
@@ -114,73 +142,91 @@
 					{value: 335, name: '直接访问'},
 					{value: 310, name: '邮件营销'}
 				],
-				executeLineData: {
-					source: [
-						['product', '2020-5-4', '2020-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
-						['执行', 100, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
-					]
-                },
+				executeLineData: [
+					{
+						source: [
+							['product', '2020-5-4', '2020-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
+							['执行', 100, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+						]
+					},
+					{
+						source: [
+							['product', '2022-5-4', '2022-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
+							['执行', 400, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+						]
+					},
+				],
 				tableData: [
 					{
-						// query: 400,
+						name: '王小虎',
+						trigger: 390,
+						data: {
+							source: [
+								['product', '2022-5-4', '2022-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
+								['执行', 400, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+							]
+						}
+					},
+					{
 						name: '王小虎',
 						trigger: 390
 					},
 					{
-						// query: 400,
+						name: '王小虎',
+						trigger: 390,
+						data: {
+							source: [
+								['product', '2022-5-4', '2022-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
+								['执行', 200, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+							]
+						}
+					},
+					{
 						name: '王小虎',
 						trigger: 390
 					},
 					{
-						// query: 400,
 						name: '王小虎',
 						trigger: 390
 					},
 					{
-						// query: 400,
 						name: '王小虎',
 						trigger: 390
 					},
 					{
-						// query: 400,
 						name: '王小虎',
 						trigger: 390
 					},
 					{
-						// query: 400,
 						name: '王小虎',
 						trigger: 390
 					},
 					{
-						// query: 400,
-						name: '王小虎',
-						trigger: 390
-					},
-					{
-						query: 400,
-						name: '王小虎',
-						trigger: 390
-					},
-					{
-						query: 400,
 						name: '王小虎',
 						trigger: 390
 					}
 				],
-                deptBarData: {
+				deptBarData: {
 					source: [
 						['product', 'A部门', 'B部门', 'C部门', 'D部门', 'E部门', 'F部门', 'G部门', 'H部门', 'I部门', 'J部门',],
 						['执行情况', 1823, 2489, 2034, 3489, 2034, 4970, 1344, 2034, 1070, 1744],
 						['情况', 1823, 2489, 2034, 3489, 2034, 4970, 1344, 2034, 1070, 1744]
 					]
-                }
+				},
+				analysisPieData: {
+					source: [
+						['product', '惩戒', '激励'],
+						['1', 20, 80],
+					]
+				}
 			}
 		},
 		mounted: function () {
 			this.renderPieChart('punishPie', this.punishPieData)
 			this.renderPieChart('rewardPie', this.rewardPieData)
-			this.renderLineChart('executeLine', this.executeLineData)
-            this.renderBarChart('analysisBar', this.deptBarData)
+			this.renderLineChart('executeLine', this.executeLineData[0])
+			this.renderBarChart('analysisBar', this.deptBarData)
+			this.renderDoublePieChart('analysisPie', this.analysisPieData)
 		},
 		methods: {
 			renderPieChart: function (id, data) {
@@ -215,19 +261,41 @@
 			renderLineChart: function (id, data) {
 				var myChart = echarts.init(document.getElementById(id))
 				var option = {
+					title: {text: '执行趋势分析', textStyle: {fontWeight: 100}, right: '50%'},
+					legend: {
+						right: '4%'
+					},
+					symbol: 'circle',
 					color: ['#3677f5', '#1bd599'],
 					dataset: data,
 					tooltip: {
 						trigger: 'axis'
 					},
-					legend: {},
 					grid: {
 						left: '3%',
 						right: '4%',
-						bottom: '3%',
+						top: '15%',
+						bottom: '6%',
 						containLabel: true
 					},
-					xAxis: {type: 'category', splitLine: {show: true}},
+					xAxis: {
+						type: 'category',
+						splitLine: {
+							show: true
+                        },
+						minorSplitLine: {
+							show: true,
+							lineStyle: {
+								color: '#ddd'
+							}
+						},
+						minorTick: {
+							show: true
+						},
+						axisTick: {
+							alignWithLabel: true
+						}
+					},
 					yAxis: {},
 					series: [
 						{
@@ -242,47 +310,90 @@
 				};
 				myChart.setOption(option)
 			},
-            renderBarChart: function (id, data) {
-	            var myChart = echarts.init(document.getElementById(id))
-	            var option = {
-	                color: ['#77c6ff', '#90e6ff'],
-	            	tooltip: {
-		                trigger: 'axis',
-		                axisPointer: {
-			                type: 'shadow'
-		                }
-	                },
-                    barWidth: 20,
-		            dataset: data,
-	                grid: {
-		                left: '3%',
-		                right: '4%',
-		                bottom: '3%',
-		                containLabel: true
-	                },
-	                xAxis: {
-		                type: 'category',
-		                boundaryGap: [0, 0.01]
-	                },
-	                yAxis: {
-		                type: 'value'
-	                },
-	                series: [
-		                {
-			                type: 'bar',
-			                seriesLayoutBy: 'row',
-			                stack: '总量'
-		                },
-		                {
-			                type: 'bar',
-			                seriesLayoutBy: 'row',
-			                stack: '总量'
-		                }
-	                ]
-                }
-                option.xAxis.axisLine = option.yAxis.axisLine = { lineStyle: { color: "aaa" } }
-	            myChart.setOption(option)
-            }
+			renderBarChart: function (id, data) {
+				var myChart = echarts.init(document.getElementById(id))
+				var option = {
+					color: ['#77c6ff', '#90e6ff'],
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							type: 'shadow'
+						}
+					},
+					barWidth: 20,
+					dataset: data,
+					grid: {
+						left: '3%',
+						right: '4%',
+						bottom: '3%',
+						containLabel: true
+					},
+					xAxis: {
+						type: 'category',
+						boundaryGap: [0, 0.01]
+					},
+					yAxis: {
+						type: 'value'
+					},
+					series: [
+						{
+							type: 'bar',
+							seriesLayoutBy: 'row',
+							stack: '总量'
+						},
+						{
+							type: 'bar',
+							seriesLayoutBy: 'row',
+							stack: '总量'
+						}
+					]
+				}
+				option.xAxis.axisLine = option.yAxis.axisLine = {lineStyle: {color: "f2f5fa"}}
+				myChart.setOption(option)
+			},
+			renderDoublePieChart: function (id, data) {
+				var option = {
+					color: ['#8ea1ff', '#ccf7fe'],
+					dataset: data,
+					tooltip: {
+						trigger: 'item',
+						formatter: '{a} <br/>{b}: {c} ({d}%)'
+					},
+					series: [
+						// {
+						//     hoverAnimation: false,
+						//     name: '访问来源',
+						//     type: 'pie',
+						//     radius: ['51%', '70%'],
+						//     avoidLabelOverlap: false,
+						//     labelLine: {
+						//         show: false
+						//     },
+						//     seriesLayoutBy: 'row'
+						// },
+						{
+							hoverAnimation: false,
+							name: '访问来源',
+							type: 'pie',
+							radius: ['0%', '50%'],
+							avoidLabelOverlap: false,
+							labelLine: {
+								show: false
+							},
+							label: {color: '#333', position: 'inside'},
+							seriesLayoutBy: 'row'
+						}
+					]
+				}
+				var myChart = echarts.init(document.getElementById(id))
+				myChart.setOption(option)
+			},
+			handle: function (p) {
+				this.renderLineChart('executeLine', this.executeLineData[p])
+			},
+			handleRow: function (row) {
+				this.renderLineChart('executeLine', row.data)
+			}
 		}
 	})
 </script>

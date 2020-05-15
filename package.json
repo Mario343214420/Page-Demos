@@ -7,7 +7,7 @@
     "serve": "live-server --open=./src/pages/analyse-statistic.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
     "build": "gulp build"
   },
-  "author": "wangbin",
+  "author": "zhengyu",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -21,5 +21,8 @@
     "gulp-rename": "^1.4.0",
     "gulp-stylus": "^2.7.0",
     "gulp-uglify": "^3.0.2"
+  },
+  "dependencies": {
+    "echart": "^0.1.3"
   }
 }
