@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="../styles/reset.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
     <script src="../js/lib/vue.min.js"></script>
+    <script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>
     <style>
         .m-scroll-list{
             width: 400px;
@@ -16,6 +18,10 @@
         .m-scroll-list li{
             border-right: 1px solid #000;
             border-bottom: 1px solid #000;
+        }
+        .swiper-container {
+             width: 600px;
+             height: 300px;
         }
     </style>
 </head>
@@ -35,6 +41,16 @@
             </ul>
         </div>
     </div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+        </div>
+
+        <!-- 如果需要滚动条 -->
+        <div class="swiper-scrollbar"></div>
+    </div>
 </div>
 <script src="../js/autoScroll.js"></script>
 <script>
@@ -42,7 +58,38 @@
     new Vue({
         el: '#app',
         mounted(){
-        	autoScroll('mScrollBox')
+        	autoScroll('mScrollBox');
+            this.createSwiper()
+        },
+        methods:{
+        	createSwiper: function(){
+		        var mySwiper = new Swiper ('.swiper-container', {
+			        direction: 'vertical', // 垂直切换选项
+			        loop: true, // 循环模式选项
+			        slidesPerView :5,
+			        preventClicks : false,// 点击拖动禁止
+
+			        // 如果需要分页器
+			        pagination: {
+				        el: '.swiper-pagination',
+			        },
+
+			        // 如果需要前进后退按钮
+			        navigation: {
+				        nextEl: '.swiper-button-next',
+				        prevEl: '.swiper-button-prev',
+			        },
+
+                    // 自动滚动
+			        autoplay:true,
+
+			        // 如果需要滚动条
+			        scrollbar: {
+				        el: '.swiper-scrollbar',
+				        draggable: true
+			        },
+		        })
+	        }
         }
     })
 </script>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>联合奖惩分析</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+    <link rel="stylesheet" href="../js/lib/element-ui@2.9.1/index.css">
+    <link rel="stylesheet" href="../styles/analyse-statistic.css">
+    <script src="../js/lib/vue.min.js"></script>
+    <script src="../js/lib/echarts/echarts.min.js"></script>
+    <script src="../js/lib/element-ui@2.9.1/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="app-wrapper">
+        <div class="top-wrapper">
+
+        </div>
+        <div class="count-wrapper">
+            <div class="count-wrapper-item">
+                <div class="inner-left">
+                    <p>奖惩查询（次）</p>
+                    <p class="num">126,560</p>
+                    <p>累计 88,</p>
+                </div>
+                <div class="inner-right">
+                    <img src="../images/analyse-statistic/data.png" alt="">
+                </div>
+            </div>
+            <div class="count-wrapper-item">
+                <div class="inner-left">
+                    <p>奖惩查询（次）</p>
+                    <p class="num">126,560</p>
+                    <p>累计 88,</p>
+                </div>
+                <div class="inner-right">
+                    <img src="../images/analyse-statistic/data.png" alt="">
+                </div>
+            </div>
+            <div class="count-wrapper-item">
+                <div class="inner-left">
+                    <p>奖惩查询（次）</p>
+                    <p class="num">126,560</p>
+                    <p>累计 88,</p>
+                </div>
+                <div class="inner-right">
+                    <div id="punishPie"></div>
+                </div>
+            </div>
+            <div class="count-wrapper-item">
+                <div class="inner-left">
+                    <p>奖惩查询（次）</p>
+                    <p class="num">126,560</p>
+                    <p>累计 88,</p>
+                </div>
+                <div class="inner-right">
+                    <div id="rewardPie"></div>
+                </div>
+            </div>
+        </div>
+        <div class="card-wrapper">
+            <div class="card-title-bar"><i class="el-icon-s-data"></i><i>备忘录被执行情况分析</i></div>
+            <div id="executeLine"></div>
+            <div class="table">
+                <el-table
+                        :data="tableData"
+                        :header-cell-style="{'background': '#f2f5fa', 'color': '#333333'}"
+                        stripe
+                        height="280"
+                        style="width: 100%">
+                    <el-table-column
+                            label="排名"
+                            fixed
+                            width="200"
+                            type="index">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            label="备忘录名称">
+                    </el-table-column>
+<!--                    <el-table-column-->
+<!--                            prop="query"-->
+<!--                            label="查询次数">-->
+<!--                    </el-table-column>-->
+                    <el-table-column
+                            prop="trigger"
+                            label="触发次数">
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div flex="jus">
+            <div class="card-wrapper" style="flex: 1">
+                <div class="card-title-bar"><i class="el-icon-s-data"></i><i>部门执行情况统计分析</i></div>
+                <div id="analysisBar"></div>
+            </div>
+            <div class="card-wrapper" style="width: 500px;">
+                <div class="card-title-bar"><i class="el-icon-s-data"></i><i>处理情况分析</i></div>
+                <div id="analysisPie"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+	new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				punishPieData: [
+					{value: 335, name: '直接访问'},
+					{value: 310, name: '邮件营销'}
+				],
+				rewardPieData: [
+					{value: 335, name: '直接访问'},
+					{value: 310, name: '邮件营销'}
+				],
+				executeLineData: {
+					source: [
+						['product', '2020-5-4', '2020-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
+						['执行', 100, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+					]
+                },
+				tableData: [
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						// query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						query: 400,
+						name: '王小虎',
+						trigger: 390
+					},
+					{
+						query: 400,
+						name: '王小虎',
+						trigger: 390
+					}
+				],
+                deptBarData: {
+					source: [
+						['product', 'A部门', 'B部门', 'C部门', 'D部门', 'E部门', 'F部门', 'G部门', 'H部门', 'I部门', 'J部门',],
+						['执行情况', 1823, 2489, 2034, 3489, 2034, 4970, 1344, 2034, 1070, 1744],
+						['情况', 1823, 2489, 2034, 3489, 2034, 4970, 1344, 2034, 1070, 1744]
+					]
+                }
+			}
+		},
+		mounted: function () {
+			this.renderPieChart('punishPie', this.punishPieData)
+			this.renderPieChart('rewardPie', this.rewardPieData)
+			this.renderLineChart('executeLine', this.executeLineData)
+            this.renderBarChart('analysisBar', this.deptBarData)
+		},
+		methods: {
+			renderPieChart: function (id, data) {
+				var myChart = echarts.init(document.getElementById(id))
+				var option = {
+					color: ['rgba(255, 255, 255, 1)', 'rgba(255, 255, 255, .4)'],
+					series: [
+						{
+							hoverAnimation: false,
+							type: 'pie',
+							radius: ['40%', '90%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false
+							},
+							emphasis: {
+								label: {
+									show: false,
+									fontSize: '30',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: data
+						}
+					]
+				}
+				myChart.setOption(option)
+			},
+			renderLineChart: function (id, data) {
+				var myChart = echarts.init(document.getElementById(id))
+				var option = {
+					color: ['#3677f5', '#1bd599'],
+					dataset: data,
+					tooltip: {
+						trigger: 'axis'
+					},
+					legend: {},
+					grid: {
+						left: '3%',
+						right: '4%',
+						bottom: '3%',
+						containLabel: true
+					},
+					xAxis: {type: 'category', splitLine: {show: true}},
+					yAxis: {},
+					series: [
+						{
+							type: 'line',
+							seriesLayoutBy: 'row'
+						},
+						{
+							type: 'line',
+							seriesLayoutBy: 'row'
+						}
+					]
+				};
+				myChart.setOption(option)
+			},
+            renderBarChart: function (id, data) {
+	            var myChart = echarts.init(document.getElementById(id))
+	            var option = {
+	                color: ['#77c6ff', '#90e6ff'],
+	            	tooltip: {
+		                trigger: 'axis',
+		                axisPointer: {
+			                type: 'shadow'
+		                }
+	                },
+                    barWidth: 20,
+		            dataset: data,
+	                grid: {
+		                left: '3%',
+		                right: '4%',
+		                bottom: '3%',
+		                containLabel: true
+	                },
+	                xAxis: {
+		                type: 'category',
+		                boundaryGap: [0, 0.01]
+	                },
+	                yAxis: {
+		                type: 'value'
+	                },
+	                series: [
+		                {
+			                type: 'bar',
+			                seriesLayoutBy: 'row',
+			                stack: '总量'
+		                },
+		                {
+			                type: 'bar',
+			                seriesLayoutBy: 'row',
+			                stack: '总量'
+		                }
+	                ]
+                }
+                option.xAxis.axisLine = option.yAxis.axisLine = { lineStyle: { color: "aaa" } }
+	            myChart.setOption(option)
+            }
+		}
+	})
+</script>
+</body>
+</html>

@@ -41,7 +41,7 @@
 		);
 
 	    var scene = new THREE.Scene();
-	    renderer.setClearColor(0x333333, 1.0);
+	    renderer.setClearColor(0xffffff, 1.0);
 	    renderer.shadowMap.enabled = true;
 	    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		renderer.setSize(w, h);
@@ -50,7 +50,7 @@
 		container.append(renderer.domElement);
 
 		//设置球体的值
-		var radius = 60, segemnt = 60, rings = 60;
+		var radius = 60, segemnt = 60;
 		var earth_png = new THREE.TextureLoader().load('../images/canvas/map-ad-bg.png');
 		// var sphereMaterial = new THREE.MeshLambertMaterial({map: earth_png, color: '#ffffff'});
 		var sphereMaterial = new THREE.MeshPhysicalMaterial({map: earth_png, color: '#ffffff'});
@@ -60,20 +60,21 @@
 	    sphereMaterial.shininess = 80;
 	    sphereMaterial.color = new THREE.Color(0x2194ce);
 	    sphereMaterial.emissive = new THREE.Color(0x0);
-	    var sphereGeometry = new THREE.SphereGeometry(radius, segemnt, rings);
+	    var sphereGeometry = new THREE.SphereGeometry(radius, segemnt, segemnt);
 
 	    let pMaterial = new THREE.PointsMaterial({
 		    // 粒子颜色
-		    color: 0xffffff,
+		    color: 0x333333,
 		    // 粒子大小
 		    size: 2
 	    });
 
 	    let particleSystem = new THREE.ParticleSystem(sphereGeometry, pMaterial);
 
+	    var material = new THREE.MeshBasicMaterial( {color: 0xff11ff} );
 		var sphere = new THREE.Mesh(
 			sphereGeometry,
-			// sphereMaterial
+			material
 		);
 
 	    var pivotPoint = new THREE.Object3D();// 3d效果
@@ -92,7 +93,7 @@
 
 	    var ambientLight = new THREE.AmbientLight( 0xffffff );
 
-	    var helper = new THREE.DirectionalLightHelper(spotLight, 50,0xFFFFFF);
+	    var helper = new THREE.DirectionalLightHelper(spotLight, 50, 0xffffff);
 
 	    camera.position.x = 0;
 	    camera.position.y = 0;
@@ -101,15 +102,15 @@
 
 	    scene.add(camera);
 	    scene.add(spotLight);
-	    scene.add(particleSystem);
+	    // scene.add(particleSystem);
 	    scene.add(sphere);
 	    scene.add(helper);
 
 		function animate(){
 			requestAnimationFrame(animate);
 			//画图
-			//sphere.rotation.x+=.1;
-			sphere.rotation.y += .001;//延Y轴旋转
+			sphere.rotation.y+=.001;
+			particleSystem.rotation.y += .001;//延Y轴旋转
 			renderer.render(scene, camera);
 		}
 		animate()
