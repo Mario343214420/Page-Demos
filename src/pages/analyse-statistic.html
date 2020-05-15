@@ -14,16 +14,16 @@
 <div id="app">
     <div class="app-wrapper">
         <div class="top-wrapper">
-            <span @click="tab = 0" :class="(tab === 0 && value === '') ? 'active' : ''">
+            <span @click="changeTab(0)" :class="(tab === 0 && value === '') ? 'active' : ''">
                 今日
             </span>
-            <span @click="tab = 1" :class="(tab === 1 && value === '') ? 'active' : ''">
+            <span @click="changeTab(1)" :class="(tab === 1 && value === '') ? 'active' : ''">
                 本周
             </span>
-            <span @click="tab = 2" :class="(tab === 2 && value === '') ? 'active' : ''">
+            <span @click="changeTab(2)" :class="(tab === 2 && value === '') ? 'active' : ''">
                 本月
             </span>
-            <span @click="tab = 3" :class="(tab === 3 && value === '') ? 'active' : ''">
+            <span @click="changeTab(3)" :class="(tab === 3 && value === '') ? 'active' : ''">
                 全年
             </span>
             <span>
@@ -40,8 +40,8 @@
             <div class="count-wrapper-item">
                 <div class="inner-left">
                     <p>奖惩查询（次）</p>
-                    <p class="num">126,560</p>
-                    <p>累计 88,48</p>
+                    <p class="num">{{ formatterNum(countList.searchList[0].count) }}</p>
+                    <p>累计 {{ formatterNum(countList.searchList[0].total) }}</p>
                 </div>
                 <div class="inner-right">
                     <img src="../images/analyse-statistic/data.png" alt="">
@@ -49,9 +49,9 @@
             </div>
             <div class="count-wrapper-item">
                 <div class="inner-left">
-                    <p>奖惩查询（次）</p>
-                    <p class="num">126,560</p>
-                    <p>累计 88,48</p>
+                    <p>奖惩反馈（次）</p>
+                    <p class="num">{{ formatterNum(countList.searchList[1].count) }}</p>
+                    <p>累计 {{ formatterNum(countList.searchList[1].total) }}</p>
                 </div>
                 <div class="inner-right">
                     <img src="../images/analyse-statistic/data.png" alt="">
@@ -59,9 +59,9 @@
             </div>
             <div class="count-wrapper-item">
                 <div class="inner-left">
-                    <p>奖惩查询（次）</p>
-                    <p class="num">126,560</p>
-                    <p>累计 88,48</p>
+                    <p>惩戒（次）</p>
+                    <p class="num">{{ formatterNum(countList.searchList[2].count) }}</p>
+                    <p>累计 {{ formatterNum(countList.searchList[2].total) }}</p>
                 </div>
                 <div class="inner-right">
                     <div id="punishPie"></div>
@@ -69,9 +69,9 @@
             </div>
             <div class="count-wrapper-item">
                 <div class="inner-left">
-                    <p>奖惩查询（次）</p>
-                    <p class="num">126,560</p>
-                    <p>累计 88,48</p>
+                    <p>反馈（次）</p>
+                    <p class="num">{{ formatterNum(countList.searchList[3].count) }}</p>
+                    <p>累计 {{ formatterNum(countList.searchList[3].total) }}</p>
                 </div>
                 <div class="inner-right">
                     <div id="rewardPie"></div>
@@ -92,11 +92,13 @@
                     <el-table-column
                             label="排名"
                             fixed
+                            align="center"
                             width="200"
                             type="index">
                     </el-table-column>
                     <el-table-column
                             prop="name"
+                            align="center"
                             label="备忘录名称">
                         <template slot-scope="scope">
                             <span class="table-btn" @click="handle(scope.$index)">
@@ -109,13 +111,14 @@
                     <!--                            label="查询次数">-->
                     <!--                    </el-table-column>-->
                     <el-table-column
+                            align="center"
                             prop="trigger"
                             label="触发次数">
                     </el-table-column>
                 </el-table>
             </div>
         </div>
-        <div flex="jus">
+        <div flex>
             <div class="card-wrapper" style="flex: 1; margin-right: 20px;">
                 <div class="card-title-bar"><i class="el-icon-s-data"></i><i>部门执行情况统计分析</i></div>
                 <div id="analysisBar"></div>
@@ -134,6 +137,26 @@
 			return {
 				tab: 0,
 				value: '',
+                countList: {
+				    searchList: [
+					    {
+						    count: 126560,
+						    total: 88488848
+					    },
+                        {
+						    count: 8848,
+						    total: 88488848
+					    },
+					    {
+						    count: 8848,
+						    total: 88488848
+					    },
+					    {
+						    count: 8848,
+						    total: 88488848
+					    }
+                    ]
+                },
 				punishPieData: [
 					{value: 335, name: '直接访问'},
 					{value: 310, name: '邮件营销'}
@@ -152,7 +175,7 @@
 					{
 						source: [
 							['product', '2022-5-4', '2022-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
-							['执行', 400, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+							['zhixing', 400, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
 						]
 					},
 				],
@@ -393,7 +416,29 @@
 			},
 			handleRow: function (row) {
 				this.renderLineChart('executeLine', row.data)
-			}
+			},
+            changeTab: function (param) {
+                this.value = ''
+                this.tab = param
+            },
+            formatterNum: function (param) {
+                var str = param.toString()
+                var arr = str.split('')
+                arr.reverse()
+	            var copy = []
+	            arr.forEach((item, index)=>{
+		            if ((index) % 3 === 0 && index !== 0){
+		                copy.push(',')
+		                copy.push(item)
+	                } else {
+	                	copy.push(item)
+                    }
+                })
+	            copy.reverse()
+	            // arr.reverse()
+                arr =  null
+	            return copy.join('')
+            }
 		}
 	})
 </script>
