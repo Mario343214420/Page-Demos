@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/common/flex.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../styles/luohe/data-1.css">
+  <script src="../../js/lib/vue.min.js"></script>
+  <!--  <script src="../../js/lib/hight-chart/highcharts.js"></script>-->
+  <!--  <script src="../../js/lib/hight-chart/highcharts-zh_CN.js"></script>-->
+  <!--  <script src="../../js/lib/hight-chart/highcharts-3d.js"></script>-->
+  <!--  <script src="../../js/lib/hight-chart/exporting.js"></script>-->
+  <script src="../../js/lib/echarts/echarts.min.js"></script>
+  <script src="../../js/lib/bin-ui/bin-ui.umd.min.js"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+  <div class="top-wrapper">
+    <p>企业信用风险评价分析</p>
+  </div>
+  <div class="main-wrapper" flex="main:justify">
+    <div class="panel" flex="dir:top main:justify">
+      <div class="light-container" style="height: 160px;">
+        <div class="title">平台数据轨迹情况</div>
+        <div class="content">
+          <div class="count-wrapper">
+
+          </div>
+        </div>
+      </div>
+      <div class="light-container">
+        <div class="title">企业预警情况</div>
+        <div class="content">
+        </div>
+      </div>
+      <div class="light-container h264px">
+        <div class="title">纳入预警原因分析</div>
+        <div class="content">
+          <div id="areaChart" class="simple-chart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" flex="dir:top main:justify">
+      <div class="light-container" style="border: none;box-shadow: none">
+        <div class="center-chart-container">
+          <div id="pieChart" class="simple-chart"></div>
+        </div>
+      </div>
+      <div class="light-container h264px">
+        <div flex="space:around">
+          <div class="title">企业信用风险评级结果公布</div>
+          <div class="title">食品行业评级结果分布</div>
+        </div>
+        <div class="chart-wrapper" flex="space:around">
+          <div id="barChart0" class="simple-chart"></div>
+          <div id="barChart1" class="simple-chart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" flex="dir:top main:justify">
+      <div class="light-container h264px">
+        <div class="title">企业类型统计</div>
+        <div class="content">
+          <div id="ringChart" class="simple-chart"></div>
+        </div>
+      </div>
+      <div class="light-container h264px">
+        <div class="title">数据提报量部门Top10</div>
+        <div class="content">
+          <div id="barChart2" class="simple-chart"></div>
+        </div>
+      </div>
+      <div class="light-container h264px">
+        <div class="title">失信执行人数量趋势分析</div>
+        <div class="content" flex="space:around">
+          <div id="roseChart" class="simple-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+	new Vue({
+		el: '#app',
+		data: function () {
+			return {}
+		},
+		mounted: function () {
+			var colorList = ['#563cff','#e48831','#f03e58','#1fdf94','#04c8ff','#1167e2']
+			// 假数据
+			var barChartData1 = [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6]
+			var barChartData2 = [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 180.0]
+			// var areaChartData = ['2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-010']
+			var ringChartData = [
+				{value: 335, name: '金融'},
+				{value: 310, name: '保险'},
+				{value: 234, name: '建筑'},
+				{value: 135, name: '环保'},
+				{value: 200, name: '其他'}
+			]
+			var roseChartData = [
+				{
+					name: '红名单',
+					list: ringChartData
+				}, {
+					name: '黑名单',
+					list: ringChartData
+				}
+			]
+			var xLabel0 = ['AAA', 'AA', 'A', 'B', 'C', 'D', 'E']
+			var xLabel1 = ['公安局', '人社局', '民政局', '市场监督局', '交通局', '地税局', '交通局', '税务局']
+			var xLabel2 = ['2020-04', '2020-05', '2020-06', '2020-07']
+
+			this.renderChart([
+				{fun: this.renderBarChart, id: 'barChart0', color: '#02d0ff', data: barChartData1, xLabel:xLabel0},
+				{fun: this.renderBarChart, id: 'barChart1', color: '#4dcea8', data: barChartData1, xLabel:xLabel0},
+				{fun: this.renderBarChart, id: 'barChart2', color: '#02d0ff', data: barChartData2, xLabel:xLabel1},
+				{fun: this.renderRingChart, id: 'ringChart',color: colorList, data: ringChartData},
+				{fun: this.renderRoseChart, id: 'roseChart',color: colorList, data: roseChartData},
+				{fun: this.renderAreaChart, id: 'areaChart',color:'#07a8e3', data: [820, 932, 901, 934], xLabel:xLabel2},
+			])
+		},
+		methods: {
+			// renderChart方法统一调用render，
+			// 参数使用arr包裹每个表格渲染方法，
+			// 自动以fun属性作为基础渲染方法，
+      // funList{fun,id,color,data...}
+			// 并将其他key作为渲染方法的调用参数
+      // example: renderChart(paramObj){
+      //    ...
+      // }
+      // paramObj:{id,color,data...}
+			renderChart: function (funList) {
+				var _self = this
+				funList.forEach(function (item) {
+					var arr = []
+					if (Object.prototype.toString.call(item).slice(8, -1) === 'Object') {
+						var obj = {}
+						var keys = Object.keys(item)
+						keys.splice(keys.indexOf('fun'), 1)
+						for (var i = 0; i < keys.length; i++) {
+							obj[keys[i]] = item[keys[i]]
+						}
+						item.fun.call(_self, obj)
+					} else {
+						console.log('funList中存在非对象个体')
+					}
+				})
+			},
+			renderBarChart: function (paramObj) {
+				var rotate = paramObj.data.length > 7 ? 30 : 0
+				var myChart = echarts.init(document.getElementById(paramObj.id));
+				var option = {
+					color: paramObj.color,
+          grid:{
+						top: '10%',
+            bottom: '20%'
+          },
+					xAxis: {
+						type: 'category',
+						data: paramObj.xLabel,
+						axisLine:{
+							lineStyle: {
+								color: '#5d6788'
+							}
+						},
+						boundaryGap: ['10%', '10%'],
+            axisTick:{
+							interval: 0,
+	            alignWithLabel: true
+            },
+            axisLabel: {
+							rotate: rotate
+            }
+					},
+					yAxis: {
+						type: 'value',
+						axisLine:{
+							lineStyle: {
+								color: '#5d6788'
+							}
+						},
+						splitLine: {
+							lineStyle: {
+								color: '#5d6788'
+							}
+						}
+					},
+					series: [{
+						data: paramObj.data,
+						type: 'bar',
+						barWidth: 20
+					}]
+				};
+				myChart.setOption(option)
+			},
+			renderAreaChart: function (paramObj) {
+				var myChart = echarts.init(document.getElementById(paramObj.id));
+				var option = {
+					color:paramObj.color,
+					grid:{
+						top: '20%',
+						bottom: '20%'
+					},
+					xAxis: {
+						type: 'category',
+						boundaryGap: false,
+						data: paramObj.xLabel,
+            axisLine:{
+	            lineStyle: {
+		            color: '#5d6788'
+	            }
+            }
+					},
+					legend: {
+						top: 0,
+						right: 0,
+						data: ['风险企业信用预警'],
+						textStyle: {
+							color: '#fff'
+						}
+					},
+					yAxis: {
+						type: 'value',
+						axisLine:{
+							lineStyle: {
+								color: '#5d6788'
+							}
+						},
+						splitLine: {
+							lineStyle: {
+								color: '#5d6788'
+							}
+						}
+					},
+					series: [{
+						name: '风险企业信用预警',
+						data: paramObj.data,
+						type: 'line',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+								offset: 0,
+								color: paramObj.color
+							}, {
+								offset: 1,
+								color: 'transparent'
+							}])
+						},
+					}]
+				};
+				myChart.setOption(option)
+			},
+			renderRingChart: function (paramObj) {
+				var myChart = echarts.init(document.getElementById(paramObj.id));
+				var legendList = paramObj.data.map(item => item.name)
+				var option = {
+					color:paramObj.color,
+					grid:{
+						top: '10%',
+						bottom: '20%'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: '{a} <br/>{b}: {c} ({d}%)'
+					},
+					legend: {
+						bottom: 10,
+						data: legendList,
+						textStyle: {
+							color:'#fff'
+						}
+					},
+					series: [
+						{
+							name: '访问来源',
+							type: 'pie',
+							radius: ['50%', '70%'],
+              center: ['50%','40%'],
+							avoidLabelOverlap: false,
+              label: {
+                show: true,
+                color:'#fff'
+              },
+							data: paramObj.data
+						}
+					]
+				};
+				myChart.setOption(option);
+			},
+			renderRoseChart: function (paramObj) {
+				var myChart = echarts.init(document.getElementById(paramObj.id));
+				var legendList = paramObj.data[0].list.map(item => item.name)
+				var option = {
+					color: paramObj.color,
+					grid:{
+						top: '10%',
+						bottom: '20%'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: '{a} <br/>{b} : {c} ({d}%)'
+					},
+					legend: {
+						bottom: 10,
+						data: legendList,
+            textStyle: {
+							color:'#fff'
+            }
+					},
+					series: [
+						{
+							name: paramObj.data[0].name,
+							type: 'pie',
+							radius: [20, 60],
+							center: ['25%', '40%'],
+							roseType: 'radius',
+							label: {
+								show: false
+							},
+							data: paramObj.data[0].list
+						},
+						{
+							name: paramObj.data[1].name,
+							type: 'pie',
+							radius: [20, 60],
+							label: {
+								show: false
+							},
+							center: ['75%', '45%'],
+							roseType: 'area',
+							data: paramObj.data[1].list
+						}
+					]
+				};
+				myChart.setOption(option)
+			}
+		}
+	})
+</script>
+</body>
+</html>

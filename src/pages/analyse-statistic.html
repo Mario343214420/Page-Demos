@@ -1,162 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>联合奖惩分析</title>
-    <link rel="stylesheet" href="../styles/reset.css">
-    <link rel="stylesheet" href="../js/lib/element-ui@2.9.1/index.css">
-    <link rel="stylesheet" href="../styles/analyse-statistic.css">
-    <script src="../js/lib/vue.min.js"></script>
-    <script src="../js/lib/echarts/echarts.min.js"></script>
-    <script src="../js/lib/element-ui@2.9.1/index.js"></script>
+  <meta charset="UTF-8">
+  <title>联合奖惩分析</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../js/lib/element-ui@2.9.1/index.css">
+  <link rel="stylesheet" href="../styles/analyse-statistic.css">
+  <script src="../js/lib/vue.min.js"></script>
+  <script src="../js/lib/echarts/echarts.min.js"></script>
+  <script src="../js/lib/element-ui@2.9.1/index.js"></script>
 </head>
 <body>
 <div id="app">
-    <div class="app-wrapper">
-        <div class="top-wrapper">
+  <div class="app-wrapper">
+    <div class="top-wrapper">
             <span @click="changeTab(0)" :class="(tab === 0 && value === '') ? 'active' : ''">
                 今日
             </span>
-            <span @click="changeTab(1)" :class="(tab === 1 && value === '') ? 'active' : ''">
+      <span @click="changeTab(1)" :class="(tab === 1 && value === '') ? 'active' : ''">
                 本周
             </span>
-            <span @click="changeTab(2)" :class="(tab === 2 && value === '') ? 'active' : ''">
+      <span @click="changeTab(2)" :class="(tab === 2 && value === '') ? 'active' : ''">
                 本月
             </span>
-            <span @click="changeTab(3)" :class="(tab === 3 && value === '') ? 'active' : ''">
+      <span @click="changeTab(3)" :class="(tab === 3 && value === '') ? 'active' : ''">
                 全年
             </span>
-            <span>
+      <span>
                 <el-date-picker
-                        v-model="value"
-                        type="daterange"
-                        range-separator="~"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                  v-model="value"
+                  type="daterange"
+                  range-separator="~"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
                 </el-date-picker>
             </span>
+    </div>
+    <div class="count-wrapper">
+      <div class="count-wrapper-item">
+        <div class="inner-left">
+          <p>奖惩查询（次）</p>
+          <p class="num">{{ formatterNum(countList.searchList[0].count) }}</p>
+          <p>累计 {{ formatterNum(countList.searchList[0].total) }}</p>
         </div>
-        <div class="count-wrapper">
-            <div class="count-wrapper-item">
-                <div class="inner-left">
-                    <p>奖惩查询（次）</p>
-                    <p class="num">{{ formatterNum(countList.searchList[0].count) }}</p>
-                    <p>累计 {{ formatterNum(countList.searchList[0].total) }}</p>
-                </div>
-                <div class="inner-right">
-                    <img src="../images/analyse-statistic/data.png" alt="">
-                </div>
-            </div>
-            <div class="count-wrapper-item">
-                <div class="inner-left">
-                    <p>奖惩反馈（次）</p>
-                    <p class="num">{{ formatterNum(countList.searchList[1].count) }}</p>
-                    <p>累计 {{ formatterNum(countList.searchList[1].total) }}</p>
-                </div>
-                <div class="inner-right">
-                    <img src="../images/analyse-statistic/data.png" alt="">
-                </div>
-            </div>
-            <div class="count-wrapper-item">
-                <div class="inner-left">
-                    <p>惩戒（次）</p>
-                    <p class="num">{{ formatterNum(countList.searchList[2].count) }}</p>
-                    <p>累计 {{ formatterNum(countList.searchList[2].total) }}</p>
-                </div>
-                <div class="inner-right">
-                    <div id="punishPie"></div>
-                </div>
-            </div>
-            <div class="count-wrapper-item">
-                <div class="inner-left">
-                    <p>反馈（次）</p>
-                    <p class="num">{{ formatterNum(countList.searchList[3].count) }}</p>
-                    <p>累计 {{ formatterNum(countList.searchList[3].total) }}</p>
-                </div>
-                <div class="inner-right">
-                    <div id="rewardPie"></div>
-                </div>
-            </div>
+        <div class="inner-right">
+          <img src="../images/analyse-statistic/data.png" alt="">
         </div>
-        <div class="card-wrapper">
-            <div class="card-title-bar"><i class="el-icon-s-data"></i><i>备忘录被执行情况分析</i></div>
-            <div id="executeLine"></div>
-            <div class="table">
-                <el-table
-                        :data="tableData"
-                        :header-cell-style="{'background': '#f2f5fa', 'color': '#333333'}"
-                        @row-click="handleRow"
-                        stripe
-                        height="280"
-                        style="width: 100%">
-                    <el-table-column
-                            label="排名"
-                            fixed
-                            align="center"
-                            width="200"
-                            type="index">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            align="center"
-                            label="备忘录名称">
-                        <template slot-scope="scope">
+      </div>
+      <div class="count-wrapper-item">
+        <div class="inner-left">
+          <p>奖惩反馈（次）</p>
+          <p class="num">{{ formatterNum(countList.searchList[1].count) }}</p>
+          <p>累计 {{ formatterNum(countList.searchList[1].total) }}</p>
+        </div>
+        <div class="inner-right">
+          <img src="../images/analyse-statistic/data.png" alt="">
+        </div>
+      </div>
+      <div class="count-wrapper-item">
+        <div class="inner-left">
+          <p>惩戒（次）</p>
+          <p class="num">{{ formatterNum(countList.searchList[2].count) }}</p>
+          <p>累计 {{ formatterNum(countList.searchList[2].total) }}</p>
+        </div>
+        <div class="inner-right">
+          <div id="punishPie"></div>
+        </div>
+      </div>
+      <div class="count-wrapper-item">
+        <div class="inner-left">
+          <p>反馈（次）</p>
+          <p class="num">{{ formatterNum(countList.searchList[3].count) }}</p>
+          <p>累计 {{ formatterNum(countList.searchList[3].total) }}</p>
+        </div>
+        <div class="inner-right">
+          <div id="rewardPie"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-wrapper">
+      <div class="card-title-bar"><i class="el-icon-s-data"></i><i>备忘录被执行情况分析</i></div>
+      <div id="executeLine"></div>
+      <div class="table">
+        <el-table
+          :data="tableData"
+          :header-cell-style="{'background': '#f2f5fa', 'color': '#333333'}"
+          @row-click="handleRow"
+          highlight-current-row
+          @current-change="handleCurrentChange"
+          stripe
+          height="280"
+          style="width: 100%">
+          <el-table-column
+            label="排名"
+            fixed
+            align="center"
+            width="200"
+            type="index">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            align="center"
+            label="备忘录名称">
+            <template slot-scope="scope">
                             <span class="table-btn" @click="handle(scope.$index)">
                                 {{ scope.row.name }}
                             </span>
-                        </template>
-                    </el-table-column>
-                    <!--                    <el-table-column-->
-                    <!--                            prop="query"-->
-                    <!--                            label="查询次数">-->
-                    <!--                    </el-table-column>-->
-                    <el-table-column
-                            align="center"
-                            prop="trigger"
-                            label="触发次数">
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
-        <div flex>
-            <div class="card-wrapper" style="flex: 1; margin-right: 20px;">
-                <div class="card-title-bar"><i class="el-icon-s-data"></i><i>部门执行情况统计分析</i></div>
-                <div id="analysisBar"></div>
-            </div>
-            <div class="card-wrapper" style="width: 500px;">
-                <div class="card-title-bar"><i class="el-icon-s-data"></i><i>处理情况分析</i></div>
-                <div id="analysisPie"></div>
-            </div>
-        </div>
+            </template>
+          </el-table-column>
+          <!--                    <el-table-column-->
+          <!--                            prop="query"-->
+          <!--                            label="查询次数">-->
+          <!--                    </el-table-column>-->
+          <el-table-column
+            align="center"
+            prop="trigger"
+            label="触发次数">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
+    <div flex>
+      <div class="card-wrapper" style="flex: 1; margin-right: 20px;">
+        <div class="card-title-bar"><i class="el-icon-s-data"></i><i>部门执行情况统计分析</i></div>
+        <div id="analysisBar"></div>
+      </div>
+      <div class="card-wrapper" style="width: 500px;">
+        <div class="card-title-bar"><i class="el-icon-s-data"></i><i>处理情况分析</i></div>
+        <div id="analysisPie"></div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
 	new Vue({
 		el: '#app',
 		data: function () {
 			return {
+				// 年月切换flag
 				tab: 0,
+				// 日期选择
 				value: '',
-                countList: {
-				    searchList: [
-					    {
-						    count: 126560,
-						    total: 88488848
-					    },
-                        {
-						    count: 8848,
-						    total: 88488848
-					    },
-					    {
-						    count: 8848,
-						    total: 88488848
-					    },
-					    {
-						    count: 8848,
-						    total: 88488848
-					    }
-                    ]
-                },
+				// 顶部展示信息
+				countList: {
+					searchList: [
+						{
+							count: 126560,
+							total: 88488848
+						},
+						{
+							count: 8848,
+							total: 88488848
+						},
+						{
+							count: 8848,
+							total: 88488848
+						},
+						{
+							count: 8848,
+							total: 88488848
+						}
+					]
+				},
+				// 顶部奖惩信息
 				punishPieData: [
 					{value: 335, name: '直接访问'},
 					{value: 310, name: '邮件营销'}
@@ -165,20 +171,14 @@
 					{value: 335, name: '直接访问'},
 					{value: 310, name: '邮件营销'}
 				],
-				executeLineData: [
-					{
-						source: [
-							['product', '2020-5-4', '2020-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
-							['执行', 100, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
-						]
-					},
-					{
-						source: [
-							['product', '2022-5-4', '2022-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
-							['zhixing', 400, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
-						]
-					},
-				],
+				// 执行趋势分析
+				executeLineData: {
+					source: [
+						['product', '2020-5-4', '2020-5-5', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'],
+						['执行', 100, 200, 150, 300, 250, 350, 300, 280, 430, 240, 280, 170],
+					]
+				},
+				// 表格数据
 				tableData: [
 					{
 						name: '王小虎',
@@ -229,6 +229,7 @@
 						trigger: 390
 					}
 				],
+				// 部门执行柱状图数据
 				deptBarData: {
 					source: [
 						['product', 'A部门', 'B部门', 'C部门', 'D部门', 'E部门', 'F部门', 'G部门', 'H部门', 'I部门', 'J部门',],
@@ -236,6 +237,7 @@
 						['情况', 1823, 2489, 2034, 3489, 2034, 4970, 1344, 2034, 1070, 1744]
 					]
 				},
+				// 处理分析饼图
 				analysisPieData: {
 					source: [
 						['product', '惩戒', '激励'],
@@ -245,13 +247,20 @@
 			}
 		},
 		mounted: function () {
+			// 绘制图标
 			this.renderPieChart('punishPie', this.punishPieData)
 			this.renderPieChart('rewardPie', this.rewardPieData)
-			this.renderLineChart('executeLine', this.executeLineData[0])
+			this.renderLineChart('executeLine', this.executeLineData)
 			this.renderBarChart('analysisBar', this.deptBarData)
 			this.renderDoublePieChart('analysisPie', this.analysisPieData)
 		},
 		methods: {
+			setCurrent(row) {
+				this.$refs.singleTable.setCurrentRow(row);
+			},
+			handleCurrentChange(val) {
+				this.currentRow = val;
+			},
 			renderPieChart: function (id, data) {
 				var myChart = echarts.init(document.getElementById(id))
 				var option = {
@@ -305,7 +314,7 @@
 						type: 'category',
 						splitLine: {
 							show: true
-                        },
+						},
 						minorSplitLine: {
 							show: true,
 							lineStyle: {
@@ -380,7 +389,10 @@
 					dataset: data,
 					tooltip: {
 						trigger: 'item',
-						formatter: '{a} <br/>{b}: {c} ({d}%)'
+						formatter: function (p) {
+							console.log(p);
+							return p.name + ' ：' + p.percent + '%'
+						}
 					},
 					series: [
 						// {
@@ -411,34 +423,52 @@
 				var myChart = echarts.init(document.getElementById(id))
 				myChart.setOption(option)
 			},
-			handle: function (p) {
-				this.renderLineChart('executeLine', this.executeLineData[p])
-			},
+			// 表格内备用点击事件（）
+			// handle: function (p) {
+			// 	this.renderLineChart('executeLine', this.executeLineData)
+			// },
+			// 表格行点击事件
 			handleRow: function (row) {
+				// 可操作row读取行信息请求后台获取相应折线图信息渲染
 				this.renderLineChart('executeLine', row.data)
 			},
-            changeTab: function (param) {
-                this.value = ''
-                this.tab = param
-            },
-            formatterNum: function (param) {
-                var str = param.toString()
-                var arr = str.split('')
-                arr.reverse()
-	            var copy = []
-	            arr.forEach((item, index)=>{
-		            if ((index) % 3 === 0 && index !== 0){
-		                copy.push(',')
-		                copy.push(item)
-	                } else {
-	                	copy.push(item)
-                    }
-                })
-	            copy.reverse()
-	            // arr.reverse()
-                arr =  null
-	            return copy.join('')
-            }
+			// 时间区间切换事件
+			changeTab: function (param) {
+				this.value = ''
+				this.tab = param
+			},
+			// 数字逗号分割
+			formatterNum: function (param) {
+				var str = param.toString()
+				var arr = str.split('')
+				arr.reverse()
+				var copy = []
+				arr.forEach((item, index) => {
+					if ((index) % 3 === 0 && index !== 0) {
+						copy.push(',')
+						copy.push(item)
+					} else {
+						copy.push(item)
+					}
+				})
+				copy.reverse()
+				// arr.reverse()
+				arr = null
+				return copy.join('')
+			},
+			// 请求示例(参照axios文档)
+			req: function () {
+				axios.post('/user', {
+					firstName: 'Fred',
+					lastName: 'Flintstone'
+				})
+					.then(function (response) {
+						console.log(response);
+					})
+					.catch(function (error) {
+						console.log(error);
+					})
+			}
 		}
 	})
 </script>
