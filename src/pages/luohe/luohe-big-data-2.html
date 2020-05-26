@@ -6,12 +6,8 @@
   <link rel="stylesheet" href="../../styles/reset.css">
   <link rel="stylesheet" href="../../js/lib/bin-ui/styles/common/flex.css">
   <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
-  <link rel="stylesheet" href="../../styles/luohe/data-1.css">
+  <link rel="stylesheet" href="../../styles/luohe/data-2.css">
   <script src="../../js/lib/vue.min.js"></script>
-  <!--  <script src="../../js/lib/hight-chart/highcharts.js"></script>-->
-  <!--  <script src="../../js/lib/hight-chart/highcharts-zh_CN.js"></script>-->
-  <!--  <script src="../../js/lib/hight-chart/highcharts-3d.js"></script>-->
-  <!--  <script src="../../js/lib/hight-chart/exporting.js"></script>-->
   <script src="../../js/lib/echarts/echarts.min.js"></script>
   <script src="../../js/lib/bin-ui/bin-ui.umd.min.js"></script>
 </head>
@@ -21,122 +17,28 @@
     <p>企业信用风险评价分析</p>
   </div>
   <div class="main-wrapper" flex="main:justify">
-    <div class="panel" flex="dir:top main:justify">
-      <div class="light-container" style="padding-bottom: 20px;">
-        <div class="title">平台数据轨迹情况</div>
-        <div class="content" flex="space:around" style="height: 100px;padding: 20px 10px 0">
-          <div class="count-wrapper" flex="main:center">
-            <div flex>
-              <img src="../../images/luohe/icon01.png" alt="">
-              <span>
-                <i class="num">{{top.dept}}</i><i>条</i><br>
-                <i>归集企业信息</i>
-              </span>
-            </div>
-            <div flex>
-              <img src="../../images/luohe/icon02.png" alt="">
-              <span>
-                <i class="num">{{top.msg}}</i><i>条</i><br>
-                <i>归集信息总量</i>
-              </span>
-            </div>
-          </div>
-        </div>
+    <div class="panel" flex="dir:top main:justify" flex-box="1">
+      <div class="light-container" flex-box="1">
+
       </div>
-      <div class="light-container">
-        <div class="title">企业预警情况</div>
+    </div>
+    <div class="panel" flex="dir:top main:justify" style="width: 500px;margin-right: 0;">
+      <div class="light-container h264px">
+        <div class="title">食品类企业量化分级统计表</div>
         <div class="content">
-          <div class="inner-top">
-            <div class="inner-top-item">
-              <img src="../../images/luohe/icon03.png" alt="">
-              <p><i class="num">{{mid.lic}}</i><i>条</i></p>
-              <p><i>行政许可</i></p>
-            </div>
-            <div class="inner-top-item">
-              <img src="../../images/luohe/icon04.png" alt="">
-              <p><i class="num">{{mid.punish}}</i><i>条</i></p>
-              <p><i>行政处罚</i></p>
-            </div>
-            <div class="inner-top-item">
-              <img src="../../images/luohe/icon05.png" alt="">
-              <p><i class="num">{{mid.honor}}</i><i>条</i></p>
-              <p><i>荣誉信息</i></p>
-            </div>
-            <div class="inner-top-item">
-              <img src="../../images/luohe/icon06.png" alt="">
-              <p><i class="num">{{mid.check}}</i><i>条</i></p>
-              <p><i>抽查检查</i></p>
-            </div>
-          </div>
-          <div class="inner-bot" flex="main:justify">
-            <div class="inner-bot-left">
-              <img src="../../images/luohe/icon07.png" alt="">
-              <i>重点关注领域</i>
-            </div>
-            <div class="inner-bot-right" flex>
-              <div class="inner-bot-right-item">
-                <p><i class="num">{{mid.random}}</i><i>条</i></p>
-                <p><i>双随机—公开</i></p>
-              </div>
-              <div class="inner-bot-right-item">
-                <p><i class="num">{{mid.lose}}</i><i>条</i></p>
-                <p><i>双随机—公开</i></p>
-              </div>
-              <div class="inner-bot-right-item">
-                <p><i class="num">{{mid.abnormal}}</i><i>条</i></p>
-                <p><i>双随机—公开</i></p>
-              </div>
-              <div class="inner-bot-right-item">
-                <p><i class="num">{{mid.black}}</i><i>条</i></p>
-                <p><i>双随机—公开</i></p>
-              </div>
-            </div>
-          </div>
+          <div id="pieChart" class="simple-chart"></div>
         </div>
       </div>
       <div class="light-container h264px">
-        <div class="title">纳入预警原因分析</div>
+        <div class="title">食品行业抽检情况趋势分析</div>
+        <div class="content">
+          <div id="lineChart" class="simple-chart"></div>
+        </div>
+      </div>
+      <div class="light-container h264px">
+        <div class="title">新增食品企业数量分析</div>
         <div class="content">
           <div id="areaChart" class="simple-chart"></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel" flex="dir:top main:justify">
-      <div class="light-container" flex-box="1" style="border: none;box-shadow: none">
-        <div class="center-chart-container" style="overflow: hidden">
-          <div class="inner-bg">
-            <div id="mapChart" style="height: 100%; width: 100%;"></div>
-          </div>
-        </div>
-      </div>
-      <div class="light-container h264px">
-        <div flex="space:around">
-          <div class="title">企业信用风险评级结果公布</div>
-          <div class="title">食品行业评级结果分布</div>
-        </div>
-        <div class="chart-wrapper" flex="space:around">
-          <div id="barChart0" class="simple-chart"></div>
-          <div id="barChart1" class="simple-chart"></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel" flex="dir:top main:justify">
-      <div class="light-container h264px">
-        <div class="title">企业类型统计</div>
-        <div class="content">
-          <div id="ringChart" class="simple-chart"></div>
-        </div>
-      </div>
-      <div class="light-container h264px">
-        <div class="title">数据提报量部门Top10</div>
-        <div class="content">
-          <div id="barChart2" class="simple-chart"></div>
-        </div>
-      </div>
-      <div class="light-container h264px">
-        <div class="title">失信执行人数量趋势分析</div>
-        <div class="content" flex="space:around">
-          <div id="roseChart" class="simple-chart"></div>
         </div>
       </div>
     </div>
