@@ -22,17 +22,76 @@
   </div>
   <div class="main-wrapper" flex="main:justify">
     <div class="panel" flex="dir:top main:justify">
-      <div class="light-container" style="height: 160px;">
+      <div class="light-container" style="padding-bottom: 20px;">
         <div class="title">平台数据轨迹情况</div>
-        <div class="content">
-          <div class="count-wrapper">
-
+        <div class="content" flex="space:around" style="height: 100px;padding: 20px 10px 0">
+          <div class="count-wrapper" flex="main:center">
+            <div flex>
+              <img src="../../images/luohe/icon01.png" alt="">
+              <span>
+                <i class="num">{{top.dept}}</i><i>条</i><br>
+                <i>归集企业信息</i>
+              </span>
+            </div>
+            <div flex>
+              <img src="../../images/luohe/icon02.png" alt="">
+              <span>
+                <i class="num">{{top.msg}}</i><i>条</i><br>
+                <i>归集信息总量</i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
       <div class="light-container">
         <div class="title">企业预警情况</div>
         <div class="content">
+          <div class="inner-top">
+            <div class="inner-top-item">
+              <img src="../../images/luohe/icon03.png" alt="">
+              <p><i class="num">{{mid.lic}}</i><i>条</i></p>
+              <p><i>行政许可</i></p>
+            </div>
+            <div class="inner-top-item">
+              <img src="../../images/luohe/icon04.png" alt="">
+              <p><i class="num">{{mid.punish}}</i><i>条</i></p>
+              <p><i>行政处罚</i></p>
+            </div>
+            <div class="inner-top-item">
+              <img src="../../images/luohe/icon05.png" alt="">
+              <p><i class="num">{{mid.honor}}</i><i>条</i></p>
+              <p><i>荣誉信息</i></p>
+            </div>
+            <div class="inner-top-item">
+              <img src="../../images/luohe/icon06.png" alt="">
+              <p><i class="num">{{mid.check}}</i><i>条</i></p>
+              <p><i>抽查检查</i></p>
+            </div>
+          </div>
+          <div class="inner-bot" flex="main:justify">
+            <div class="inner-bot-left">
+              <img src="../../images/luohe/icon07.png" alt="">
+              <i>重点关注领域</i>
+            </div>
+            <div class="inner-bot-right" flex>
+              <div class="inner-bot-right-item">
+                <p><i class="num">{{mid.random}}</i><i>条</i></p>
+                <p><i>双随机—公开</i></p>
+              </div>
+              <div class="inner-bot-right-item">
+                <p><i class="num">{{mid.lose}}</i><i>条</i></p>
+                <p><i>双随机—公开</i></p>
+              </div>
+              <div class="inner-bot-right-item">
+                <p><i class="num">{{mid.abnormal}}</i><i>条</i></p>
+                <p><i>双随机—公开</i></p>
+              </div>
+              <div class="inner-bot-right-item">
+                <p><i class="num">{{mid.black}}</i><i>条</i></p>
+                <p><i>双随机—公开</i></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="light-container h264px">
@@ -43,9 +102,11 @@
       </div>
     </div>
     <div class="panel" flex="dir:top main:justify">
-      <div class="light-container" style="border: none;box-shadow: none">
-        <div class="center-chart-container">
-          <div id="pieChart" class="simple-chart"></div>
+      <div class="light-container" flex-box="1" style="border: none;box-shadow: none">
+        <div class="center-chart-container" style="overflow: hidden">
+          <div class="inner-bg">
+            <div id="mapChart" style="height: 100%; width: 100%;"></div>
+          </div>
         </div>
       </div>
       <div class="light-container h264px">
@@ -81,14 +142,32 @@
     </div>
   </div>
 </div>
+<script src="../../js/lib/echarts/extension/bmap.min.js"></script>
+<script src="http://api.map.baidu.com/api?v=2.0&ak=mf9v9D2wro0QuBfsuhPl8wltrwcFSZqX"></script>
+<script src="../../js/lib/echarts/map/luohe.js"></script>
 <script>
 	new Vue({
 		el: '#app',
 		data: function () {
-			return {}
+			return {
+				top: {
+					msg: 8848,
+          dept: 20
+        },
+        mid:{
+					lic:2,
+          punish:2,
+          honor:0,
+          check:0,
+					random: 0,
+          lose:4,
+	        abnormal:0,
+          black:0
+        }
+      }
 		},
 		mounted: function () {
-			var colorList = ['#563cff','#e48831','#f03e58','#1fdf94','#04c8ff','#1167e2']
+			var colorList = ['#563cff', '#e48831', '#f03e58', '#1fdf94', '#04c8ff', '#1167e2']
 			// 假数据
 			var barChartData1 = [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6]
 			var barChartData2 = [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 180.0]
@@ -114,24 +193,25 @@
 			var xLabel2 = ['2020-04', '2020-05', '2020-06', '2020-07']
 
 			this.renderChart([
-				{fun: this.renderBarChart, id: 'barChart0', color: '#02d0ff', data: barChartData1, xLabel:xLabel0},
-				{fun: this.renderBarChart, id: 'barChart1', color: '#4dcea8', data: barChartData1, xLabel:xLabel0},
-				{fun: this.renderBarChart, id: 'barChart2', color: '#02d0ff', data: barChartData2, xLabel:xLabel1},
-				{fun: this.renderRingChart, id: 'ringChart',color: colorList, data: ringChartData},
-				{fun: this.renderRoseChart, id: 'roseChart',color: colorList, data: roseChartData},
-				{fun: this.renderAreaChart, id: 'areaChart',color:'#07a8e3', data: [820, 932, 901, 934], xLabel:xLabel2},
+				{fun: this.renderBarChart, id: 'barChart0', color: '#02d0ff', data: barChartData1, xLabel: xLabel0},
+				{fun: this.renderBarChart, id: 'barChart1', color: '#4dcea8', data: barChartData1, xLabel: xLabel0},
+				{fun: this.renderBarChart, id: 'barChart2', color: '#02d0ff', data: barChartData2, xLabel: xLabel1},
+				{fun: this.renderRingChart, id: 'ringChart', color: colorList, data: ringChartData},
+				{fun: this.renderRoseChart, id: 'roseChart', color: colorList, data: roseChartData},
+				{fun: this.renderAreaChart, id: 'areaChart', color: '#07a8e3', data: [820, 932, 901, 934], xLabel: xLabel2},
+				{fun: this.renderMap, id: 'mapChart'}
 			])
 		},
 		methods: {
 			// renderChart方法统一调用render，
 			// 参数使用arr包裹每个表格渲染方法，
 			// 自动以fun属性作为基础渲染方法，
-      // funList{fun,id,color,data...}
+			// funList{fun,id,color,data...}
 			// 并将其他key作为渲染方法的调用参数
-      // example: renderChart(paramObj){
-      //    ...
-      // }
-      // paramObj:{id,color,data...}
+			// example: renderChart(paramObj){
+			//    ...
+			// }
+			// paramObj:{id,color,data...}
 			renderChart: function (funList) {
 				var _self = this
 				funList.forEach(function (item) {
@@ -154,30 +234,30 @@
 				var myChart = echarts.init(document.getElementById(paramObj.id));
 				var option = {
 					color: paramObj.color,
-          grid:{
+					grid: {
 						top: '10%',
-            bottom: '20%'
-          },
+						bottom: '20%'
+					},
 					xAxis: {
 						type: 'category',
 						data: paramObj.xLabel,
-						axisLine:{
+						axisLine: {
 							lineStyle: {
 								color: '#5d6788'
 							}
 						},
 						boundaryGap: ['10%', '10%'],
-            axisTick:{
+						axisTick: {
 							interval: 0,
-	            alignWithLabel: true
-            },
-            axisLabel: {
+							alignWithLabel: true
+						},
+						axisLabel: {
 							rotate: rotate
-            }
+						}
 					},
 					yAxis: {
 						type: 'value',
-						axisLine:{
+						axisLine: {
 							lineStyle: {
 								color: '#5d6788'
 							}
@@ -199,8 +279,8 @@
 			renderAreaChart: function (paramObj) {
 				var myChart = echarts.init(document.getElementById(paramObj.id));
 				var option = {
-					color:paramObj.color,
-					grid:{
+					color: paramObj.color,
+					grid: {
 						top: '20%',
 						bottom: '20%'
 					},
@@ -208,11 +288,11 @@
 						type: 'category',
 						boundaryGap: false,
 						data: paramObj.xLabel,
-            axisLine:{
-	            lineStyle: {
-		            color: '#5d6788'
-	            }
-            }
+						axisLine: {
+							lineStyle: {
+								color: '#5d6788'
+							}
+						}
 					},
 					legend: {
 						top: 0,
@@ -224,7 +304,7 @@
 					},
 					yAxis: {
 						type: 'value',
-						axisLine:{
+						axisLine: {
 							lineStyle: {
 								color: '#5d6788'
 							}
@@ -256,8 +336,8 @@
 				var myChart = echarts.init(document.getElementById(paramObj.id));
 				var legendList = paramObj.data.map(item => item.name)
 				var option = {
-					color:paramObj.color,
-					grid:{
+					color: paramObj.color,
+					grid: {
 						top: '10%',
 						bottom: '20%'
 					},
@@ -269,20 +349,21 @@
 						bottom: 10,
 						data: legendList,
 						textStyle: {
-							color:'#fff'
-						}
+							color: '#fff'
+						},
+            icon:'circle'
 					},
 					series: [
 						{
 							name: '访问来源',
 							type: 'pie',
 							radius: ['50%', '70%'],
-              center: ['50%','40%'],
+							center: ['50%', '40%'],
 							avoidLabelOverlap: false,
-              label: {
-                show: true,
-                color:'#fff'
-              },
+							label: {
+								show: true,
+								color: '#fff'
+							},
 							data: paramObj.data
 						}
 					]
@@ -294,7 +375,7 @@
 				var legendList = paramObj.data[0].list.map(item => item.name)
 				var option = {
 					color: paramObj.color,
-					grid:{
+					grid: {
 						top: '10%',
 						bottom: '20%'
 					},
@@ -305,9 +386,10 @@
 					legend: {
 						bottom: 10,
 						data: legendList,
-            textStyle: {
-							color:'#fff'
-            }
+						textStyle: {
+							color: '#fff'
+						},
+						icon:'circle'
 					},
 					series: [
 						{
@@ -335,6 +417,182 @@
 					]
 				};
 				myChart.setOption(option)
+			},
+			renderMap: function (paramObj) {
+				var chinaGeoCoordMap = {
+					'舞阳县': [113.70565,33.546278],
+					'源汇区': [113.957,33.54],
+					'郾城区': [113.95,33.65],
+					'召陵区': [114.18686,33.567555],
+					'临颍县': [113.938891,33.80609]
+				};
+				var chinaDatas = [
+					[{
+						name: '郾城区',
+						value: 0
+					}],	[{
+						name: '召陵区',
+						value: 0
+					}],	[{
+						name: '舞阳县',
+						value: 0
+					}],	[{
+						name: '临颍县',
+						value: 0
+					}]
+				];
+
+				var convertData = function(data) {
+					var res = [];
+					for(var i = 0; i < data.length; i++) {
+						var dataItem = data[i];
+						var fromCoord = chinaGeoCoordMap[dataItem[0].name];
+						var toCoord = [113.957,33.54];
+						if(fromCoord && toCoord) {
+							res.push([{
+								coord: fromCoord,
+								value: dataItem[0].value
+							}, {
+								coord: toCoord,
+							}]);
+						}
+					}
+					return res;
+				};
+				var series = [];
+				[['源汇区', chinaDatas]].forEach(function(item, i) {
+					// console.log(item)
+					series.push({
+							type: 'lines',
+							zlevel: 1,
+							effect: {
+								show: true,
+								period: 4, //箭头指向速度，值越小速度越快
+								trailLength: 0.02, //特效尾迹长度[0,1]值越大，尾迹越长重
+								symbol: 'arrow',
+								symbolSize: [5, 5], //图标大小
+							},
+							lineStyle: {
+								normal: {
+									width: 2, //尾迹线条宽度
+									opacity: 0.1, //尾迹线条透明度
+									curveness: .1 //尾迹线条曲直度
+								}
+							},
+							data: convertData(item[1])
+						},
+						{
+							type: 'effectScatter',
+							coordinateSystem: 'geo',
+							zlevel: 2,
+							rippleEffect: { //涟漪特效
+								period: 4, //动画时间，值越小速度越快
+								brushType: 'stroke', //波纹绘制方式 stroke, fill
+								scale: 4 //波纹圆环最大限制，值越大波纹越大
+							},
+							label: {
+								normal: {
+									show: true,
+									position: 'right', //显示位置
+									offset: [5, 0], //偏移设置
+									formatter: function(params){//圆环显示文字
+										return params.data.name;
+									},
+									fontSize: 13
+								},
+								emphasis: {
+									show: true
+								}
+							},
+							symbol: 'circle',
+							symbolSize: function(val) {
+								return 5+ val[2] * 5; //圆环大小
+							},
+							itemStyle: {
+								normal: {
+									show: false,
+									color: '#f00'
+								}
+							},
+							data: item[1].map(function(dataItem) {
+								return {
+									name: dataItem[0].name,
+									value: chinaGeoCoordMap[dataItem[0].name].concat([dataItem[0].value])
+								};
+							}),
+						},
+						// 标的点
+						{
+							type: 'scatter',
+							coordinateSystem: 'geo',
+							zlevel: 2,
+							rippleEffect: {
+								period: 4,
+								brushType: 'stroke',
+								scale: 2
+							},
+							label: {
+								normal: {
+									show: true,
+									position: 'right',
+									//offset:[5, 0],
+									color: '#00d0ff',
+									formatter: '{b}',
+									textStyle: {
+										fontSize:18,
+										color: "#00d0ff"
+									}
+								},
+								emphasis: {
+									show: true,
+									color: "#f60"
+								}
+							},
+							symbol: 'pin',
+							symbolSize: 30,
+							data: [{
+								name: item[0],
+								value: chinaGeoCoordMap[item[0]].concat([10]),
+							}],
+						}
+					);
+				});
+
+				var option = {
+					visualMap: { //图例值控制
+						min: 0,
+						max: 1,
+						calculable: true,
+						show: false,
+						color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
+						textStyle: {
+							color: '#fff'
+						}
+					},
+					geo: {
+						map: 'luohe',
+						zoom: 1.2,
+						label: {
+							emphasis: {
+								show: false
+							}
+						},
+						roam: true, //是否允许缩放
+						itemStyle: {
+							normal: {
+								color: 'rgba(51, 69, 89, .5)', //地图背景色
+								borderColor: '#516a89', //省市边界线00fcff 516a89
+								borderWidth: 1
+							},
+							emphasis: {
+								color: 'rgba(37, 43, 61, .5)' //悬浮背景
+							}
+						}
+					},
+					series: series
+				};
+				var chart = echarts.init(document.getElementById(paramObj.id));
+				chart.setOption(option);
 			}
 		}
 	})
