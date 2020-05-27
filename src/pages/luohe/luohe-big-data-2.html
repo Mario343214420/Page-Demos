@@ -6,20 +6,133 @@
   <link rel="stylesheet" href="../../styles/reset.css">
   <link rel="stylesheet" href="../../js/lib/bin-ui/styles/common/flex.css">
   <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../js/lib/element-ui@2.9.1/index.css">
   <link rel="stylesheet" href="../../styles/luohe/data-2.css">
   <script src="../../js/lib/vue.min.js"></script>
   <script src="../../js/lib/echarts/echarts.min.js"></script>
+  <script src="../../js/lib/element-ui@2.9.1/index.js"></script>
   <script src="../../js/lib/bin-ui/bin-ui.umd.min.js"></script>
+  <script src="../../js/lib/component/min/v-modal.min.js"></script>
+
 </head>
 <body>
 <div id="app" v-cloak>
+  <v-modal :rect="[20,80,1360,836]" :label="modalData.name"
+           v-model="modalFlag" transition-name="fade-scale-move">
+    <div class="modal-inner">
+      <div class="modal-table">
+        <div class="row" flex>
+          <div class="col">名称</div>
+          <div class="col">{{modalData.name}}</div>
+          <div class="col">法定代表人</div>
+          <div class="col">{{modalData.represent}}</div>
+        </div>
+        <div class="row" flex>
+          <div class="col">注册资本</div>
+          <div class="col">{{modalData.signFund}}</div>
+          <div class="col">实际资本</div>
+          <div class="col">{{modalData.realFund}}</div>
+        </div>
+        <div class="row" flex>
+          <div class="col">开业时间</div>
+          <div class="col">{{modalData.setDate}}</div>
+          <div class="col">公司类型</div>
+          <div class="col">{{modalData.comType}}</div>
+        </div>
+        <div class="row" flex>
+          <div class="col">统一信用代码</div>
+          <div class="col">{{modalData.code}}</div>
+          <div class="col">工商注册号</div>
+          <div class="col">{{modalData.signNum}}</div>
+        </div>
+        <div class="row" flex>
+          <div class="col">地址</div>
+          <div class="col">{{modalData.address}}</div>
+          <div class="col">行业类型</div>
+          <div class="col">{{modalData.tradeType}}</div>
+        </div>
+        <div class="row" flex>
+          <div class="col">经营范围</div>
+          <div class="col">{{modalData.scope}}</div>
+          <div class="col">所属景区</div>
+          <div class="col">{{modalData.area}}</div>
+        </div>
+        <div class="row" flex>
+          <div class="col">信用等级</div>
+          <div class="col">
+            {{modalData.creditLv}}
+            <i style="color: #f4c058;padding-left: 20px;">信用分：{{modalData.creditGrade}}</i>
+          </div>
+        </div>
+      </div>
+      <div class="modal-mid-title"><i>相关信息</i></div>
+      <div class="btn-wrap">
+        <span :class="btnFlag===index?'active':''"
+             v-for="(item,index) in modalData.msg"
+             @click="btnFlag = index"
+             :key="index">
+          {{item.name}}
+        </span>
+      </div>
+      <div class="table-outer-container">
+        <el-table
+          ref="singleTable"
+          :data="tableData"
+          style="width: 100%">
+          <el-table-column
+            type="index"
+            width="50">
+          </el-table-column>
+          <el-table-column
+            property="date"
+            label="日期"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            property="name"
+            label="姓名"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            property="address"
+            label="地址">
+          </el-table-column>
+        </el-table>
+      </div>
+      <div v-show="btnFlag===(modalData.msg.length-1)">
+        <div id="modalChart" style="width: 600px;height: 300px;"></div>
+      </div>
+    </div>
+  </v-modal>
   <div class="top-wrapper">
     <p>企业信用风险评价分析</p>
   </div>
   <div class="main-wrapper" flex="main:justify">
     <div class="panel" flex="dir:top main:justify" flex-box="1">
-      <div class="light-container" flex-box="1">
-
+      <div class="top-search-container">
+        <b-input search
+                 placeholder="Enter something..."
+                 class="input-item"
+                 @on-search="search"></b-input>
+      </div>
+      <div class="light-container" flex-box="1" style="overflow: hidden;border-radius: 6px;">
+        <div class="map-container">
+          <div class="left-handle-container">
+            <b-dropdown>
+              <b-button type="primary">
+                <span>{{selected}}</span>
+                <b-icon name="ios-arrow-down"></b-icon>
+              </b-button>
+              <b-dropdown-menu slot="list">
+                <b-dropdown-item v-for="(item, index) in deptList"
+                                 :key="index">
+                  <div @click="selectDropDown(item)">{{item}}</div>
+                </b-dropdown-item>
+              </b-dropdown-menu>
+            </b-dropdown>
+          </div>
+          <div id="mapChart" style="width: 100%;height: calc(100% + 50px);"></div>
+        </div>
       </div>
     </div>
     <div class="panel" flex="dir:top main:justify" style="width: 500px;margin-right: 0;">
@@ -45,27 +158,121 @@
   </div>
 </div>
 <script src="../../js/lib/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=mf9v9D2wro0QuBfsuhPl8wltrwcFSZqX"></script>
 <script src="../../js/lib/echarts/map/luohe.js"></script>
 <script>
+	// 简单处理深拷贝问题
+	var deepClone = function (obj) {
+		return JSON.parse(JSON.stringify(obj))
+	}
 	new Vue({
 		el: '#app',
 		data: function () {
 			return {
 				top: {
 					msg: 8848,
-          dept: 20
-        },
-        mid:{
-					lic:2,
-          punish:2,
-          honor:0,
-          check:0,
+					dept: 20
+				},
+				mid: {
+					lic: 2,
+					punish: 2,
+					honor: 0,
+					check: 0,
 					random: 0,
-          lose:4,
-	        abnormal:0,
-          black:0
-        }
-      }
+					lose: 4,
+					abnormal: 0,
+					black: 0
+				},
+				selected: '选择部门',
+				deptList: [
+					'工商局',
+					'土地局',
+					'税务局',
+					'铁路局'
+				],
+				deptName:'',
+				modalFlag:true,
+        btnFlag:0,
+				modalData: {
+					name: '********股份有限公司',
+					represent: '于建阳',
+					signFund: '7388万人民币',
+					realFund: '7500万人民币',
+					setDate: '2016-05-11',
+					comType: '股份有限公司',
+					code: '913700006137722062',
+					signNum: '371082400002081',
+					address: '正定**路',
+					tradeType: '食品加工业',
+					scope: '糕点类、饼干类、薯片类',
+					area: '正定县城',
+					creditLv: 'AAA',
+					creditGrade: '1480',
+					msg: [
+						{
+							name: "双公示信息",
+							list: [
+								{name: '行政相对人名称', value: '***公司'},
+								{name: '行政相对人类别', value: '法人及非法人组织'},
+								{name: '统一社会信用代码', value: '91440101MA59A5P606'},
+								{name: '工商注册号', value: '工商注册号'},
+								{name: '组织机构', value: 'MA59A5P60'},
+								{name: '税务登记号', value: 'MA59A5P60'}
+							]
+						},
+						{
+							name: "信用承诺信息",
+							list: [
+								{name: '信用承诺信息', value: '***公司'},
+								{name: '信用承诺信息', value: '法人及非法人组织'},
+								{name: '信用承诺信息', value: '91440101MA59A5P606'},
+								{name: '信用承诺信息', value: '工商注册号'},
+								{name: '信用承诺信息', value: 'MA59A5P60'},
+								{name: '信用承诺信息', value: 'MA59A5P60'}
+							]
+						},
+						{
+							name: "红黑名单",
+							list: [
+								{name: '红黑名单', value: '***公司'},
+								{name: '红黑名单', value: '法人及非法人组织'},
+								{name: '红黑名单', value: '91440101MA59A5P606'},
+								{name: '红黑名单', value: '工商注册号'},
+								{name: '红黑名单', value: 'MA59A5P60'},
+								{name: '红黑名单', value: 'MA59A5P60'}
+							]
+						},
+						{
+							name: "执法信息",
+							list: [
+								{name: '执法信息', value: '***公司'},
+								{name: '执法信息', value: '法人及非法人组织'},
+								{name: '执法信息', value: '91440101MA59A5P606'},
+								{name: '执法信息', value: '工商注册号'},
+								{name: '执法信息', value: 'MA59A5P60'},
+								{name: '执法信息', value: 'MA59A5P60'}
+							]
+						},
+					]
+				},
+				tableData: [{
+					date: '2016-05-02',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄'
+				}, {
+					date: '2016-05-04',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1517 弄'
+				}, {
+					date: '2016-05-01',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1519 弄'
+				}, {
+					date: '2016-05-03',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1516 弄'
+				}],
+			}
 		},
 		mounted: function () {
 			var colorList = ['#563cff', '#e48831', '#f03e58', '#1fdf94', '#04c8ff', '#1167e2']
@@ -94,12 +301,9 @@
 			var xLabel2 = ['2020-04', '2020-05', '2020-06', '2020-07']
 
 			this.renderChart([
-				{fun: this.renderBarChart, id: 'barChart0', color: '#02d0ff', data: barChartData1, xLabel: xLabel0},
-				{fun: this.renderBarChart, id: 'barChart1', color: '#4dcea8', data: barChartData1, xLabel: xLabel0},
-				{fun: this.renderBarChart, id: 'barChart2', color: '#02d0ff', data: barChartData2, xLabel: xLabel1},
-				{fun: this.renderRingChart, id: 'ringChart', color: colorList, data: ringChartData},
-				{fun: this.renderRoseChart, id: 'roseChart', color: colorList, data: roseChartData},
+				{fun: this.renderRingChart, id: 'pieChart', color: colorList, data: ringChartData},
 				{fun: this.renderAreaChart, id: 'areaChart', color: '#07a8e3', data: [820, 932, 901, 934], xLabel: xLabel2},
+				{fun: this.renderLineChart, id: 'lineChart', color: '#07a8e3', data: [820, 932, 901, 934], xLabel: xLabel2},
 				{fun: this.renderMap, id: 'mapChart'}
 			])
 		},
@@ -129,53 +333,6 @@
 						console.log('funList中存在非对象个体')
 					}
 				})
-			},
-			renderBarChart: function (paramObj) {
-				var rotate = paramObj.data.length > 7 ? 30 : 0
-				var myChart = echarts.init(document.getElementById(paramObj.id));
-				var option = {
-					color: paramObj.color,
-					grid: {
-						top: '10%',
-						bottom: '20%'
-					},
-					xAxis: {
-						type: 'category',
-						data: paramObj.xLabel,
-						axisLine: {
-							lineStyle: {
-								color: '#5d6788'
-							}
-						},
-						boundaryGap: ['10%', '10%'],
-						axisTick: {
-							interval: 0,
-							alignWithLabel: true
-						},
-						axisLabel: {
-							rotate: rotate
-						}
-					},
-					yAxis: {
-						type: 'value',
-						axisLine: {
-							lineStyle: {
-								color: '#5d6788'
-							}
-						},
-						splitLine: {
-							lineStyle: {
-								color: '#5d6788'
-							}
-						}
-					},
-					series: [{
-						data: paramObj.data,
-						type: 'bar',
-						barWidth: 20
-					}]
-				};
-				myChart.setOption(option)
 			},
 			renderAreaChart: function (paramObj) {
 				var myChart = echarts.init(document.getElementById(paramObj.id));
@@ -252,13 +409,12 @@
 						textStyle: {
 							color: '#fff'
 						},
-            icon:'circle'
+						icon: 'circle'
 					},
 					series: [
 						{
 							name: '访问来源',
 							type: 'pie',
-							radius: ['50%', '70%'],
 							center: ['50%', '40%'],
 							avoidLabelOverlap: false,
 							label: {
@@ -271,229 +427,622 @@
 				};
 				myChart.setOption(option);
 			},
-			renderRoseChart: function (paramObj) {
+			renderLineChart: function (paramObj) {
 				var myChart = echarts.init(document.getElementById(paramObj.id));
-				var legendList = paramObj.data[0].list.map(item => item.name)
 				var option = {
-					color: paramObj.color,
+					tooltip: {
+						trigger: 'axis'
+					},
 					grid: {
-						top: '10%',
+						top: '20%',
 						bottom: '20%'
 					},
-					tooltip: {
-						trigger: 'item',
-						formatter: '{a} <br/>{b} : {c} ({d}%)'
-					},
 					legend: {
-						bottom: 10,
-						data: legendList,
-						textStyle: {
+						data: ['邮件营销', '联盟广告', '视频广告'],
+            textStyle:{
 							color: '#fff'
-						},
-						icon:'circle'
+            }
+					},
+					xAxis: {
+						type: 'category',
+						boundaryGap: false,
+						data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+						axisLine: {
+							lineStyle: {
+								color: '#5d6788'
+							}
+						}
+					},
+					yAxis: {
+						type: 'value',
+						axisLine: {
+							lineStyle: {
+								color: '#5d6788'
+							}
+						}
 					},
 					series: [
 						{
-							name: paramObj.data[0].name,
-							type: 'pie',
-							radius: [20, 60],
-							center: ['25%', '40%'],
-							roseType: 'radius',
-							label: {
-								show: false
-							},
-							data: paramObj.data[0].list
+							name: '邮件营销',
+							type: 'line',
+							stack: '总量',
+							data: [120, 132, 101, 134, 90, 230, 210]
 						},
 						{
-							name: paramObj.data[1].name,
-							type: 'pie',
-							radius: [20, 60],
-							label: {
-								show: false
-							},
-							center: ['75%', '45%'],
-							roseType: 'area',
-							data: paramObj.data[1].list
+							name: '联盟广告',
+							type: 'line',
+							stack: '总量',
+							data: [220, 182, 191, 234, 290, 330, 310]
+						},
+						{
+							name: '视频广告',
+							type: 'line',
+							stack: '总量',
+							data: [150, 232, 201, 154, 190, 330, 410]
 						}
 					]
-				};
-				myChart.setOption(option)
+				}
+				myChart.setOption(option);
 			},
 			renderMap: function (paramObj) {
-				var chinaGeoCoordMap = {
-					'舞阳县': [113.70565,33.546278],
-					'源汇区': [113.957,33.54],
-					'郾城区': [113.95,33.65],
-					'召陵区': [114.18686,33.567555],
-					'临颍县': [113.938891,33.80609]
+				// 模拟地图数据，请求后抽成动态作为paramObj内属性参数
+				var _self = this
+				var geoCoordMap = {
+					'企业1': [113.93319, 34.00742],
+					'企业2': [113.83319, 34.00742],
+					'企业3': [113.73319, 34.01742],
+					'企业4': [113.83319, 34.10742],
+					'企业5': [114.13319, 34.20742]
 				};
-				var chinaDatas = [
-					[{
-						name: '郾城区',
-						value: 0
-					}],	[{
-						name: '召陵区',
-						value: 0
-					}],	[{
-						name: '舞阳县',
-						value: 0
-					}],	[{
-						name: '临颍县',
-						value: 0
-					}]
-				];
-
-				var convertData = function(data) {
-					var res = [];
-					for(var i = 0; i < data.length; i++) {
-						var dataItem = data[i];
-						var fromCoord = chinaGeoCoordMap[dataItem[0].name];
-						var toCoord = [113.957,33.54];
-						if(fromCoord && toCoord) {
-							res.push([{
-								coord: fromCoord,
-								value: dataItem[0].value
-							}, {
-								coord: toCoord,
-							}]);
-						}
-					}
-					return res;
-				};
-				var series = [];
-				[['源汇区', chinaDatas]].forEach(function(item, i) {
-					// console.log(item)
-					series.push({
-							type: 'lines',
-							zlevel: 1,
-							effect: {
-								show: true,
-								period: 4, //箭头指向速度，值越小速度越快
-								trailLength: 0.02, //特效尾迹长度[0,1]值越大，尾迹越长重
-								symbol: 'arrow',
-								symbolSize: [5, 5], //图标大小
-							},
-							lineStyle: {
-								normal: {
-									width: 2, //尾迹线条宽度
-									opacity: 0.1, //尾迹线条透明度
-									curveness: .4 //尾迹线条曲直度
-								}
-							},
-							data: convertData(item[1])
-						},
-						{
-							type: 'effectScatter',
-							coordinateSystem: 'geo',
-							zlevel: 2,
-							rippleEffect: { //涟漪特效
-								period: 4, //动画时间，值越小速度越快
-								brushType: 'stroke', //波纹绘制方式 stroke, fill
-								scale: 4 //波纹圆环最大限制，值越大波纹越大
-							},
-							label: {
-								normal: {
-									show: true,
-									position: 'right', //显示位置
-									offset: [5, 0], //偏移设置
-									formatter: function(params){//圆环显示文字
-										return params.data.name;
-									},
-									fontSize: 13
-								},
-								emphasis: {
-									show: true
-								}
-							},
-							symbol: 'circle',
-							symbolSize: function(val) {
-								return 5+ val[2] * 5; //圆环大小
-							},
-							itemStyle: {
-								normal: {
-									show: false,
-									color: '#f00'
-								}
-							},
-							data: item[1].map(function(dataItem) {
-								return {
-									name: dataItem[0].name,
-									value: chinaGeoCoordMap[dataItem[0].name].concat([dataItem[0].value])
-								};
-							}),
-						},
-						// 标的点
-						{
-							type: 'scatter',
-							coordinateSystem: 'geo',
-							zlevel: 2,
-							rippleEffect: {
-								period: 4,
-								brushType: 'stroke',
-								scale: 2
-							},
-							label: {
-								normal: {
-									show: true,
-									position: 'right',
-									//offset:[5, 0],
-									color: '#00d0ff',
-									formatter: '{b}',
-									textStyle: {
-										fontSize:18,
-										color: "#00d0ff"
-									}
-								},
-								emphasis: {
-									show: true,
-									color: "#f60"
-								}
-							},
-							symbol: 'pin',
-							symbolSize: 30,
-							data: [{
-								name: item[0],
-								value: chinaGeoCoordMap[item[0]].concat([10]),
-							}],
-						}
-					);
-				});
-
-				var option = {
-					visualMap: { //图例值控制
-						min: 0,
-						max: 1,
-						calculable: true,
-						show: false,
-						color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
-						textStyle: {
-							color: '#fff'
+				var mockData = [
+					{
+						"name": "企业1",
+						"rank": 1,
+						"total": 1955,
+						"value": 1983,
+						"count": 2573,
+						"data": 591,
+						"s5": "14, 占比3%",
+						"s4": "395, 占比90%",
+						"s3": "22, 占比54%",
+						"s2": "398, 占比69%",
+						"s1": "85, 占比26%",
+						"s0": "116, 占比41%",
+						"list": {
+							"xData": [
+								"1月",
+								"2月",
+								"3月",
+								"4月",
+								"5月",
+								"6月",
+								"7月"
+							],
+							"numData": [
+								7434,
+								9572,
+								13,
+								1211,
+								4118,
+								337,
+								2552
+							],
+							"valData": [
+								981,
+								734,
+								210,
+								1069,
+								505,
+								591,
+								561
+							]
 						}
 					},
-					geo: {
-						map: 'luohe',
-						zoom: 1.2,
+					{
+						"name": "企业2",
+						"rank": 2,
+						"total": 44,
+						"value": 2782,
+						"count": 484,
+						"data": 327,
+						"s5": "172, 占比1%",
+						"s4": "482, 占比3%",
+						"s3": "203, 占比32%",
+						"s2": "140, 占比18%",
+						"s1": "468, 占比77%",
+						"s0": "176, 占比93%",
+						"list": {
+							"xData": [
+								"1月",
+								"2月",
+								"3月",
+								"4月",
+								"5月",
+								"6月",
+								"7月"
+							],
+							"numData": [
+								5080,
+								2067,
+								9029,
+								6314,
+								355,
+								8892,
+								9411
+							],
+							"valData": [
+								21,
+								1454,
+								1115,
+								1468,
+								1433,
+								435,
+								1421
+							]
+						}
+					},
+					{
+						"name": "企业3",
+						"rank": 3,
+						"total": 1784,
+						"value": 217,
+						"count": 1873,
+						"data": 211,
+						"s5": "318, 占比53%",
+						"s4": "241, 占比52%",
+						"s3": "59, 占比8%",
+						"s2": "474, 占比78%",
+						"s1": "282, 占比55%",
+						"s0": "553, 占比29%",
+						"list": {
+							"xData": [
+								"1月",
+								"2月",
+								"3月",
+								"4月",
+								"5月",
+								"6月",
+								"7月"
+							],
+							"numData": [
+								3,
+								1520,
+								1977,
+								4173,
+								1443,
+								2862,
+								7531
+							],
+							"valData": [
+								768,
+								828,
+								970,
+								687,
+								1175,
+								581,
+								1414
+							]
+						}
+					},
+					{
+						"name": "企业4",
+						"rank": 4,
+						"total": 642,
+						"value": 236,
+						"count": 2233,
+						"data": 314,
+						"s5": "146, 占比56%",
+						"s4": "625, 占比6%",
+						"s3": "64, 占比54%",
+						"s2": "604, 占比18%",
+						"s1": "523, 占比47%",
+						"s0": "282, 占比34%",
+						"list": {
+							"xData": [
+								"1月",
+								"2月",
+								"3月",
+								"4月",
+								"5月",
+								"6月",
+								"7月"
+							],
+							"numData": [
+								4372,
+								7738,
+								9353,
+								2919,
+								6412,
+								2795,
+								2038
+							],
+							"valData": [
+								216,
+								935,
+								964,
+								812,
+								27,
+								1237,
+								625
+							]
+						}
+					},
+					{
+						"name": "企业5",
+						"rank": 5,
+						"total": 1812,
+						"value": 2243,
+						"count": 28,
+						"data": 300,
+						"s5": "262, 占比81%",
+						"s4": "235, 占比18%",
+						"s3": "573, 占比92%",
+						"s2": "420, 占比79%",
+						"s1": "348, 占比48%",
+						"s0": "55, 占比57%",
+						"list": {
+							"xData": [
+								"1月",
+								"2月",
+								"3月",
+								"4月",
+								"5月",
+								"6月",
+								"7月"
+							],
+							"numData": [
+								6964,
+								2285,
+								3026,
+								610,
+								5894,
+								4397,
+								107
+							],
+							"valData": [
+								898,
+								880,
+								632,
+								468,
+								768,
+								151,
+								292
+							]
+						}
+					}
+				]
+
+				// 数据转化
+				function convertData(data) {
+					var res = []
+					for (var i = 0; i < data.length; i++) {
+						var geoCoord = geoCoordMap[data[i].name]
+						if (geoCoord) {
+							res.push({
+								name: data[i].name,
+								value: geoCoord.concat(data[i].value),
+								row: data[i]
+							})
+						}
+					}
+					return res
+				}
+
+				// 转化后数据
+				var cData = convertData(mockData);
+				// 散点配置
+				var series = [
+					{
+						name: 'A',
+						type: 'effectScatter',
+						coordinateSystem: 'bmap',
+						showEffectOn: 'render',
+						symbolSize: function (v) { // 标准大小
+							return 15 + v[0] / 2500
+						},
+						rippleEffect: {
+							brushType: 'stroke',
+							scale: 3
+						},
 						label: {
-							emphasis: {
-								show: false
+							normal: {
+								formatter: '{b}',
+								position: 'top',
+								show: true
 							}
 						},
-						roam: true, //是否允许缩放
-						itemStyle: {
-							normal: {
-								color: 'rgba(51, 69, 89, .5)', //地图背景色
-								borderColor: '#516a89', //省市边界线00fcff 516a89
-								borderWidth: 1
-							},
-							emphasis: {
-								color: 'rgba(37, 43, 61, .5)' //悬浮背景
+						data: cData.filter((item) => {
+							if (item.row.rank === 1) {
+								return item
 							}
+						})
+					},
+					{
+						name: 'B',
+						type: 'effectScatter',
+						coordinateSystem: 'bmap',
+						showEffectOn: 'render',
+						symbolSize: function (v) { // 标准大小
+							return 15 + v[0] / 2500
+						},
+						rippleEffect: {
+							brushType: 'stroke',
+							scale: 3
+						},
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'top',
+								show: true
+							}
+						},
+						data: cData.filter((item) => {
+							if (item.row.rank === 2) {
+								return item
+							}
+						})
+					},
+					{
+						name: 'C',
+						type: 'effectScatter',
+						coordinateSystem: 'bmap',
+						showEffectOn: 'render',
+						symbolSize: function (v) { // 标准大小
+							return 15 + v[0] / 2500
+						},
+						rippleEffect: {
+							brushType: 'stroke',
+							scale: 3
+						},
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'top',
+								show: true
+							}
+						},
+						data: cData.filter((item) => {
+							if (item.row.rank === 3) {
+								return item
+							}
+						})
+					},
+					{
+						name: 'D',
+						type: 'effectScatter',
+						coordinateSystem: 'bmap',
+						showEffectOn: 'render',
+						symbolSize: function (v) { // 标准大小
+							return 15 + v[0] / 2500
+						},
+						rippleEffect: {
+							brushType: 'stroke',
+							scale: 3
+						},
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'top',
+								show: true
+							}
+						},
+						data: cData.filter((item) => {
+							if (item.row.rank === 4) {
+								return item
+							}
+						})
+					},
+					{
+						name: 'E',
+						type: 'effectScatter',
+						coordinateSystem: 'bmap',
+						showEffectOn: 'render',
+						symbolSize: function (v) { // 标准大小
+							return 15 + v[0] / 2500
+						},
+						rippleEffect: {
+							brushType: 'stroke',
+							scale: 3
+						},
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'top',
+								show: true
+							}
+						},
+						data: cData.filter((item) => {
+							if (item.row.rank === 5) {
+								return item
+							}
+						})
+					}
+				];
+				// 地图配置
+				var option = {
+					color: [
+						'#3b9fff',
+						'#38cbcb',
+						'#fad336',
+						'#e48831',
+						'#f2647c',
+					],
+					legend: {
+						textStyle: {
+							color: '#fff'
+						},
+						left: '2%',
+						bottom: '8%',
+						orient: 'vertical',
+						data: ['A', 'B', 'C', 'D', 'E'], icon: 'rect',
+						formatter: function (name) {
+							switch (name) {
+								case 'A':
+									return 'A级  守信'
+								case 'B':
+									return 'B级  基本守信'
+								case 'C':
+									return 'C级  轻微失信'
+								case 'D':
+									return 'D级  较重失信'
+								case 'E':
+									return 'E级  严重失信'
+							}
+							return word
+						},
+						selected: {
+							'All': false
+						},
+						selector: ['all', 'inverse'],
+						selectorLabel: {
+							color: '#fff',
+							borderColor: '#fff',
+							fontSize: 14,
+							padding: [2, 8]
 						}
+					},
+					bmap: {
+						center: [113.99319, 34.00742],
+						zoom: 11,
+						roam: false,
+						mapStyle: {style: 'midnight'},
+						enableMapClick: false
 					},
 					series: series
 				};
 				var chart = echarts.init(document.getElementById(paramObj.id));
+
+				chart.on('click', function (params) {
+					//深拷贝当前选中
+					console.log(params);
+					_self.modalFlag = true
+				})
 				chart.setOption(option);
+			},
+			zhenRowClick: function (row) {
+				// 深拷贝当前选中行
+				this.currentMap = deepClone(row)
+				if (!this.mapPointChart) { // 如果不存在则初始化表格
+					this.mapPointChart = echarts.init(document.getElementById('mapPointChart'))
+				}
+				var option = {
+					color: ['#0b87ed', '#d20f60'],
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							type: 'cross'
+						}
+					},
+					legend: {
+						bottom: 0,
+						icon: 'rect',
+						itemWidth: 10,
+						itemHeight: 10,
+						textStyle: {
+							color: '#7893ad'
+						}
+					},
+					grid: {
+						top: 30,
+						right: 50,
+						bottom: 50
+					},
+					xAxis: {
+						type: 'category',
+						axisLine: {
+							show: true,
+							lineStyle: {color: '#4b5472'}
+						},
+						axisLabel: {
+							color: '#4b5472'
+						},
+						splitLine: {
+							show: true,
+							lineStyle: {color: '#222b45'}
+						},
+						data: this.currentMap.list.xData
+					},
+					yAxis: [
+						{
+							type: 'value',
+							name: '数据量',
+							splitNumber: 10,
+							axisTick: {
+								show: false
+							},
+							axisLabel: {
+								color: '#4b5472'
+							},
+							axisLine: {
+								show: true,
+								lineStyle: {color: '#4b5472'}
+							},
+							splitLine: {
+								show: true,
+								lineStyle: {color: '#222b45'}
+							}
+						},
+						{
+							type: 'value',
+							name: '信用指数',
+							min: 0,
+							max: 1600,
+							splitNumber: 10,
+							axisTick: {
+								show: false
+							},
+							axisLine: {
+								show: true,
+								lineStyle: {color: '#424b69'}
+							},
+							splitLine: {
+								show: false
+							}
+						}
+					],
+					series: [
+						{
+							name: '数据量',
+							type: 'line',
+							data: this.currentMap.list.numData,
+							label: {
+								show: true,
+								position: 'top'
+							}
+						},
+						{
+							name: '信用指数',
+							type: 'line',
+							data: this.currentMap.list.valData,
+							yAxisIndex: 1,
+							label: {
+								show: true,
+								position: 'top'
+							}
+						}
+					]
+				}
+				// 使用刚指定的配置项和数据显示图表。
+				this.mapPointChart.setOption(option)
+				this.mapPointModal = true
+				// console.log(this.currentMap)
+			},
+			selectDropDown: function (item) {
+				var _self = this
+				_self.selected = item
+				console.log('请求此参数：' + item);
+				// 请求数据，重新渲染地图
+				//_self.renderMap()
+			},
+			search: function (value) {
+				console.log('请求此参数' + value);
+				// axios.get('/user?ID='+value)
+				// .then(function (response) {
+				// 		console.log(response);
+				// 	})
+				// .catch(function (error) {
+				// 			console.log(error);
+				// });
 			}
 		}
 	})

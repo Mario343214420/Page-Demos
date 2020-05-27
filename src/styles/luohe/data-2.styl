@@ -1,3 +1,4 @@
+@import "../font/iconfont.css"
 $fontColor = #00d0ff
 
 html, body, #app
@@ -15,6 +16,7 @@ i
   background-color: #040823
   display flex
   flex-direction column
+  position relative
   .top-wrapper
     background-image: url(../../images/luohe/top_bg.jpg)
     height: 60px
@@ -178,6 +180,24 @@ i
                 width 80px
                 flex: none
 
+        .map-container
+          width: 100%
+          height: 100%
+          position relative
+          .left-handle-container
+            position absolute
+            left: 30px
+            top 20px
+            width 0
+            height: 0
+            z-index 100
+            background-color: #fff
+      .top-search-container
+        width 100%
+        padding-bottom: 20
+        margin-bottom: 10px
+        >div
+          width: 30%
 .bin-scrollbar__wrap{overflow-x:hidden;}
 [flex~='space:around']{
   justify-content space-around
@@ -187,3 +207,94 @@ i
   height: 214px
 .h264px
   height: 264px
+
+
+.v-modal {
+  background-color: #060c22;
+  border: 1px solid #586ea2;
+  border-radius: 5px;
+  height: 100%;
+  opacity 1
+  .top-header {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%)
+    font-size: 20px;
+    color: #fff;
+    padding: 4px 20px;
+    background-color: #00addd;
+    border-radius: 19px;
+    white-space: nowrap;
+  }
+  .content {
+    overflow: hidden;
+  }
+  .icon-ios-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 40px;
+    cursor: pointer;
+  }
+}
+.modal-inner
+  padding-right: 20px
+  .modal-mid-title
+    padding 30px 0 10px
+    i
+      padding-left: 2px
+      font-weight: 700
+      font-size: 22px
+      color #00aeff
+.modal-table
+  line-height: 36px
+  border-top: 1px solid #2f3a58
+  border-left: 1px solid #2f3a58
+  .col
+    border-right: 1px solid #2f3a58
+    border-bottom: 1px solid #2f3a58
+    &:nth-child(odd)
+      background-color: #132952
+      text-align center
+      width 140px
+    &:nth-child(even)
+      flex: 1
+      padding-left: 10px
+.btn-wrap
+  padding 10px 0
+  span
+    cursor pointer
+    -webkit-border-radius: 6px
+    -moz-border-radius: 6px
+    border-radius: 6px
+    display inline-block
+    width 120px
+    margin-right 20px
+    background-color: #303b5b
+    color #fff
+    height 40px
+    line-height: 40px
+    text-align center
+  .active
+    background-color: #1984d2
+.modal-bin-table
+  display block
+  width: 100%
+  table
+    width: 100%
+.el-table th, .el-table td, .el-table th.is-leaf
+  background-color: #132952
+  border-right: 1px solid #5e6d82
+  border-bottom: 1px solid #5e6d82
+.el-table td
+  background-color: #121534
+  border-right: 1px solid #5e6d82
+  border-bottom: 1px solid #5e6d82
+.table-outer-container
+  border-top: 1px solid #5e6d82
+  border-left: 1px solid #5e6d82
+.el-table--border::after, .el-table--group::after, .el-table::before
+  background-color: transparent
+.el-table--enable-row-hover .el-table__body tr:hover>td
+  background-color: #132952
