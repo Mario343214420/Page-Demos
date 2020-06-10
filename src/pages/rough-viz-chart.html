@@ -7,6 +7,7 @@
 <body>
 <div id="vis0"></div>
 <div id="vis1"></div>
+<div id="vis3"></div>
 <script src="../js/lib/rough-viz.min.js"></script>
 <script>
 	new roughViz.BarH(
@@ -26,7 +27,25 @@
 			highlight: 'gold',
 		}
 	);
-
+	new roughViz.Donut({
+		element: '#vis3',
+		data: {
+			labels: ['1992 Ford Aerostar Van', '2013 Kia Rio', '1980 Honda CB 125s', '1992 Toyota Tercel'],
+			values: [8, 4, 6, 2]
+		},
+		title: 'Regions',
+		labels: 'region',
+		values: 'count',
+		roughness: 0,
+		colors: ['pink', 'coral', 'teal', 'skyblue'],
+		highlight: 'gold',
+		strokeWidth: 2,
+		titleFontSize: '25px',
+		fillWeight: 1.5,
+		fillStyle: 'zigzag-line',
+		width: window.innerWidth / 2,
+		height: 450,
+	});
 	new roughViz.BarH(
 		{
 			element: '#vis1',
