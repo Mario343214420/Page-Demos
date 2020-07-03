@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../styles/luohe_big_data/common.css">
+  <link rel="stylesheet" href="../../styles/luohe_big_data/risk.css">
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script src="../../js/lib/three.min.js"></script>
+  <script src="../../js/lib/echarts/echarts.min.js"></script>
+  <script src="../../js/lib/echarts/map/luohe.js"></script>
+</head>
+<body>
+<div id="app">
+  <div id="cvsBg"></div>
+  <div id="map"></div>
+</div>
+<script>
+	new Vue({
+		el: '#app',
+		data() {
+			return {
+				mapData: [
+					[{
+						name: '临颍县',
+						value: 1
+					}], [{
+						name: '舞阳县',
+						value: 1
+					}], [{
+						name: '郾城区',
+						value: 1
+					}], [{
+						name: '汇源区',
+						value: 1
+					}], [{
+						name: '召陵区',
+						value: 1
+					}]
+				],
+			}
+		},
+		mounted() {
+			this.drw_ball(600, 600, '../../images/luohe_big_data/map.png', 77, 'cvsBg')
+			this.renderMap({id: 'map', mapData: this.mapData})
+		},
+		methods: {
+			drw_ball: function (w, h, picUrl, radius, id) {
+				//var w = 800, h =600;//场景高宽
+				var camera_deg = 45, aspect = w / h, near = .1, far = 10000//相机参数
+				var container = document.getElementById(id)
+				var renderer = new THREE.WebGLRenderer({alpha: true, lights: true})
+				var camera = new THREE.PerspectiveCamera(
+					camera_deg, aspect, near, far
+				)
+				var scene = new THREE.Scene()
+				scene.add(camera)
+				camera.position.z = 200
+				renderer.setSize(w, h)
+				//附加DOM元素
+				container.append(renderer.domElement)
+				//设置球体的值
+				var segemnt = 60, rings = 60
+				var earth_png = new THREE.TextureLoader().load(picUrl)
+				//var sphereMaterial = new THREE.MeshBasicMaterial(earth_png);
+				var sphereMaterial = new THREE.MeshLambertMaterial({
+					map: earth_png,
+					opacity: 0.5
+				})
+				var sphere = new THREE.Mesh(
+					new THREE.SphereGeometry(radius, segemnt, rings),
+					sphereMaterial
+				)
+
+				// sphere.material.emissive=new THREE.Color(.5,.5,.5);
+				// sphere.material.emissiveIntensity=1;
+				// sphere.material.emissiveMap=sphere.material.map;
+
+				sphere.geometry.verticesNeedUpdate = true
+				sphere.geometry.normalsNeedUpdate = true
+				scene.add(sphere)
+
+				var pointLight = new THREE.PointLight(0Xffffff)
+
+				pointLight.position.x = 10
+				pointLight.position.y = 50
+				pointLight.position.z = 150
+				scene.add(pointLight)
+
+				function animate() {
+					requestAnimationFrame(animate)
+					//画图
+					//sphere.rotation.x+=.01;
+					sphere.rotation.y += .005//延Y轴旋转
+					renderer.render(scene, camera)
+				}
+
+				animate()
+			},
+			renderMap: function (paramObj) {
+				var chinaGeoCoordMap = {
+					'舞阳县': [113.70565,33.546278],
+					'源汇区': [113.957,33.54],
+					'郾城区': [113.95,33.65],
+					'召陵区': [114.18686,33.567555],
+					'临颍县': [113.938891,33.80609]
+				};
+				var chinaDatas = [
+					[{
+						name: '郾城区',
+						value: 0
+					}],	[{
+						name: '召陵区',
+						value: 0
+					}],	[{
+						name: '舞阳县',
+						value: 0
+					}],	[{
+						name: '临颍县',
+						value: 0
+					}]
+				];
+
+				var convertData = function(data) {
+					var res = [];
+					for(var i = 0; i < data.length; i++) {
+						var dataItem = data[i];
+						var fromCoord = chinaGeoCoordMap[dataItem[0].name];
+						var toCoord = [113.957,33.54];
+						if(fromCoord && toCoord) {
+							res.push([{
+								coord: fromCoord,
+								value: dataItem[0].value
+							}, {
+								coord: toCoord,
+							}]);
+						}
+					}
+					return res;
+				};
+				var series = [];
+				[['源汇区', chinaDatas]].forEach(function(item, i) {
+					// console.log(item)
+					series.push({
+							type: 'lines',
+							zlevel: 1,
+							effect: {
+								show: true,
+								period: 4,
+								trailLength: 0.02,
+								symbol: 'arrow',
+								symbolSize: [5, 5],
+							},
+							lineStyle: {
+								normal: {
+									width: 4,
+									opacity: 0.1,
+									curveness: .6
+								}
+							},
+							data: convertData(item[1])
+						},
+						{
+							type: 'effectScatter',
+							coordinateSystem: 'geo',
+							zlevel: 2,
+							rippleEffect: {
+								period: 4,
+								brushType: 'stroke',
+								scale: 4
+							},
+							label: {
+								normal: {
+									show: true,
+									position: 'right',
+									offset: [5, 0],
+									formatter: function(params){
+										return params.data.name;
+									},
+									fontSize: 13
+								},
+								emphasis: {
+									show: true
+								}
+							},
+							symbol: 'circle',
+							symbolSize: function(val) {
+								return 5+ val[2] * 5;
+							},
+							itemStyle: {
+								normal: {
+									show: false,
+									color: '#f00'
+								}
+							},
+							data: item[1].map(function(dataItem) {
+								return {
+									name: dataItem[0].name,
+									value: chinaGeoCoordMap[dataItem[0].name].concat([dataItem[0].value])
+								};
+							}),
+						},
+						{
+							type: 'scatter',
+							coordinateSystem: 'geo',
+							zlevel: 2,
+							rippleEffect: {
+								period: 4,
+								brushType: 'stroke',
+								scale: 2
+							},
+							label: {
+								normal: {
+									show: true,
+									position: 'right',
+									//offset:[5, 0],
+									color: '#ffffff',
+									formatter: '{b}',
+									textStyle: {
+										fontSize:18,
+										color: "#ffffff"
+									}
+								},
+								emphasis: {
+									show: true,
+									color: "#f60"
+								}
+							},
+							symbol: 'pin',
+							symbolSize: 30,
+							data: [{
+								name: item[0],
+								value: chinaGeoCoordMap[item[0]].concat([10]),
+							}],
+						}
+					);
+				});
+
+				var option = {
+					visualMap: {
+						min: 0,
+						max: 1,
+						calculable: true,
+						show: false,
+						color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
+						textStyle: {
+							color: '#fff'
+						}
+					},
+					geo: {
+						map: 'luohe',
+						zoom: 1.2,
+						label: {
+							emphasis: {
+								show: false
+							}
+						},
+						roam: false,
+						itemStyle: {
+							normal: {
+								color: 'rgba(2, 44, 102, 1)',
+								borderColor: '#516a89',
+								borderWidth: 1
+							},
+							emphasis: {
+								color: 'rgba(3, 93, 181, 1)'
+							}
+						}
+					},
+					series: series
+				};
+				var chart = echarts.init(document.getElementById(paramObj.id));
+				chart.setOption(option);
+			}
+		}
+	})
+</script>
+</body>
+</html>

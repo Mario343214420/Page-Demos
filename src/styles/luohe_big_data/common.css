@@ -1,0 +1,81 @@
+.page-container {
+  height: 100%;
+}
+.page-container .page-title {
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  background-image: url("../../images/luohe_big_data/title_bg_page.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  height: 100px;
+}
+.page-container .side-box {
+  width: 460px;
+}
+.text-gradient {
+  display: inline-block;
+  font-size: 40px;
+  line-height: 80px;
+  color: #1aaed2;
+  font-family: '微软雅黑';
+  background-image: -webkit-gradient(linear, 0 0, right 0, from(#4276ed), color-stop(50%, #1aaed2), to(#4276ed));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.card-container {
+  height: 100%;
+  padding: 20px;
+}
+.card-container .card {
+  padding: 10px 30px;
+  background-color: rgba(3,27,91,0.8);
+}
+.title-container .title-content {
+  color: #fff;
+  font-weight: 700;
+  font-size: 24px;
+  background-image: url("../../images/luohe_big_data/title_bg.png");
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  padding: 16px 20px;
+}
+[flex] {
+  display: flex;
+}
+[flex ~= 'space:around'] {
+  justify-content: space-around;
+}
+[flex ~= 'space:between'] {
+  justify-content: space-between;
+}
+[flex ~= 'dir:column'] {
+  flex-direction: column;
+}
+[flex ~= 'item:center'] {
+  align-items: center;
+}
+[flex-box~='1'] {
+  flex: 1;
+}
+[flex-box~='2'] {
+  flex: 2;
+}
+[flex-box~='3'] {
+  flex: 3;
+}
+[flex-box~='4'] {
+  flex: 4;
+}
+[flex-box~='5'] {
+  flex: 5;
+}
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+#app {
+  background-image: radial-gradient(#051a47 5%, #041a54 35%, #021d6c 60%);
+}

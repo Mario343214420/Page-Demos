@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "live-server --open=./src/pages/luohe/luohe-big-data-2.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
+    "serve": "live-server --open=./src/pages/luohe_big_data/risk_page.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
     "build": "gulp build"
   },
   "author": "mario343214420",
