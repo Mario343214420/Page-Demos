@@ -203,6 +203,7 @@
 }
 .center .earth-wrapper {
   position: relative;
+  overflow: hidden;
 }
 .center .earth-wrapper .title-count {
   position: absolute;
@@ -292,8 +293,26 @@
   border-color: transparent;
   animation: rotate-cir-7 infinite 120s;
 }
+.side-inner {
+  font-size: 16px;
+}
 .table-container {
   padding: 30px;
+  color: #fff;
+}
+.table-container .swiper-container {
+  border-left: 1px solid #093c95;
+}
+.table-container .cell {
+  height: 45px;
+  line-height: 45px;
+  flex: 1;
+  text-align: center;
+  border-bottom: 1px solid #093c95;
+  border-right: 1px solid #093c95;
+}
+.table-container .table-title {
+  background-color: #093c95;
 }
 .h100percent {
   height: 100%;

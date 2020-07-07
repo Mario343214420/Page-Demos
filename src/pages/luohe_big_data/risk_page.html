@@ -12,42 +12,179 @@
   <script src="../../js/lib/three.min.js"></script>
   <script src="../../js/lib/echarts/echarts.min.js"></script>
   <script src="../../js/lib/echarts/map/luohe.js"></script>
+  <script src="../../js/lib/axios.min.js"></script>
 </head>
 <body>
 <div id="app">
-  <div id="cvsBg"></div>
-  <div id="map"></div>
+  <div class="page-container" flex="dir:column">
+    <div class="page-title">
+      <i class="text-gradient">企业信用风险评价分析系统</i>
+      <a href="./warning_page.html" class="link-btn">*****</a>
+    </div>
+    <div class="page-content" flex-box="1">
+      <div class="main">
+        <div class="left-side">
+          <div class="card-container" flex="dir:column space:between">
+            <div flex-box="1">
+              <div class="title-container">
+                <div class="title-content">
+                  <i>企业信用风险评价分析</i>
+                </div>
+              </div>
+              <div class="inner-table">
+                <div class="row">
+                  <div class="cell">信用等级</div>
+                  <div class="cell">信用描述</div>
+                  <div class="cell">企业数量（个）</div>
+                  <div class="cell">企业占比</div>
+                </div>
+                <div class="row" v-for="(item, index) in riskList" :key="index">
+                  <div class="cell"><span class="lv-pop" :style="switchLvColor(item.lv)">{{item.lv}}级</span></div>
+                  <div class="cell">{{item.des}}</div>
+                  <div class="cell">{{item.count}}</div>
+                  <div class="cell"><span class="percent">{{item.percent}}%</span><span class="b-progress-box" flex-box="1"><b-progress :percent="item.percent" :show-text="false"></b-progress></span></div>
+                </div>
+              </div>
+            </div>
+            <div flex-box="1" flex="dir:column">
+              <div class="title-container">
+                <div class="title-content">
+                  <i>重点领域分析</i>
+                </div>
+              </div>
+              <div id="pieChart" flex-box="1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="right-side">
+          <div class="card-container" flex="dir:column space:between">
+            <div flex-box="1" flex="dir:column">
+              <div class="title-container">
+                <div class="title-content">
+                  <i>重点领域分析</i>
+                </div>
+              </div>
+              <div id="barChart1" flex-box="1"></div>
+            </div>
+            <div flex-box="1" flex="dir:column">
+              <div class="title-container">
+                <div class="title-content">
+                  <i>重点领域分析</i>
+                </div>
+              </div>
+              <div id="barChart2" flex-box="1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="num-bar">
+          <div class="num-bar-title">
+            <span class="title-inner">
+              <i>市场主体总数</i><i class="unit">（条）</i>
+            </span>
+          </div>
+          <div class="num-box">
+            <div class="num-list" flex="space:around">
+              <span v-for="(item, index) in numList" :class="'num-bg-'+item"></span>
+            </div>
+            <div class="corner"></div>
+            <div class="corner"></div>
+            <div class="corner"></div>
+            <div class="corner"></div>
+          </div>
+        </div>
+        <div id="cvsBg"></div>
+        <div id="map"></div>
+        <div class="cir-container">
+          <img src="../../images/luohe_big_data/1.png" alt="">
+          <img src="../../images/luohe_big_data/2.png" alt="">
+          <img src="../../images/luohe_big_data/3.png" alt="">
+          <img src="../../images/luohe_big_data/4.png" alt="">
+          <img src="../../images/luohe_big_data/5.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
+  var chartLineColor = '#4e587e'
 	new Vue({
 		el: '#app',
 		data() {
 			return {
 				mapData: [
 					[{
-						name: '临颍县',
-						value: 1
-					}], [{
-						name: '舞阳县',
-						value: 1
-					}], [{
 						name: '郾城区',
 						value: 1
-					}], [{
-						name: '汇源区',
-						value: 1
-					}], [{
+					}],	[{
 						name: '召陵区',
+						value: 1
+					}],	[{
+						name: '舞阳县',
+						value: 1
+					}],	[{
+						name: '临颍县',
 						value: 1
 					}]
 				],
+        numList: [1,2,3,4,5,6,7,8],
+				blackNameList:[
+					{TYPE:'食品类',CNT: 100},
+					{TYPE:'其他类',CNT: 100},
+					{TYPE:'药品类',CNT: 100},
+					{TYPE:'种植养殖类',CNT: 100},
+					{TYPE:'家用电器',CNT: 100},
+					{TYPE:'汽车配件',CNT: 100},
+				],
+				riskList: [
+          {lv:'A',des:'dhsfsss',count:200,percent:10},
+          {lv:'B',des:'dhsfsss',count:200,percent:10},
+          {lv:'C',des:'dhsfsss',count:200,percent:10},
+          {lv:'D',des:'dhsfsss',count:200,percent:10},
+          {lv:'E',des:'dhsfsss',count:200,percent:10}
+        ]
 			}
 		},
 		mounted() {
-			this.drw_ball(600, 600, '../../images/luohe_big_data/map.png', 77, 'cvsBg')
-			this.renderMap({id: 'map', mapData: this.mapData})
+			this.drw_ball(500, 500, '../../images/luohe_big_data/map.png', 77, 'cvsBg')
+			// 以下渲染方法请求后调用
+      this.renderMap({id: 'map', data: this.mapData})
+			this.numChange(this.numList)
+			this.renderPieChart({id:'pieChart', data: this.blackNameList})
+			this.renderBarChart({id:'barChart1', data: this.blackNameList})
+			this.renderBarChart({id:'barChart2', data: this.blackNameList})
 		},
 		methods: {
+			// 数据请求方法
+			initChart(){
+				axios.get('/user?ID=12345')
+					.then((response) => {
+						// 从data中解构声明dtCounts
+						const {dtCounts} = response.data
+            // 获取后渲染相应图表
+						this.renderMap({id: 'map', data: dtCounts})
+					})
+					.catch((error)=>{
+						console.log(error);
+					});
+      },
+      // 数字条动态方法
+			numChange(num) {
+				let copy = JSON.parse(JSON.stringify(num))
+				let change = setInterval(()=>{
+					let arr = []
+					num.forEach(()=>{
+						arr.push(parseInt(Math.random()*10))
+					})
+					num.splice(0,8)
+					num.push(...arr)
+				},100)
+				setTimeout(() => {
+					window.clearInterval(change)
+					num.splice(0,8)
+					num.push(...copy)
+				}, 1000)
+			},
+      // 背景地球渲染
 			drw_ball: function (w, h, picUrl, radius, id) {
 				//var w = 800, h =600;//场景高宽
 				var camera_deg = 45, aspect = w / h, near = .1, far = 10000//相机参数
@@ -100,6 +237,7 @@
 
 				animate()
 			},
+      // 地图渲染
 			renderMap: function (paramObj) {
 				var chinaGeoCoordMap = {
 					'舞阳县': [113.70565,33.546278],
@@ -108,21 +246,7 @@
 					'召陵区': [114.18686,33.567555],
 					'临颍县': [113.938891,33.80609]
 				};
-				var chinaDatas = [
-					[{
-						name: '郾城区',
-						value: 0
-					}],	[{
-						name: '召陵区',
-						value: 0
-					}],	[{
-						name: '舞阳县',
-						value: 0
-					}],	[{
-						name: '临颍县',
-						value: 0
-					}]
-				];
+				var chinaDatas = paramObj.data
 
 				var convertData = function(data) {
 					var res = [];
@@ -142,6 +266,8 @@
 					return res;
 				};
 				var series = [];
+				var chart = echarts.init(document.getElementById(paramObj.id));
+
 				[['源汇区', chinaDatas]].forEach(function(item, i) {
 					// console.log(item)
 					series.push({
@@ -237,15 +363,16 @@
 							}],
 						}
 					);
-				});
 
+				});
 				var option = {
+					tooltip:{},
 					visualMap: {
 						min: 0,
 						max: 1,
 						calculable: true,
 						show: false,
-						color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
+						color: ['#03cdfa'],
 						textStyle: {
 							color: '#fff'
 						}
@@ -272,9 +399,194 @@
 					},
 					series: series
 				};
-				var chart = echarts.init(document.getElementById(paramObj.id));
 				chart.setOption(option);
-			}
+			},
+      // 环图渲染
+			renderPieChart(paramObj) {
+				const myChart = echarts.init(document.getElementById(paramObj.id));
+				const option = {
+					color: ['#0d85ff','#02b2bf','#03cdfa','#e0af4f','#52c41a','#e0926d','#ff4d4f','#d45f92'],
+					tooltip: {
+						trigger: 'item',
+						formatter: param=>{return `${param.name}：${param.value.CNT}（${param.percent}%）`}
+					},
+					dataset: {
+						source: paramObj.data
+					},
+					legend: {
+						textStyle: {
+							color: '#fff'
+						},
+						icon: 'circle',
+						bottom: 0
+					},
+					series: [
+						{
+							name: '访问来源',
+							type: 'pie',
+							radius: ['20%', '65%'],
+							center: ['50%','50%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: true,
+								position: 'inside',
+								formatter: param=>parseInt(param.percent) + '%'
+							},
+							labelLine: {
+								show: false
+							}
+						}
+					]
+				};
+				myChart.setOption(option);
+			},
+      // 条形图渲染
+			renderBarChart(paramObj) {
+				const myChart = echarts.init(document.getElementById(paramObj.id));
+				const option = {
+					color: ['#3ea799','#01CDFF','#FAC457','#E38931', '#FB4339'],
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+							type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+						}
+					},
+					grid: {
+						top: '20%',
+						left: '3%',
+						right: '4%',
+						bottom: '6%',
+						containLabel: true
+					},
+					xAxis: [
+						{
+							type: 'category',
+							axisLine:{
+								lineStyle: {
+									color: chartLineColor
+								}
+							},
+              axisLabel: {
+                color: '#fff'
+              },
+              axisTick: {
+								alignWithLabel: true
+							}
+						}
+					],
+					yAxis: [
+						{
+							boundaryGap: ['20%', '20%'],
+							name: '数量',
+              nameTextStyle: {
+								color: '#ffffff'
+              },
+              axisLine:{
+								lineStyle: {
+									color: chartLineColor
+                }
+              },
+							axisLabel: {
+								color: '#fff'
+							},
+              splitLine:{
+								lineStyle: {
+									color: chartLineColor
+                }
+              },
+							type: 'value'
+						}
+					],
+					series: [
+						{
+							name: 'A',
+							type: 'bar',
+              itemStyle: {
+	              barBorderRadius:[10, 10, 0, 0]
+              },
+							barWidth: 20,
+							barGap:1.6,
+							data: [22],
+							label: {
+								show:true,
+								position: 'bottom',
+                formatter: param=>{return param.seriesName}
+							}
+						},
+						{
+							name: 'B',
+							type: 'bar',
+              itemStyle: {
+	              barBorderRadius:[10, 10, 0, 0]
+              },
+							barWidth: 20,
+							barGap:1.6,
+							data: [12],
+							label: {
+								show:true,
+								position: 'bottom',
+								formatter: param=>{return param.seriesName}
+							}
+						},
+						{
+							name: 'C',
+							type: 'bar',
+              itemStyle: {
+	              barBorderRadius:[10, 10, 0, 0]
+              },
+							barWidth:20,
+							barGap:1.6,
+							data: [14],
+							label: {
+								show:true,
+								position: 'bottom',
+								formatter: param=>{return param.seriesName}
+							}
+						},
+						{
+							name: 'D',
+							type: 'bar',
+              itemStyle: {
+	              barBorderRadius:[10, 10, 0, 0]
+              },
+							barWidth: 20,
+							barGap:1.6,
+							data: [30],
+							label: {
+								show:true,
+								position: 'bottom',
+								formatter: param=>{return param.seriesName}
+							}
+						},
+						{
+							name: 'E',
+							type: 'bar',
+              itemStyle: {
+								barBorderRadius:[10, 10, 0, 0]
+              },
+							barWidth: 20,
+							barGap:1.6,
+							data: [20],
+							label: {
+								show:true,
+                position: 'bottom',
+								formatter: param=>{return param.seriesName}
+							}
+						},
+					]
+				};
+				myChart.setOption(option);
+			},
+      // 表格等级过滤色彩方法
+			switchLvColor(lv){
+				switch(lv){
+          case 'A': return 'color: #3ea799'
+          case 'B': return 'color: #01CDFF'
+          case 'C': return 'color: #FAC457'
+          case 'D': return 'color: #E38931'
+          case 'E': return 'color: #FB4339'
+        }
+      }
 		}
 	})
 </script>

@@ -40,6 +40,20 @@
   background-position: left bottom;
   padding: 16px 20px;
 }
+.link-btn {
+  width: 200px;
+  height: 50px;
+  background-image: url("../../images/luohe_big_data/button.png");
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  text-align: center;
+  line-height: 50px;
+  display: inline-block;
+  -webkit-background-size: cover;
+  background-size: cover;
+  font-size: 24px;
+}
 [flex] {
   display: flex;
 }

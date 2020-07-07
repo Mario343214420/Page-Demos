@@ -7,15 +7,18 @@
   <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
   <link rel="stylesheet" href="../../styles/luohe_big_data/common.css">
   <link rel="stylesheet" href="../../styles/luohe_big_data/warning.css">
+  <link rel="stylesheet" href="../../js/lib/swiper/swiper.min.css">
   <script src="../../js/lib/vue.min.js"></script>
   <script src="../../js/lib/bin-ui/bin-ui.min.js"></script>
   <script src="../../js/lib/echarts/echarts.min.js"></script>
+  <script src="../../js/lib/swiper/swiper.min.js"></script>
 </head>
 <body>
 <div id="app" v-cloak>
   <div class="page-container" flex="dir:column">
     <div class="page-title">
       <i class="text-gradient">企业信用风险评价分析系统</i>
+      <a href="./risk_page.html" class="link-btn">*****</a>
     </div>
     <div class="page-content" flex-box="1" flex="dir:column">
       <div class="row-wrapper" flex flex-box="2">
@@ -26,7 +29,7 @@
                 <i>采集数据分类统计</i>
               </div>
             </div>
-            <div flex-box="1" flex="dir:column space:between" style="padding: 30px 0">
+            <div class="side-inner" flex-box="1" flex="dir:column space:between" style="padding: 30px 0">
               <div class="progress-title" flex="space:between" style="padding: 10px 0"><i>（数据分类）</i><i>（条）</i></div>
               <div class="chart-container" flex="dir:column space:between" flex-box="1">
                 <div class="progress" v-for="(item, index) in dataClassificationList">
@@ -120,7 +123,24 @@
           </div>
         </div>
         <div class="table-container">
-          <b-table :columns="columns" :data="list" height="250"></b-table>
+          <div class="table-title" flex="space:between">
+            <div class="cell">企业名称</div>
+            <div class="cell">法定代表人</div>
+            <div class="cell">注册资本（万）</div>
+            <div class="cell">评级得分</div>
+            <div class="cell">评级</div>
+          </div>
+          <div class="swiper-container" style="height: 183px;">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="(item,index) in list" flex="space:between">
+                <div class="cell">{{item.NAME}}</div>
+                <div class="cell">{{item.party}}</div>
+                <div class="cell">{{item.capital}}</div>
+                <div class="cell">{{item.capital}}</div>
+                <div class="cell">{{item.LV}}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -131,28 +151,6 @@
 		el: '#app',
 		data: function () {
 			return {
-				columns: [
-					{
-						title: '企业名称',
-						key: 'NAME'
-					},
-					{
-						title: '法定代表人',
-						key: 'party'
-					},
-					{
-						title: '注册资本（万）',
-						key: 'capital'
-					},
-					{
-						title: '评级得分',
-						key: 'score'
-					},
-					{
-						title: '评级',
-						key: 'LV'
-					}
-				],
 				list: [],
 				warningCom: 1256584,
 				rotateList: [
@@ -175,13 +173,13 @@
 					{label:'异常名录',value:95}
         ],
 				blackNameList:[
-          {TYPE:'食品类',CNT: 100},
-          {TYPE:'其他类',CNT: 100},
-          {TYPE:'药品类',CNT: 100},
-          {TYPE:'种植养殖类',CNT: 100},
-          {TYPE:'家用电器',CNT: 100},
-          {TYPE:'汽车配件',CNT: 100},
-        ],
+					{TYPE:'食品类',CNT: 100},
+					{TYPE:'其他类',CNT: 100},
+					{TYPE:'药品类',CNT: 100},
+					{TYPE:'种植养殖类',CNT: 100},
+					{TYPE:'家用电器',CNT: 100},
+					{TYPE:'汽车配件',CNT: 100},
+				],
 				wraningComList:[
           ['product', '数量'],
           ['MM1', 100],
@@ -224,6 +222,16 @@
 				}, 1000)
 			},
 			initData(){
+				// axios.get('/user?ID=12345')
+				// 	.then((response) => {
+				// 		// 从data中解构声明dtCounts
+				// 		const {dtCounts} = response.data
+				// 		// 获取后渲染相应图表
+				// 		this.renderMap({id: 'map', data: dtCounts})
+				// 	})
+				// 	.catch((error)=>{
+				// 		console.log(error);
+				// 	});
 				let list = JSON.parse(JSON.stringify({
 					"list": [
 						{
@@ -369,6 +377,7 @@
 					]
 				})).list
 				this.list.push(...list)
+				setTimeout(this.createSwiper,10)
       },
 			renderPieChart(paramObj) {
 				const myChart = echarts.init(document.getElementById(paramObj.id));
@@ -478,6 +487,27 @@
 							color: '#ffffff'
 						}
 					},
+          tooltip:{
+	          formatter: param => {
+		          const {name, value} = param
+              let str = ""
+		          switch (name) {
+			          case 'MM1': str = '1月'
+			          case 'MM2': str = '2月'
+			          case 'MM3': str = '3月'
+			          case 'MM4': str = '4月'
+			          case 'MM5': str = '5月'
+			          case 'MM6': str = '6月'
+			          case 'MM7': str = '7月'
+			          case 'MM8': str = '8月'
+			          case 'MM9': str = '9月'
+			          case 'MM10': str = '10月'
+			          case 'MM11': str = '11月'
+			          case 'MM12': str = '12月'
+		          }
+		          return str + ' ：' + value[1] + '（条）'
+	          }
+          },
 					series: [{
 						type: 'line',
             areaStyle: {}
@@ -489,6 +519,14 @@
 				let sum = 0
 				list.forEach(item=>sum+=item.value)
 	      return sum
+      },
+      createSwiper(){
+	      new Swiper ('.swiper-container', {
+		      direction: 'vertical', // 垂直切换选项
+		      loop: true, // 循环模式选项
+		      slidesPerView :4,
+          autoplay: true
+	      })
       }
 		}
 	})
