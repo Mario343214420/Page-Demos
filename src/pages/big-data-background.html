@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    html, body{
+      height: 100%;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    #app{
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <canvas id="water" width="200" height="200"></canvas>
+</div>
+<script>
+	// 兼容的requestAnimationFrame函数
+	let requestAnimationFrame = (function () {
+		return window.requestAnimationFrame || webkitRequestAnimationFrame || mozRequestAnimationFrame || function (
+			callback) {
+			window.setTimeout(callback, 1000 / 60);
+		}
+	})();
+
+	// 封装设置canvas大小的函数
+	let setCanvasSize = function () {
+		canvas.width = canvas.parentNode.offsetWidth;
+		canvas.height = canvas.parentNode.offsetHeight;
+	}
+
+	// 获取canvas相关
+	let canvas = document.getElementById('water');
+	console.log(canvas);
+	let ctx = canvas.getContext('2d');
+	setCanvasSize();
+
+	// 一些变量
+	let boHeight = canvas.height / 30; // 顶峰高度
+	let posHeight = canvas.height / 1.1; // 最低高度
+	let step = 0; // 初始角度
+	let colors = ['rgba(1,205,255,0.6)', 'rgba(1,205,255,0.3)', 'rgba(1,205,255,0.1)'];
+
+	// 绘制函数
+	let paint = function () {
+		ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空画布
+		step += 1; // 角度
+
+		// 遍历colors数组，进行绘制
+		colors.forEach((item, index) => {
+			ctx.fillStyle = item; // 画笔的颜色
+			let angle = (step + index * 50) * Math.PI / 180; // 相差的角度
+			let deltaHeight = Math.sin(angle) * boHeight; // 线条左边的起点
+			let deltaHeightRight = Math.cos(angle) * boHeight; //线条右边的终点
+			ctx.beginPath();
+			ctx.moveTo(0, posHeight + deltaHeight);
+			ctx.bezierCurveTo(canvas.width / 2, posHeight + deltaHeight - boHeight, canvas.width / 2, posHeight +
+				deltaHeightRight - boHeight, canvas.width, posHeight + deltaHeightRight); // 绘制贝塞尔曲线
+			ctx.lineTo(canvas.width, canvas.height); // 防止右侧出现空隙
+			ctx.lineTo(0, canvas.height); // 防止左侧出现空隙
+			ctx.closePath();
+			ctx.fill();
+		})
+
+		requestAnimationFrame(paint); // 自调
+	}
+
+	// 调用绘制函数
+	paint();
+
+	// 响应式
+	window.onresize = setCanvasSize;
+</script>
+</body>
+</html>

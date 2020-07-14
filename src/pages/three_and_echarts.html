@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/three_and_echarts.css">
+  <script type="text/javascript" src="../js/lib/three.min.js"></script>
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../js/lib/echarts/echarts.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div class="main-container">
+    <div id="map" style="width: 1200px;height: 600px;z-index: 30;opacity: 0"></div>
+    </div>
+    <div class="bg" id="bg">
+
+    </div>
+  </div>
+  <script type="text/javascript" src="../js/lib/echarts/map/world.js"></script>
+  <script type="text/javascript">
+    new Vue({
+      el: '#app',
+      mounted(){
+        this.renderCanvas()
+	      this.renderMap({id:'map'})
+	      this.renderBall()
+      },
+      methods: {
+      	renderCanvas(){
+        },
+        renderMap(paramObj){
+	        var border = '#105689'
+	        var bg = 'rgba(1,205,255,0.8)'
+	        var series = [];
+	        var option = {
+		        geo: {
+			        map: 'world',
+			        zoom: 1.2,
+			        label: {
+				        emphasis: {
+					        show: false
+				        }
+			        },
+			        roam: false, // 是否允许缩放
+			        itemStyle: {
+				        normal: {
+					        color: 'rgba(243,246,251,0.1)', // 地图背景色
+					        // color:'#0f1d37',
+					        borderColor: border, // 省市边界线00fcff 516a89
+					        borderWidth: 1,
+					        shadowColor: bg,
+					        shadowBlur: 1
+				        },
+				        emphasis: {
+					        color: 'rgba(37, 43, 61, .5)' // 悬浮背景
+				        }
+			        }
+		        },
+		        series: series
+	        }
+	        var chart = echarts.init(document.getElementById(paramObj.id))
+	        chart.setOption(option)
+        },
+      	renderBall(){
+		      var canvas = document.createElement("canvas");
+		      canvas.width = 512;
+		      canvas.height = 128;
+		      var c = canvas.getContext('2d');
+		      // 矩形区域填充背景
+		      c.fillStyle = "#01cdff";
+		      c.fillRect(0, 0, 512, 128);
+		      c.beginPath();
+		      // 文字
+		      c.beginPath();
+		      c.translate(256,64);
+		      c.fillStyle = "#000000"; //文本填充颜色
+		      c.font = "bold 48px 宋体"; //字体样式设置
+		      c.textBaseline = "middle"; //文本与fillText定义的纵坐标
+		      c.textAlign = "center"; //文本居中(以fillText定义的横坐标)
+		      c.fillText("TEST_FONT", 0, 0);
+
+		      document.body.appendChild(canvas)
+          var map = document.getElementById('map')
+          var canvasContainer = map.children[0]
+          // console.dir(canvasContainer.children);
+          var canvas0 = canvasContainer.children[0]
+		      var w = 1200, h =600;//场景高宽
+		      var camera_deg = 45, aspect = w / h, near = .1, far = 10000;//相机参数
+		      var container = document.getElementById('bg');
+		      var renderer = new THREE.WebGLRenderer({ alpha: true });
+		      var camera = new THREE.PerspectiveCamera(
+			      camera_deg, aspect, near, far
+		      );
+		      var scene = new THREE.Scene();
+		      scene.add(camera)
+		      camera.position.z = 200;
+
+		      renderer.setSize(w, h);
+
+		      //附加DOM元素
+		      container.append(renderer.domElement);
+
+		      //设置球体的值
+		      var radius = 60, segemnt = 60, rings = 60;
+		      // var png = new THREE.TextureLoader().load('../images/canvas/map.png');
+		      var texture = new THREE.CanvasTexture(canvas0)
+		      // 使用echarts作为canvas贴图
+          var sphereMaterial = new THREE.MeshBasicMaterial({map: texture, fog:true});
+
+		      var sphere = new THREE.Mesh(
+			      new THREE.SphereGeometry(radius, segemnt, rings),
+			      sphereMaterial
+		      );
+		      //let sphereGeometry = new THREE.SphereGeometry(1000, 50, 50);//球几何体创建
+		      //sphereGeometry.scale(-1, 1, 1);//球形几何网格进行x轴反转，使所有的面点向内
+
+		      sphere.geometry.verticesNeedUpdate = true;
+		      sphere.geometry.normalsNeedUpdate = true;
+
+		      scene.add(sphere);
+
+		      var pointLight = new THREE.PointLight(0Xffffff);
+
+		      pointLight.position.x = 10;
+		      pointLight.position.y = 50;
+		      pointLight.position.z = 150;
+
+		      //scene.add(pointLight);
+		      function animate(){
+			      requestAnimationFrame(animate);
+			      //画图
+			      //sphere.rotation.x+=.1;
+			      sphere.rotation.y+=.005;//延Y轴旋转
+			      renderer.render(scene, camera);
+		      }
+		      animate()
+        }
+      }
+    })
+  </script>
+</body>
+</html>

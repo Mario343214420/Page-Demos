@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body, html {
+      height: 100%;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<script>
+	let h = window.innerHeight, w = window.innerWidth
+	let cvs = document.createElement('Canvas')
+	cvs.width = w
+	cvs.height = h
+	let fun = () => {
+
+		function drawSquare() {
+
+			let ctx = cvs.getContext('2d')
+
+			function returnRandomColor(){
+				let randomR = parseInt(Math.random() * 225)
+				let randomG = parseInt(Math.random() * 225)
+				let randomB = parseInt(Math.random() * 225)
+				let opacity = Math.random().toFixed(1)
+				return `rgba(${randomR},${randomG},${randomB},${opacity})`
+			}
+			ctx.rotate(Math.PI * Math.random());
+			ctx.fillStyle = returnRandomColor()
+			let startX = Math.random() * window.innerWidth
+			let startY = Math.random() * window.innerHeight
+			ctx.fillRect(startX, startY, 10, 10);
+		}
+		for (let i = 0; i < 100; i++) {
+			drawSquare()
+		}
+		window.requestAnimationFrame(fun)
+
+	}
+	window.requestAnimationFrame(fun)
+
+	document.body.appendChild(cvs)
+</script>
+</body>
+</html>
