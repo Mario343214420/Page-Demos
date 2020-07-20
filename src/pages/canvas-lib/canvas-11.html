@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body {
+      background: #000000;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .back {
+      z-index: 0;
+      -webkit-filter: blur(6px);
+      filter: blur(6px);
+      background-image: -webkit-radial-gradient(#4682b4, #191970);
+      background-image: radial-gradient(#4682b4, #191970);
+    }
+
+    .mid {
+      z-index: 1;
+      -webkit-filter: blur(3px);
+      filter: blur(3px);
+      mix-blend-mode: lighten;
+      background: rgba(20, 20, 20, 0.5);
+    }
+
+    .front {
+      z-index: 2;
+      -webkit-filter: blur(1px);
+      filter: blur(1px);
+      mix-blend-mode: luminosity;
+    }
+
+  </style>
+</head>
+<body>
+<canvas class="back"></canvas>
+<canvas class="mid"></canvas>
+<canvas class="front"></canvas>
+<script>
+	var Vector2=function(){function t(t,o){this.x=t||0,this.y=o||0}return t}();Vector2.prototype.zero=function(){return this.x=0,this.y=0,this},Vector2.prototype.add=function(t){return this.x+=t.x||0,this.y+=t.y||0,this},Vector2.prototype.addX=function(t){return this.x+=t.x||0,this},Vector2.prototype.addY=function(t){return this.y+=t.y||0,this},Vector2.prototype.addScalar=function(t){return this.x+=t||0,this.y+=t||0,this},Vector2.prototype.addScalarX=function(t){return this.x+=t||0,this},Vector2.prototype.addScalarY=function(t){return this.y+=t||0,this},Vector2.prototype.sub=function(t){return this.x-=t.x||0,this.y-=t.y||0,this},Vector2.prototype.subX=function(t){return this.x-=t.x||0,this},Vector2.prototype.subY=function(t){return this.y-=t.y||0,this},Vector2.prototype.subScalar=function(t){return this.x-=t||0,this.y-=t||0,this},Vector2.prototype.subX=function(t){return this.x-=t||0,this},Vector2.prototype.subY=function(t){return this.y-=t||0,this},Vector2.prototype.multiply=function(t){return this.x*=t.x||1,this.y*=t.y||1,this},Vector2.prototype.multiplyX=function(t){return this.x*=t.x||1,this},Vector2.prototype.multiplyY=function(t){return this.y*=t.y||1,this},Vector2.prototype.multiplyScalar=function(t){return this.x*=t||1,this.y*=t||1,this},Vector2.prototype.multiplyScalarX=function(t){return this.x*=t||1,this},Vector2.prototype.multiplyScalarY=function(t){return this.y*=t||1,this},Vector2.prototype.divide=function(t){return 0===t.x||0===t.y?void console.log("! Cannot divide by zero !"):(this.x/=t.x||1,this.y/=t.y||1,this)},Vector2.prototype.divideX=function(t){return 0===t.x?void console.log("! Cannot divide by zero !"):(this.x/=t.x||1,this)},Vector2.prototype.divideY=function(t){return 0===t.y?void console.log("! Cannot divide by zero !"):(this.y/=t.y||1,this)},Vector2.prototype.divideScalar=function(t){return 0===t?void console.log("! Cannot divide by zero !"):(this.x/=t||1,this.y/=t||1,this)},Vector2.prototype.divideScalarX=function(t){return 0===t?void console.log("! Cannot divide by zero !"):(this.x/=t||1,this)},Vector2.prototype.divideScalarY=function(t){return 0===t?void console.log("! Cannot divide by zero !"):(this.Y/=t||1,this)},Vector2.prototype.normalize=function(){var t=Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));this.divideScalar(t)},Vector2.prototype.randomize=function(t){return t=t||new Vector2(1,1),this.x=Math.random()*t.x,this.y=Math.random()*t.y,this},Vector2.prototype.addRandom=function(t){this.x+=t-Math.random()*(2*t),this.y+=t-Math.random()*(2*t)},Vector2.prototype.addRandomX=function(t){this.x+=t-Math.random()*(2*t)},Vector2.prototype.addRandomY=function(t){this.y+=t-Math.random()*(2*t)},Vector2.prototype.lerp=function(t,o){return t=t||this,o=o||.05,this.x=(1-o)*this.x+o*t.x,this.y=(1-o)*this.y+o*t.y,this},Vector2.prototype.midpoint=function(t){var o=new Vector2(this.x+t.x,this.y+t.y);return o.divideScalar(2),o},Vector2.prototype.slope=function(t){return(t.y-this.y)/(t.x-this.x)*-1},Vector2.prototype.intercept=function(t){return console.log(-t*this.x+this.y),-t*this.x+this.y},Vector2.prototype.distanceTo=function(t){return t=t||this,Math.sqrt(Math.pow(t.x-this.x,2)+Math.pow(t.y-this.y,2))},Vector2.prototype.angleTo=function(t,o){t=t||this,o=o||"rad";var i="rad"===o?Math.atan2(t.y-this.y,t.x-this.x):"deg"===o?180*Math.atan2(t.y-this.y,t.x-this.x)/Math.PI:void 0;return i};
+
+	/* jshint esversion: 6 */
+	((main) => {
+
+		this.requestAnimationFrame = (() => {
+			return window.requestAnimationFrame ||
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.oRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				function(callback) {
+					window.setTimeout(callback, 1000 / 60);
+				};
+		})();
+
+		main(this, document, Vector2);
+
+	})((window, document, v2, undefined) => {
+
+		'use strict';
+
+		const PI = Math.PI,
+			TAU = PI * 2;
+
+		const APP_DEFAULTS = {
+			particleCount: 600,
+			particleColor: 'rgba(200,200,230,0.5)'
+		};
+
+		class Particle {
+			constructor(size, speed, context, bounds) {
+				this.size = size;
+				this.ctx = context;
+				this.bounds = bounds;
+				this.position = new v2();
+				this.position.randomize(bounds);
+				this.velocity = new v2(0, speed);
+				this.velocity.y -= Math.random();
+			}
+
+			reset() {
+				this.position.y = this.bounds.y + this.size;
+				this.position.x = Math.random() * this.bounds.x;
+			}
+
+			update() {
+				this.position.add(this.velocity);
+				if (this.position.y < -this.size) {
+					this.reset();
+				}
+			}
+		}
+
+		class App {
+			constructor() {
+				this.setup();
+				this.getCanvas();
+				this.resize();
+				this.populate();
+				this.render();
+			}
+
+			setup() {
+				let self = this;
+				self.props = Object.assign({}, APP_DEFAULTS);
+				self.dimensions = new v2();
+				window.onresize = () => {
+					self.resize();
+				};
+			}
+
+			getCanvas() {
+				this.canvas = {
+					back: document.querySelector('.back'),
+					mid: document.querySelector('.mid'),
+					front: document.querySelector('.front')
+				};
+
+				this.ctx = {
+					back: this.canvas.back.getContext('2d'),
+					mid: this.canvas.mid.getContext('2d'),
+					front: this.canvas.front.getContext('2d')
+				};
+			}
+
+			resize() {
+				for (var c in this.canvas) {
+					this.canvas[c].width = this.dimensions.x = window.innerWidth;
+					this.canvas[c].height = this.dimensions.y = window.innerHeight;
+				}
+			}
+
+			populate() {
+				this.particles = [];
+				for (let i = 0; i < this.props.particleCount; i++) {
+					let pCtx = i < 300 ? this.ctx.back : i < 500 ? this.ctx.mid : this.ctx.front,
+						size = i < 300 ? 5 : i < 500 ? 8 : 12,
+						speed = i < 300 ? -0.5 : i < 500 ? -1 : -2,
+						particle = new Particle(size, speed, pCtx, this.dimensions);
+					this.particles.push(particle);
+				}
+			}
+
+			render() {
+				let self = this;
+				self.draw();
+				window.requestAnimationFrame(self.render.bind(self));
+			}
+
+			draw() {
+				for (var c in this.ctx) {
+					this.ctx[c].clearRect(0, 0, this.dimensions.x, this.dimensions.y);
+				}
+				for (let i = 0, len = this.particles.length; i < len; i++) {
+					let p = this.particles[i];
+					p.update();
+					p.ctx.beginPath();
+					p.ctx.fillStyle = this.props.particleColor;
+					p.ctx.arc(p.position.x, p.position.y, p.size, 0, TAU);
+					p.ctx.fill();
+					p.ctx.closePath();
+				}
+			}
+		}
+
+		window.onload = () => {
+			let app = new App();
+		};
+
+	});
+</script>
+</body>
+</html>

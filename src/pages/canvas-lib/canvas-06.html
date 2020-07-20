@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    * {
+      margin:0;
+      padding:0;
+      outline:0;
+      border:0;
+    }
+    body {
+      font:16px/1.5 Lobster,Arial,Sans-serif;
+    }
+    canvas {
+      display:block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="playground"></canvas>
+<script>
+	// base setup
+	const canvas    = document.getElementById('playground')
+	const ctx       = canvas.getContext('2d')
+
+	const particles = []
+	const step      = 8
+
+	// sizes
+	const width  = canvas.width  = window.innerWidth
+	const height = canvas.height = window.innerHeight
+
+	// settings
+	const fontSize = Math.min(height, width)/2.5
+	const word     = 'jQuery'
+
+	// bg
+	ctx.fillStyle = '#fff'
+	ctx.fillRect(0, 0, width, height)
+
+	// word
+	ctx.fillStyle = '#000'
+	ctx.font = `${fontSize}px Lobster, Arial`
+	ctx.textAlign = 'center'
+	ctx.fillText(word.toUpperCase(), width/2, height/1.5 + fontSize/4)
+
+	//////////////////////////////////////////////
+
+	const data   = ctx.getImageData(0, 0, width, height).data;
+	const data32 = new Uint32Array(data.buffer);
+
+	for (let x = 0; x < width; x += step) {
+		for (let y = 0; y < height; y += step) {
+			const color = data32[y * width + x];
+
+			if (color != 0xFFFFFFFF) {
+				particles.push({ x, y });
+			}
+		}
+	}
+
+	//////////////////////////////////////////////
+
+	let counter = 0
+
+	const loop = () => {
+		window.requestAnimationFrame(loop)
+
+		counter++
+
+		ctx.clearRect(0, 0, width, height)
+
+		ctx.fillStyle = '#1c1c1c'
+		ctx.fillRect(0, 0, width, height)
+
+		particles.forEach((particle, i) => {
+			const dX = (step/10) * Math.cos(i * 2 + counter/10)
+			const dY = (step/10) * Math.sin(i * 12 + counter/10)
+			const r  = step * .5 + dX - dY
+
+			const c  = (60 * Math.sign(dY) + 250) % 360
+
+			ctx.beginPath()
+			ctx.arc(particle.x + dX, particle.y + dY - i/10, r * .7, 2 * Math.PI, 0)
+			ctx.fillStyle = `hsl(${c}, 100%, 50%)`
+			ctx.fill()
+		});
+	}
+	loop()
+</script>
+</body>
+</html>

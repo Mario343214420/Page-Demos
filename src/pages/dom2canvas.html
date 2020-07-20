@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <style>
+    html, body, div{
+      margin: 0;
+      padding: 0;
+    }
+    .dom{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="dom" ref="dom">DOM</div>
+  <canvas class="cvs" id="cvs" ref="cvs"></canvas>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data(){
+    	return{
+      }
+    },
+	  mounted(){
+		  let cvs = this.$refs.cvs
+      let ctx = cvs.getContext('2d')
+		  console.dir(cvs.toDataURL);
+		  console.dir(ctx);
+
+	  }
+  })
+</script>
+</body>
+</html>
