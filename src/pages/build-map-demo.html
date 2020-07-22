@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>three.js webgl - map controls</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link type="text/css" rel="stylesheet" href="../styles/main.css">
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #000;
+    }
+
+    a {
+      color: #f00;
+    }
+
+    .title {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      font-family: Arial;
+      text-shadow: 0 2px 10px #636363;
+      transform: translateX(-50%);
+      letter-spacing: 40px;
+      color: #fff;
+      line-height: 100px;
+      font-weight: 700;
+      font-size: 100px;
+    }
+
+    #cvs {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 100;
+    }
+    #textInput{
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+
+<body>
+<div class="title">大数据展示系统</div>
+<script src="../js/lib/three/build/three.min.js"></script>
+<script src="../js/lib/FlyLine.js"></script>
+<script type="module">
+
+	import * as THREE from '../js/lib/three.module.js'
+
+	import {GUI} from '../js/lib/dat.gui.module.js'
+	import {MapControls} from '../js/lib/OrbitControls.js'
+
+	// import { MeshPhongMaterial } from '../js/lib/MeshPhongMaterial.js';
+  import {Line2} from '../js/lib/three/example/jsm/lines/Line2.js'
+	import { LineMaterial } from '../js/lib/three/example/jsm/lines/LineMaterial.js';
+	import { LineGeometry } from '../js/lib/three/example/jsm/lines/LineGeometry.js';
+	import { GeometryUtils } from '../js/lib/three/example/jsm/utils/GeometryUtils.js';
+	import { OrbitControls } from '../js/lib/three/example/jsm/controls/OrbitControls.js';
+  (function () {
+
+	  let camera, controls, scene, renderer
+
+	  let matLine, line;
+	  init()
+	  //render(); // remove when using next line for animation loop (requestAnimationFrame)
+	  animate()
+
+	  function generateTexture() {
+
+		  let canvas = document.createElement( 'canvas' );
+		  canvas.width = 2;
+		  canvas.height = 2;
+
+		  let context = canvas.getContext( '2d' );
+		  context.fillStyle = 'white';
+		  context.fillRect( 0, 1, 2, 1 );
+
+		  return canvas;
+
+	  }
+
+	  function init() {
+
+		  scene = new THREE.Scene()
+		  scene.background = new THREE.Color('#121959')
+		  scene.fog = new THREE.FogExp2(0x000000, 0.0008)
+
+		  renderer = new THREE.WebGLRenderer({antialias: true})
+		  renderer.setPixelRatio(window.devicePixelRatio)
+		  renderer.setSize(window.innerWidth, window.innerHeight)
+		  document.body.appendChild(renderer.domElement)
+
+		  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000)
+		  camera.position.set(600, 200, 0)
+		  // controls
+
+		  controls = new MapControls(camera, renderer.domElement)
+
+		  //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+		  controls.enableDamping = true // an animation loop is required when either damping or auto-rotation are enabled
+		  controls.dampingFactor = 0.05
+
+		  controls.screenSpacePanning = false
+
+		  controls.minDistance = 100
+		  controls.maxDistance = 500
+
+		  controls.maxPolarAngle = Math.PI / 2
+
+		  // world
+		  let geometry = new THREE.BoxBufferGeometry(1, 1 +  Math.random(),1 + Math.random())
+		  geometry.translate(0, 0.5, 0)
+
+		  // ground
+		  let groundTexture = new THREE.TextureLoader().load( '../images/0000.png' );
+		  groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+		  groundTexture.repeat.set( 20, 20 );
+		  groundTexture.anisotropy = 10;
+		  groundTexture.encoding = THREE.sRGBEncoding;
+		  let groundMaterial = new THREE.MeshLambertMaterial( { map: groundTexture, transparent: true} );
+		  let mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 20000, 20000 ), groundMaterial );
+		  mesh.rotation.x = - Math.PI / 2;
+		  mesh.receiveShadow = true;
+		  scene.add( mesh );
+
+		  // scene.add(plane)
+		  // let loader = new THREE.CubeTextureLoader();
+		  function returnCanvas() {
+			  let canvas = document.createElement("canvas")
+			  canvas.width = 64
+			  canvas.height = 128
+			  let c = canvas.getContext('2d')
+			  let canvasTop = document.createElement("canvas")
+			  canvasTop.width = 64
+			  canvasTop.height = 128
+			  let cTop = canvasTop.getContext('2d')
+			  cTop.beginPath()
+			  cTop.arc(0, canvasTop.height, 1, 0, 2 * Math.PI)
+			  c.stroke()
+
+			  cTop.beginPath()
+			  cTop.arc(canvasTop.width, canvasTop.height, 1, 0, 2 * Math.PI)
+			  c.stroke()
+
+			  // 矩形区域填充背景
+			  let grdTop = cTop.createLinearGradient(0, 0, canvas.width, canvas.height)
+			  grdTop.addColorStop(0, "rgba(37,130,255,0.8)")
+			  grdTop.addColorStop(1, "rgba(37,130,255,0.8)")
+			  cTop.fillStyle = grdTop
+			  cTop.fillRect(0, 0, canvas.width, canvas.height)
+
+			  // 矩形区域填充背景
+			  let grd = c.createLinearGradient(0, 0, 0, canvas.height)
+			  grd.addColorStop(0, "rgba(37,130,255,0.8)")
+			  grd.addColorStop(0.5, "rgba(37,130,255,0.6)")
+			  grd.addColorStop(1, "rgba(77,138,243,0.1)")
+
+			  // 线光效
+			  let grdLight = c.createLinearGradient(0, 0, 0, canvas.height)
+			  grdLight.addColorStop(1, "rgba(125,184,255, 0.4)")
+			  grdLight.addColorStop(0, "rgba(124,233,255,0.4)")
+
+			  let grdHide = c.createLinearGradient(0, 0, 0, canvas.height)
+			  grdHide.addColorStop(0, "rgba(63,104,255, 0.6)")
+			  grdHide.addColorStop(1, "rgba(18,25,89,0.6)")
+
+			  c.beginPath()
+			  c.lineWidth = 2
+			  c.moveTo(0, 0)
+			  c.lineTo(0, canvas.height)
+			  c.strokeStyle = grdHide
+			  c.stroke()
+
+			  for (let i = 0; i < 4; i++) {
+				  let randomW = Math.random() * 2
+				  c.beginPath()
+				  c.moveTo(canvas.width * i / 4 * randomW, 0)
+				  c.lineTo(canvas.width * i / 4 * randomW, canvas.height)
+				  c.strokeStyle = grdHide
+				  c.stroke()
+			  }
+
+			  c.beginPath()
+			  c.moveTo(0, 0)
+			  c.lineTo(canvas.width, 0)
+			  c.strokeStyle = grdLight
+			  c.stroke()
+
+			  // for(let i = 0; i< 20; i++){
+			  //   c.beginPath();
+			  //   c.moveTo(0,canvas.height-i*20)
+			  //   c.lineTo(canvas.width,canvas.height-i*20)
+			  //   c.strokeStyle =grdLight
+			  //   c.stroke()
+			  // }
+			  for (let i = 0; i < 4; i++) {
+				  c.beginPath()
+				  let rH = Math.random()
+				  c.moveTo(0, canvas.height * rH)
+				  c.lineWidth = 1
+				  c.lineTo(canvas.width, canvas.height * rH)
+				  c.strokeStyle = grdLight
+				  c.stroke()
+			  }
+
+			  // 面填充
+			  c.fillStyle = grd
+			  c.fillRect(0, 0, canvas.width, canvas.height)
+			  c.beginPath()
+			  c.lineWidth = 1
+			  c.strokeStyle = grd
+			  c.strokeWidth = 30
+			  c.strokeRect(0, 0, 100, 200)
+			  return {canvasTop, canvas}
+		  }
+
+		  // let texture = new THREE.CanvasTexture(canvas);
+		  const {canvasTop, canvas} = returnCanvas()
+		  // let materialMapList = []
+		  // for(let i = 0; i< 4;i++){
+			//   materialMapList.push(new THREE.TextureLoader().load(`../images/build_0${i+1}.png`))
+		  // }
+		  let materialList = [
+			  // new THREE.MeshPhongMaterial({map: materialMapList[2], transparent: true}),
+			  // new THREE.MeshPhongMaterial({map: materialMapList[1], transparent: true}),
+			  // new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvasTop), transparent: true}),
+			  // new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvasTop), transparent: true}),
+			  // new THREE.MeshPhongMaterial({map: materialMapList[3], transparent: true}),
+			  // new THREE.MeshPhongMaterial({map: materialMapList[0], transparent: true}),
+			  new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvas), transparent: true}),
+			  new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvas), transparent: true}),
+			  new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvasTop), transparent: true}),
+			  new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvasTop), transparent: true}),
+			  new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvas), transparent: true}),
+			  new THREE.MeshPhongMaterial({map: new THREE.CanvasTexture(canvas), transparent: true})
+		  ]
+		  // let material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture, transparent:true } );
+
+		  let loaderFont = new THREE.FontLoader()
+		  loaderFont.load('../json/helvetiker_regular.typeface.json', function (font) {
+			  let color = new THREE.Color(0x006699)
+			  let matLite = new THREE.MeshBasicMaterial({
+				  color: color,
+				  transparent: true,
+				  opacity: 1,
+			  })
+			  let geometry = new THREE.TextGeometry('Big Data', {
+				  font: font,
+				  size: 40,
+				  height: 5,
+				  curveSegments: 12,
+				  bevelEnabled: true,
+				  bevelThickness: 1,
+				  bevelSize: 0.5,
+				  bevelOffset: 0,
+				  bevelSegments: 3
+			  })
+			  for (let i = 0; i < 4; i++) {
+
+				  let text = new THREE.Mesh(geometry, matLite)
+				  text.rotation.y = 0.5 * Math.PI
+				  text.position.x = Math.random() * 200
+				  text.position.y = Math.random() * 200
+				  text.position.z = Math.random()
+				  // scene.add(text)
+			  }
+		  })
+
+		  for (let i = 0; i < 10; i++) {
+
+			  let mesh = new THREE.Mesh(geometry, materialList)
+			  mesh.position.x = Math.random() * 1600 - 800
+			  mesh.position.y = 0
+			  mesh.position.z = Math.random() * 1600 - 800
+			  mesh.scale.x = 20
+			  mesh.scale.y = Math.random() * 80 + 10
+			  mesh.scale.z = 20
+			  mesh.updateMatrix()
+			  mesh.matrixAutoUpdate = false
+			  scene.add(mesh)
+
+		  }
+
+		  // lights
+		  let light1 = new THREE.DirectionalLight('#e4deff')
+		  light1.position.set(1, 1, 1)
+		  scene.add(light1)
+
+		  let light2 = new THREE.DirectionalLight(0xeeeeee)
+		  light2.position.set(-1, -1, -1)
+		  scene.add(light2)
+
+		  let light3 = new THREE.AmbientLight(0xffffff)
+		  scene.add(light3)
+
+		  // let gui = new GUI();
+		  // gui.add( controls, 'screenSpacePanning' );
+
+	  }
+
+	  // export default FlyLine
+	  function animate() {
+		  requestAnimationFrame(animate)
+		  controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
+		  camera.lookAt(0,0,0);
+		  camera.position.z+=0.5
+		  camera.position.x++
+		  camera.position.y += 0.5
+		  // if(text){
+		  //   text.rotation.y+=0.0002
+		  // }
+		  render()
+
+	  }
+
+	  function render() {
+
+		  renderer.render(scene, camera)
+
+	  }
+
+	  // line
+	  class FlyLine extends THREE.Object3D{
+		  /**
+		   * curveOrObject 路径 THREE.Curve实例或者bufferGeo/geo实例
+		   *
+		   * color 颜色
+		   * segFlag 设置分段标记 （周期）
+		   * alphaTest 启用透明测试
+		   * radius 半径只有首参数为curve可用
+		   */
+		  constructor(curveOrObject, options){
+			  super()
+
+			  let color = options && options.color || 0xffffff
+			  let segFlag = options && options.segFlag || false
+			  let alphaTest = options && options.alphaTest || true
+			  let radius = options && options.radius || 1
+
+			  this.mesh = null
+			  let v_shader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                    gl_Position = projectionMatrix * mvPosition;
+                }`
+
+			  let define = segFlag ? '#define SEGFLAG': ''
+			  let alpha = alphaTest ? '#define ALPHATEST': ''
+			  let f_shader = `
+                ${define}
+                ${alpha}
+                #define PI 3.141592
+                uniform float time;
+                varying vec2 vUv;
+                uniform vec3 color;
+                void main() {
+                    float alpha;
+                    if (vUv.x > PI * 0.5 ){
+                        alpha = 0.0;
+                    } else {
+                        #ifdef SEGFLAG
+                        alpha = sin(3.0 *(vUv.x*14.0 + time - PI * 0.5));
+                        #else
+                        alpha = sin(1.0 * (vUv.x + time - PI * 0.5));
+                        #endif
+                    }
+                    gl_FragColor = vec4(color, alpha);
+                    #ifdef ALPHATEST
+                    if(gl_FragColor.a < 0.3){
+                        discard;
+                    }
+                    #endif
+                }`
+
+			  let geo
+
+			  if(curveOrObject instanceof THREE.Curve){
+				  geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 0.15 * radius, 4)
+			  }else if(curveOrObject instanceof THREE.Geometry || curveOrObject instanceof THREE.BufferGeometry ){
+				  geo = curveOrObject
+			  }else {
+				  throw new Error('please ensure first argument correct')
+			  }
+			  let shaderMat = new THREE.ShaderMaterial({
+				  uniforms: {
+					  time: {
+						  type: 'f', value: 0.0
+					  },
+					  color: {
+						  type: 'v3', value: new THREE.Color(color)
+					  }
+				  },
+				  vertexShader: v_shader,
+				  fragmentShader: f_shader,
+				  transparent: true,
+				  blending: THREE.AdditiveBlending
+			  })
+			  this.mesh = new THREE.Mesh(geo, shaderMat)
+			  this.add(this.mesh)
+		  }
+		  get time(){
+			  return this.mesh.material.uniforms.time.value
+		  }
+		  set time(time){
+			  this.mesh.material.uniforms.time.value = time
+		  }
+		  update(){
+			  let time = this.time + 0.01
+			  this.time = time
+		  }
+		  dispose(){
+			  this.remove(this.mesh)
+			  this.mesh.geometry.dispose()
+			  this.mesh.material.dispose()
+		  }
+
+	  }
+	  const geo = new THREE.BoxGeometry(400,400,400,8,8)
+	  const lines = new THREE.CatmullRomCurve3 (geo.vertices)
+	  console.log(geo)
+	  let test = new FlyLine(lines, {
+		  color: 0x00ffff,
+		  segFlag: true,
+      lineWidth: 100
+	  })
+	  scene.add(test)
+	  test && test.update()
+	  const renderFlyLine = () => {
+		  renderer.render(scene, camera)
+		  requestAnimationFrame(renderFlyLine)
+		  test && test.update()
+	  }
+	  renderFlyLine()
+  })()
+
+</script>
+</body>
+</html>

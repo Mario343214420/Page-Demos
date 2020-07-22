@@ -45,8 +45,9 @@
 
 <body>
 <input type="text" id="textInput">
-<div class="title">大数据展示系统</div>
+<!--<div class="title">大数据展示系统</div>-->
 <canvas id="cvs"></canvas>
+
 <script type="module">
 
 	import * as THREE from '../js/lib/three.module.js'
@@ -66,7 +67,7 @@
 
 		scene = new THREE.Scene()
 		scene.background = new THREE.Color(0x121959)
-		scene.fog = new THREE.FogExp2(0x000000, 0.001)
+		scene.fog = new THREE.FogExp2(0x000000, 0.0005)
 
 		renderer = new THREE.WebGLRenderer({antialias: true})
 		renderer.setPixelRatio(window.devicePixelRatio)
@@ -93,16 +94,30 @@
 		// world
 		var geometry = new THREE.BoxBufferGeometry(1, 1, 1)
 		geometry.translate(0, 0.5, 0)
-		var planeGeometry = new THREE.PlaneGeometry(200, 200)
+		var planeGeometry = new THREE.PlaneBufferGeometry(1000, 1000)
 		var planeColor = new THREE.Color(0xffffff)
+		var planePng = new THREE.TextureLoader().load('../images/32.png')
 		var planeMeterial = new THREE.MeshPhongMaterial({
+			map: planePng,
+			transparent: true,
 			color: planeColor
 		})
 		var plane = new THREE.Mesh(planeGeometry, planeMeterial)
 		plane.rotation.x = Math.PI * 0.5
-		scene.add(plane)
 
-		// var png = new THREE.TextureLoader().load('../images/service_icon04.png')
+		// ground
+		var groundTexture = new THREE.TextureLoader().load( '../images/tech_bg.png' );
+		groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+		groundTexture.repeat.set( 20, 20 );
+		groundTexture.anisotropy = 16;
+		groundTexture.encoding = THREE.sRGBEncoding;
+		var groundMaterial = new THREE.MeshLambertMaterial( { map: groundTexture, transparent: true} );
+		var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 20000, 20000 ), groundMaterial );
+		mesh.rotation.x = - Math.PI / 2;
+		mesh.receiveShadow = true;
+		scene.add( mesh );
+
+		// scene.add(plane)
 		// var loader = new THREE.CubeTextureLoader();
 		function returnCanvas() {
 			var canvas = document.createElement("canvas")
@@ -123,25 +138,25 @@
 
 			// 矩形区域填充背景
 			var grdTop = cTop.createLinearGradient(0, 0, canvas.width, canvas.height)
-			grdTop.addColorStop(0, "rgba(49,124,249,0.6)")
-			grdTop.addColorStop(1, "rgba(49,124,249,0.6)")
+			grdTop.addColorStop(0, "rgba(49,124,249,0.8)")
+			grdTop.addColorStop(1, "rgba(49,124,249,0.8)")
 			cTop.fillStyle = grdTop
 			cTop.fillRect(0, 0, canvas.width, canvas.height)
 
 			// 矩形区域填充背景
 			var grd = c.createLinearGradient(0, 0, 0, canvas.height)
-			grd.addColorStop(0, "rgba(49,124,249,0.8)")
-			grd.addColorStop(0.5, "rgba(99,153,252,0.4)")
-			grd.addColorStop(1, "rgba(77,138,243,0.1)")
+			grd.addColorStop(0, "rgba(37,130,255,0.8)")
+			grd.addColorStop(0.5, "rgba(37,130,255,0.6)")
+			grd.addColorStop(1, "rgba(77,138,243,0.4)")
 
 			// 线光效
 			var grdLight = c.createLinearGradient(0, 0, 0, canvas.height)
-			grdLight.addColorStop(1, "rgba(170,248,255,0.6)")
-			grdLight.addColorStop(0, "rgba(124,233,255,0.4)")
+			grdLight.addColorStop(1, "rgb(125,184,255)")
+			grdLight.addColorStop(0, "rgba(124,233,255,0.6)")
 
 			var grdHide = c.createLinearGradient(0, 0, 0, canvas.height)
-			grdHide.addColorStop(0, "rgba(143,147,255,0.8)")
-			grdHide.addColorStop(1, "rgba(18,25,89,0)")
+			grdHide.addColorStop(0, "rgb(63,104,255)")
+			grdHide.addColorStop(1, "rgba(18,25,89,0.6)")
 
 			c.beginPath()
 			c.lineWidth = 2
@@ -251,7 +266,7 @@
 		}
 
 		// lights
-		var light = new THREE.DirectionalLight(0xffffff)
+		var light = new THREE.DirectionalLight('#c0bcff')
 		light.position.set(1, 1, 1)
 		scene.add(light)
 
@@ -303,19 +318,18 @@
 <script type="text/javascript">
 	const cvs = document.getElementById('cvs')
 	const ctx = cvs.getContext('2d')
-	const layers = 4 // 模拟立体层数
+	const layers = 6 // 模拟立体层数
 	let size = 0
 	let particles = []
 	let targets = []
 	const lerp = (t, v0, v1) => (1 - t) * v0 + t * v1 // 插值
 	const fov = 2000 // 视场
-	const viewDistance = 200 // 可视范围
-	let targetRotationY = 0.5
-	let rotationY = 0.5
-	let speed = 40
+	const viewDistance = 400 // 可视范围
+	let targetRotationY = 0.1
+	let rotationY = 0.1
+	let speed = 100
 	let animFrame // 外曝露动画对象
-	const texts = [
-		'大数据']
+	const texts = ['大数据展示系统']
 	let textIndex = 0
 	cvs.width = window.innerWidth
 	cvs.height = window.innerHeight
@@ -344,7 +358,7 @@
 		rotateY(angle) {
 			const y = this.y * Math.cos(angle) - this.z * Math.sin(angle)
 			const z = this.y * Math.sin(angle) - this.z * Math.cos(angle)
-			return new Vector3(this.x, this.y, z)
+			return new Vector3(this.x, y, z)
 		}
 
 		pp() {
@@ -359,9 +373,9 @@
 		if (e) e.preventDefault();
 		cancelAnimationFrame(animFrame);
 		const text = document.getElementById('textInput').value || texts[textIndex++ % texts.length];
-		let fontSize = 150;
+		let fontSize = 120;
 		let startX = window.innerWidth / 2;
-		let startY = window.innerHeight / 2;
+		let startY = window.innerHeight / 2 - 400;
 		particles = [];
 		targets = [];
 		// Create temp canvas for the text, draw it and get the image data.
@@ -370,7 +384,7 @@
 		cx.font = `900 ${fontSize}px Arial`;
 		let w = cx.measureText(text).width;
 		const h = fontSize * 1.5;
-		let gap = 7;
+		let gap = 6;
 
 		// Adjust font and particle size to fit text on screen
 		while (w > window.innerWidth * .8) {
@@ -380,16 +394,16 @@
 		}
 		switch (fontSize) {
 			case fontSize < 100:
-				gap = 6
+				gap = 20
 				break
 			case fontSize < 70:
-				gap = 4
+				gap = 16
 				break
 			case fontSize < 40:
-				gap = 2
+				gap = 12
 				break
 		}
-		size = Math.max(gap / 2, 1);
+		size = Math.max(gap /1.1, 1);
 		c.width = w;
 		c.height = h;
 		startX = Math.floor(startX - w / 2);
@@ -445,11 +459,11 @@
         item.position.y = lerp(item.interpolant,item.position.y,item.target.y)
         item.position.z = lerp(item.interpolant,item.position.z,item.target.z)
       }
-			const rotationX = Math.sin(Date.now()/2000)*0.8
+			const rotationX = Math.sin(Date.now()/2000)*0.
       rotationY = lerp(0.00001,rotationY,targetRotationY)
       const particle = item.position.rotateX(rotationX).rotateY(rotationY).pp()
       const s = 1-item.position.z/layers
-      ctx.fillStyle = item.target.z === 0?'rgb(114,204,255)':`rgba(242,101,49,${s})`
+      ctx.fillStyle = item.target.z === 0?'rgb(240,240,255)':`rgba(120,160,220,${s})`
       ctx.fillRect(particle.x,particle.y,s*size,s*size)
     })
     animFrame = requestAnimationFrame(loop)
