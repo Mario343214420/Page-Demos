@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "live-server --open=./src/pages/build-map.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
+    "serve": "live-server --open=./src/pages/build-map-demo.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
     "build": "gulp build"
   },
   "author": "mario343214420",

@@ -20,6 +20,7 @@
       top: 30%;
       left: 50%;
       font-family: Arial;
+      word-break: keep-all;
       text-shadow: 0 2px 10px #636363;
       transform: translateX(-50%);
       letter-spacing: 40px;
@@ -46,7 +47,6 @@
 <body>
 <div class="title">大数据展示系统</div>
 <script src="../js/lib/three/build/three.min.js"></script>
-<script src="../js/lib/FlyLine.js"></script>
 <script type="module">
 
 	import * as THREE from '../js/lib/three.module.js'
@@ -54,17 +54,10 @@
 	import {GUI} from '../js/lib/dat.gui.module.js'
 	import {MapControls} from '../js/lib/OrbitControls.js'
 
-	// import { MeshPhongMaterial } from '../js/lib/MeshPhongMaterial.js';
-  import {Line2} from '../js/lib/three/example/jsm/lines/Line2.js'
-	import { LineMaterial } from '../js/lib/three/example/jsm/lines/LineMaterial.js';
-	import { LineGeometry } from '../js/lib/three/example/jsm/lines/LineGeometry.js';
-	import { GeometryUtils } from '../js/lib/three/example/jsm/utils/GeometryUtils.js';
-	import { OrbitControls } from '../js/lib/three/example/jsm/controls/OrbitControls.js';
   (function () {
 
 	  let camera, controls, scene, renderer
 
-	  let matLine, line;
 	  init()
 	  //render(); // remove when using next line for animation loop (requestAnimationFrame)
 	  animate()
@@ -116,13 +109,14 @@
 		  geometry.translate(0, 0.5, 0)
 
 		  // ground
-		  let groundTexture = new THREE.TextureLoader().load( '../images/0000.png' );
+		  let groundTexture = new THREE.TextureLoader().load( '../images/0001.png' );
 		  groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-		  groundTexture.repeat.set( 20, 20 );
+		  groundTexture.repeat.set( 10, 10 );
 		  groundTexture.anisotropy = 10;
 		  groundTexture.encoding = THREE.sRGBEncoding;
+		  let groundGeometry = new THREE.PlaneGeometry( 10000, 10000 )
 		  let groundMaterial = new THREE.MeshLambertMaterial( { map: groundTexture, transparent: true} );
-		  let mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 20000, 20000 ), groundMaterial );
+		  let mesh = new THREE.Mesh( groundGeometry, groundMaterial );
 		  mesh.rotation.x = - Math.PI / 2;
 		  mesh.receiveShadow = true;
 		  scene.add( mesh );
@@ -270,7 +264,7 @@
 			  }
 		  })
 
-		  for (let i = 0; i < 10; i++) {
+		  for (let i = 0; i < 200; i++) {
 
 			  let mesh = new THREE.Mesh(geometry, materialList)
 			  mesh.position.x = Math.random() * 1600 - 800
@@ -306,7 +300,7 @@
 	  function animate() {
 		  requestAnimationFrame(animate)
 		  controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
-		  camera.lookAt(0,0,0);
+		  // camera.lookAt(0,0,0);
 		  camera.position.z+=0.5
 		  camera.position.x++
 		  camera.position.y += 0.5
@@ -333,7 +327,7 @@
 		   * alphaTest 启用透明测试
 		   * radius 半径只有首参数为curve可用
 		   */
-		  constructor(curveOrObject, options){
+		  constructor(object, options){
 			  super()
 
 			  let color = options && options.color || 0xffffff
@@ -378,15 +372,15 @@
                     #endif
                 }`
 
-			  let geo
+			  let geo = new THREE.TubeBufferGeometry(object, 10, 0.5, 4)
 
-			  if(curveOrObject instanceof THREE.Curve){
-				  geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 0.15 * radius, 4)
+			  /*if(curveOrObject instanceof THREE.Curve){
+				  geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 1, 4)
 			  }else if(curveOrObject instanceof THREE.Geometry || curveOrObject instanceof THREE.BufferGeometry ){
 				  geo = curveOrObject
 			  }else {
 				  throw new Error('please ensure first argument correct')
-			  }
+			  }*/
 			  let shaderMat = new THREE.ShaderMaterial({
 				  uniforms: {
 					  time: {
@@ -411,7 +405,7 @@
 			  this.mesh.material.uniforms.time.value = time
 		  }
 		  update(){
-			  let time = this.time + 0.01
+			  let time = this.time + 0.05
 			  this.time = time
 		  }
 		  dispose(){
@@ -422,8 +416,22 @@
 
 	  }
 	  const geo = new THREE.BoxGeometry(400,400,400,8,8)
-	  const lines = new THREE.CatmullRomCurve3 (geo.vertices)
-	  console.log(geo)
+    let vertices = [
+	    new THREE.Vector3(400,0,800),
+	    new THREE.Vector3(200,0,800),
+	    new THREE.Vector3(200,0,-800),
+	    new THREE.Vector3(0,0,-800),
+	    new THREE.Vector3(0,0,800),
+	    new THREE.Vector3(-200,0,800),
+	    new THREE.Vector3(-200,0,800),
+	    new THREE.Vector3(200,0,800),
+	    new THREE.Vector3(400,0,800),
+	    new THREE.Vector3(-400,0,800),
+	    new THREE.Vector3(-400,0,-800),
+	    new THREE.Vector3(400,0,-800),
+	    new THREE.Vector3(400,0,800)
+    ]
+	  const lines = new THREE.CatmullRomCurve3 (vertices)
 	  let test = new FlyLine(lines, {
 		  color: 0x00ffff,
 		  segFlag: true,
