@@ -54,30 +54,112 @@
 	import {GUI} from '../js/lib/dat.gui.module.js'
 	import {MapControls} from '../js/lib/OrbitControls.js'
 
+	class FlyLine extends THREE.Object3D{
+		/**
+		 * curveOrObject 路径 THREE.Curve实例或者bufferGeo/geo实例
+		 *
+		 * color 颜色
+		 * segFlag 设置分段标记 （周期）
+		 * alphaTest 启用透明测试
+		 * radius 半径只有首参数为curve可用
+		 */
+		constructor(object, options){
+			super()
+
+			let color = options && options.color || '#ffffff'
+			let segFlag = options && options.segFlag || false
+			let alphaTest = options && options.alphaTest || true
+			let radius = options && options.radius || 1
+			this.mesh = null
+			let v_shader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                    gl_Position = projectionMatrix * mvPosition;
+                }`
+
+			let define = segFlag ? '#define SEGFLAG': ''
+			let alpha = alphaTest ? '#define ALPHATEST': ''
+			let f_shader = `
+                ${define}
+                ${alpha}
+                #define PI 3.141592
+                uniform float time;
+                varying vec2 vUv;
+                uniform vec3 color;
+                void main() {
+                    float alpha;
+                    if (vUv.x > PI * 0.5 ){
+                        alpha = 0.0;
+                    } else {
+                        #ifdef SEGFLAG
+                        alpha = sin(3.0 *(vUv.x*14.0 + time - PI * 0.5));
+                        #else
+                        alpha = sin(1.0 * (vUv.x + time - PI * 0.5));
+                        #endif
+                    }
+                    gl_FragColor = vec4(color, alpha);
+                    #ifdef ALPHATEST
+                    if(gl_FragColor.a < 0.3){
+                        discard;
+                    }
+                    #endif
+                }`
+
+			let geo = new THREE.TubeBufferGeometry(object, 12, options.lineWidth, 8)
+
+			/*if(curveOrObject instanceof THREE.Curve){
+        geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 1, 4)
+      }else if(curveOrObject instanceof THREE.Geometry || curveOrObject instanceof THREE.BufferGeometry ){
+        geo = curveOrObject
+      }else {
+        throw new Error('please ensure first argument correct')
+      }*/
+			let shaderMat = new THREE.ShaderMaterial({
+				uniforms: {
+					time: {
+						type: 'f', value: 0.0
+					},
+					color: {
+						type: 'v3', value: new THREE.Color(color)
+					}
+				},
+				vertexShader: v_shader,
+				fragmentShader: f_shader,
+				transparent: true,
+				blending: THREE.AdditiveBlending
+			})
+			this.mesh = new THREE.Mesh(geo, shaderMat)
+			this.add(this.mesh)
+		}
+		get time(){
+			return this.mesh.material.uniforms.time.value
+		}
+		set time(time){
+			this.mesh.material.uniforms.time.value = time
+		}
+		update(){
+			let time = this.time + 0.05
+			this.time = time
+		}
+		dispose(){
+			this.remove(this.mesh)
+			this.mesh.geometry.dispose()
+			this.mesh.material.dispose()
+		}
+
+	}
   (function () {
 
-	  let camera, controls, scene, renderer
+	  let camera, controls, scene, renderer, group
 
 	  init()
 	  //render(); // remove when using next line for animation loop (requestAnimationFrame)
 	  animate()
 
-	  function generateTexture() {
-
-		  let canvas = document.createElement( 'canvas' );
-		  canvas.width = 2;
-		  canvas.height = 2;
-
-		  let context = canvas.getContext( '2d' );
-		  context.fillStyle = 'white';
-		  context.fillRect( 0, 1, 2, 1 );
-
-		  return canvas;
-
-	  }
-
 	  function init() {
-
+		  group = new THREE.Group()
 		  scene = new THREE.Scene()
 		  scene.background = new THREE.Color('#121959')
 		  scene.fog = new THREE.FogExp2(0x000000, 0.0008)
@@ -105,7 +187,7 @@
 		  controls.maxPolarAngle = Math.PI / 2
 
 		  // world
-		  let geometry = new THREE.BoxBufferGeometry(1, 1 +  Math.random(),1 + Math.random())
+		  let geometry = new THREE.BoxGeometry(1, 1 +  Math.random(),1 + Math.random())
 		  geometry.translate(0, 0.5, 0)
 
 		  // ground
@@ -119,7 +201,7 @@
 		  let mesh = new THREE.Mesh( groundGeometry, groundMaterial );
 		  mesh.rotation.x = - Math.PI / 2;
 		  mesh.receiveShadow = true;
-		  scene.add( mesh );
+		  group.add( mesh );
 
 		  // scene.add(plane)
 		  // let loader = new THREE.CubeTextureLoader();
@@ -142,14 +224,14 @@
 
 			  // 矩形区域填充背景
 			  let grdTop = cTop.createLinearGradient(0, 0, canvas.width, canvas.height)
-			  grdTop.addColorStop(0, "rgba(37,130,255,0.8)")
-			  grdTop.addColorStop(1, "rgba(37,130,255,0.8)")
+			  grdTop.addColorStop(0, "rgba(37,130,255,0.9)")
+			  grdTop.addColorStop(1, "rgba(37,130,255,0.9)")
 			  cTop.fillStyle = grdTop
 			  cTop.fillRect(0, 0, canvas.width, canvas.height)
 
 			  // 矩形区域填充背景
 			  let grd = c.createLinearGradient(0, 0, 0, canvas.height)
-			  grd.addColorStop(0, "rgba(37,130,255,0.8)")
+			  grd.addColorStop(0, "rgba(37,130,255,0.9)")
 			  grd.addColorStop(0.5, "rgba(37,130,255,0.6)")
 			  grd.addColorStop(1, "rgba(77,138,243,0.1)")
 
@@ -234,62 +316,53 @@
 		  ]
 		  // let material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture, transparent:true } );
 
-		  let loaderFont = new THREE.FontLoader()
-		  loaderFont.load('../json/helvetiker_regular.typeface.json', function (font) {
-			  let color = new THREE.Color(0x006699)
-			  let matLite = new THREE.MeshBasicMaterial({
-				  color: color,
-				  transparent: true,
-				  opacity: 1,
-			  })
-			  let geometry = new THREE.TextGeometry('Big Data', {
-				  font: font,
-				  size: 40,
-				  height: 5,
-				  curveSegments: 12,
-				  bevelEnabled: true,
-				  bevelThickness: 1,
-				  bevelSize: 0.5,
-				  bevelOffset: 0,
-				  bevelSegments: 3
-			  })
-			  for (let i = 0; i < 4; i++) {
-
-				  let text = new THREE.Mesh(geometry, matLite)
-				  text.rotation.y = 0.5 * Math.PI
-				  text.position.x = Math.random() * 200
-				  text.position.y = Math.random() * 200
-				  text.position.z = Math.random()
-				  // scene.add(text)
-			  }
-		  })
-
-		  for (let i = 0; i < 200; i++) {
-
+		  for (let i = 0; i < 100; i++) {
 			  let mesh = new THREE.Mesh(geometry, materialList)
-			  mesh.position.x = Math.random() * 1600 - 800
-			  mesh.position.y = 0
-			  mesh.position.z = Math.random() * 1600 - 800
-			  mesh.scale.x = 20
-			  mesh.scale.y = Math.random() * 80 + 10
-			  mesh.scale.z = 20
+        let px = Math.random() * 1600 - 800,py = 0,pz = Math.random() * 1600 - 800,
+          cx = 20, cy = Math.random() * 80 + 10, cz = 20
+			  mesh.position.x = px
+			  mesh.position.y = py
+			  mesh.position.z = pz
+			  mesh.scale.x = cx
+			  mesh.scale.y = cy
+			  mesh.scale.z = cz
 			  mesh.updateMatrix()
 			  mesh.matrixAutoUpdate = false
 			  scene.add(mesh)
-
+			  if(i%15 === 0){
+				  let vertices =[]
+				  mesh.geometry.vertices.forEach(item=>{
+					  vertices.push(new THREE.Vector3(item.x*cx + px, item.y*cy + py, item.z*cz + pz))
+				  })
+				  let test1 = new FlyLine(new THREE.CatmullRomCurve3(vertices), {
+					  color: '#00ffff',
+					  segFlag: true,
+					  closed : true,
+					  tension: 0,
+					  lineWidth: 0.1
+				  })
+				  scene.add(test1)
+				  test1 && test1.update()
+				  const renderFlyLine1 = () => {
+					  renderer.render(scene, camera)
+					  requestAnimationFrame(renderFlyLine1)
+					  test1 && test1.update()
+				  }
+				  renderFlyLine1()
+        }
 		  }
 
 		  // lights
 		  let light1 = new THREE.DirectionalLight('#e4deff')
 		  light1.position.set(1, 1, 1)
-		  scene.add(light1)
+		  group.add(light1)
 
 		  let light2 = new THREE.DirectionalLight(0xeeeeee)
 		  light2.position.set(-1, -1, -1)
 		  scene.add(light2)
 
 		  let light3 = new THREE.AmbientLight(0xffffff)
-		  scene.add(light3)
+		  group.add(light3)
 
 		  // let gui = new GUI();
 		  // gui.add( controls, 'screenSpacePanning' );
@@ -298,7 +371,8 @@
 
 	  // export default FlyLine
 	  function animate() {
-		  requestAnimationFrame(animate)
+		  scene.add(group)
+	  	requestAnimationFrame(animate)
 		  controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
 		  // camera.lookAt(0,0,0);
 		  camera.position.z+=0.5
@@ -308,113 +382,13 @@
 		  //   text.rotation.y+=0.0002
 		  // }
 		  render()
-
 	  }
 
 	  function render() {
-
 		  renderer.render(scene, camera)
-
 	  }
 
 	  // line
-	  class FlyLine extends THREE.Object3D{
-		  /**
-		   * curveOrObject 路径 THREE.Curve实例或者bufferGeo/geo实例
-		   *
-		   * color 颜色
-		   * segFlag 设置分段标记 （周期）
-		   * alphaTest 启用透明测试
-		   * radius 半径只有首参数为curve可用
-		   */
-		  constructor(object, options){
-			  super()
-
-			  let color = options && options.color || 0xffffff
-			  let segFlag = options && options.segFlag || false
-			  let alphaTest = options && options.alphaTest || true
-			  let radius = options && options.radius || 1
-
-			  this.mesh = null
-			  let v_shader = `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-                    gl_Position = projectionMatrix * mvPosition;
-                }`
-
-			  let define = segFlag ? '#define SEGFLAG': ''
-			  let alpha = alphaTest ? '#define ALPHATEST': ''
-			  let f_shader = `
-                ${define}
-                ${alpha}
-                #define PI 3.141592
-                uniform float time;
-                varying vec2 vUv;
-                uniform vec3 color;
-                void main() {
-                    float alpha;
-                    if (vUv.x > PI * 0.5 ){
-                        alpha = 0.0;
-                    } else {
-                        #ifdef SEGFLAG
-                        alpha = sin(3.0 *(vUv.x*14.0 + time - PI * 0.5));
-                        #else
-                        alpha = sin(1.0 * (vUv.x + time - PI * 0.5));
-                        #endif
-                    }
-                    gl_FragColor = vec4(color, alpha);
-                    #ifdef ALPHATEST
-                    if(gl_FragColor.a < 0.3){
-                        discard;
-                    }
-                    #endif
-                }`
-
-			  let geo = new THREE.TubeBufferGeometry(object, 10, 0.5, 4)
-
-			  /*if(curveOrObject instanceof THREE.Curve){
-				  geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 1, 4)
-			  }else if(curveOrObject instanceof THREE.Geometry || curveOrObject instanceof THREE.BufferGeometry ){
-				  geo = curveOrObject
-			  }else {
-				  throw new Error('please ensure first argument correct')
-			  }*/
-			  let shaderMat = new THREE.ShaderMaterial({
-				  uniforms: {
-					  time: {
-						  type: 'f', value: 0.0
-					  },
-					  color: {
-						  type: 'v3', value: new THREE.Color(color)
-					  }
-				  },
-				  vertexShader: v_shader,
-				  fragmentShader: f_shader,
-				  transparent: true,
-				  blending: THREE.AdditiveBlending
-			  })
-			  this.mesh = new THREE.Mesh(geo, shaderMat)
-			  this.add(this.mesh)
-		  }
-		  get time(){
-			  return this.mesh.material.uniforms.time.value
-		  }
-		  set time(time){
-			  this.mesh.material.uniforms.time.value = time
-		  }
-		  update(){
-			  let time = this.time + 0.05
-			  this.time = time
-		  }
-		  dispose(){
-			  this.remove(this.mesh)
-			  this.mesh.geometry.dispose()
-			  this.mesh.material.dispose()
-		  }
-
-	  }
 	  const geo = new THREE.BoxGeometry(400,400,400,8,8)
     let vertices = [
 	    new THREE.Vector3(400,0,800),
@@ -433,9 +407,10 @@
     ]
 	  const lines = new THREE.CatmullRomCurve3 (vertices)
 	  let test = new FlyLine(lines, {
-		  color: 0x00ffff,
+		  color: '#00ffff',
 		  segFlag: true,
-      lineWidth: 100
+		  closed : true,
+		  lineWidth: 0.2
 	  })
 	  scene.add(test)
 	  test && test.update()

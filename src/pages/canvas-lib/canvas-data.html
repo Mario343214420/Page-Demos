@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+	const canvas = document.getElementById('canvas')
+	const ctx = canvas.getContext('2d')
+	let img = new Image()
+	img.src = '../../images/top.jpg'
+	img.onload = function () {
+		canvas.width = img.width
+		canvas.height = img.height
+	}
+	window.onload = function () {
+		ctx.drawImage(img, 0, 0, canvas.width, canvas.height) // 写入图片
+		// 获取图片对象
+		let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+		drawPic(ctx, getPx(canvas.width, canvas.height, imgData))
+	}
+	// 获取图片颜色与坐标
+	function getPx (w, h, imgData) {
+		let n = 0
+		let result = []
+		let data = imgData.data
+		for (let i = 0; i < w; i++) {
+			for (let k = 0; k < h; k++) {
+				n = [i * w + k ] * 4
+				let px = {}
+				px.y = Math.round(i + Math.random()*20)
+				px.x = Math.round(k + Math.random()*20)
+				px.style = 'rgba('+data[n]+','+(data[n+1])+','+(data[n+2])+','+(data[n+3])+')'
+				result.push(px)
+			}
+		}
+		return result
+	}
+	// 重新绘制图形
+	function drawPic(ctx, data){
+		ctx.clearRect(0,0,600,400)
+		let len = data.length
+		for(let i=0;i<len;i++){
+			ctx.fillStyle = data[i].style;
+			ctx.fillRect(data[i].x, data[i].y, 1, 1)
+		}
+	}
+</script>
+</body>
+</html>

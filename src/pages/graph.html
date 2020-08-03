@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body {
+      background-color: #333;
+    }
+  </style>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.min.js"></script>
+</head>
+<body>
+<div id="chart" style="width: 100%; height: 800px;"></div>
+<script>
+  // 数据结构
+  let links = [
+	  {                   // 节点间的关系数据
+		  target: "某二级公司0",
+		  source: "某一级公司",
+		  category: "隶属"              // 关系对象连接线上的标签内容
+	  },
+	  {
+		  target: "某二级公司1",
+		  source: "某一级公司",
+		  category: "隶属"
+	  }, {
+		  target: "某二级公司2",
+		  source: "某一级公司",
+		  category: "隶属"
+	  }, {
+		  target: "某二级公司3",
+		  source: "某一级公司",
+		  category: "隶属"
+	  }, {
+		  target: "戚某",
+		  source: "某一级公司",
+		  category: "参股"
+	  }, {
+		  target: "王某",
+		  source: "某一级公司",
+		  category: "董事"
+	  }, {
+		  target: "李某",
+		  source: "某二级公司3",
+		  category: "董事"
+	  }, {
+		  target: "季某",
+		  source: "某二级公司3",
+		  category: "参股"
+	  }, {
+		  target: "某一级公司",
+		  source: "某二级公司3",
+		  category: "参股"
+	  }, {
+		  target: "某一级公司",
+		  source: "某二级公司3",
+		  category: "经营"
+	  }]
+  let data = [
+	  {
+		  name: "某一级公司",
+		  draggable: true,                // 节点是否可拖拽，只在使用力引导布局的时候有用。
+		  symbolSize: [100, 100],         // 关系图节点标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
+		  itemStyle: {
+			  color: '#00b6c6'				// 关系图节点标记的颜色
+		  },
+		  category: "收入支出分析",         // 数据项所在类目的 index。
+		  info: '高新企业，掌握数十项技术'
+	  },
+	  {
+		  name: "某二级公司0",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#0183fe'
+		  },
+		  category: "隶属"
+	  },
+	  {
+		  name: "某二级公司1",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#0183fe'
+		  },
+		  category: "隶属"
+	  },
+	  {
+		  name: "某二级公司2",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#0183fe'
+		  },
+		  category: "隶属"
+	  },
+	  {
+		  name: "某二级公司3",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#0183fe'
+		  },
+		  category: "隶属"
+	  },
+	  {
+		  name: "戚某",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#f25a2a'
+		  },
+		  category: "参股",
+		  info: '黑名单受限人群'
+	  },
+	  {
+		  name: "王某",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#f25a2a'
+		  },
+		  category: "董事"
+	  },
+	  {
+		  name: "李某",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#f25a2a'
+		  },
+		  category: "董事"
+	  },
+	  {
+		  name: "季某",
+		  draggable: true,
+		  symbolSize: [80, 80],
+		  itemStyle: {
+			  color: '#f25a2a'
+		  },
+		  category: "参股"
+	  }
+  ]
+  let obj = {links, data}
+  console.log(obj)
+
+  const dom = document.getElementById('chart')
+	const chart = echarts.init(dom)
+	let option = {
+		title: {                    // 图表标题
+			text: "",           // 标题文本
+			left: '3%',                    // 标题距离左侧边距
+			top: '3%',                     // 标题距顶部边距
+			textStyle: {                       // 标题样式
+				color: '#000',                     // 标题字体颜色
+				fontSize: '30',                    // 标题字体大小
+			}
+		},
+		tooltip: {                  // 提示框的配置
+			formatter: function (param) {
+				if (param.dataType === 'edge') {
+					//return param.data.category + ': ' + param.data.target;
+					return param.data.target
+				}
+				//return param.data.category + ': ' + param.data.name;
+				return param.data.name + '：<br>' + param.data.info
+			}
+		},
+
+		series: [{
+
+			edgeSymbol: ['arrow', 'none'],
+			type: "graph",
+			top: '10%',
+			roam: true,
+      focusNodeAdjacency: true,
+			force: {
+				repulsion: 1000,
+				edgeLength: [150, 100]
+			},
+			layout: "force",
+			// 标记的图形
+			symbol: 'circle',
+			lineStyle: {
+				normal: {
+					color: '#fff',
+					width: 1,
+					type: 'solid',
+					opacity: 0.5,
+					curveness: 0
+				}
+			},
+			label: {
+				normal: {
+					show: true,
+					position: "inside",
+					textStyle: {
+						fontSize: 16
+					}
+				}
+			},
+			edgeLabel: {
+				normal: {
+					show: true,
+					textStyle: {
+						fontSize: 14
+					},
+					formatter: function (param) {        // 标签内容
+						return param.data.category
+					}
+				}
+			},
+			data: data,
+			categories: [
+				{              // 节点分类的类目，可选。如果节点有分类的话可以通过 data[i].category 指定每个节点的类目，类目的样式会被应用到节点样式上。图例也可以基于categories名字展现和筛选。
+					name: "参股"            // 类目名称，用于和 legend 对应以及格式化 tooltip 的内容。
+				},
+				{
+					name: "隶属"
+				},
+				{
+					name: "经营"
+				}
+			],
+			links: links
+		}],
+
+		animationEasingUpdate: "quinticInOut",          // 数据更新动画的缓动效果。[ default: cubicOut ]    "quinticInOut"
+		animationDurationUpdate: 100                    // 数据更新动画的时长。[ default: 300 ]
+	}
+	chart.setOption(option)
+</script>
+</body>
+</html>
