@@ -5,7 +5,7 @@
   <title>Title</title>
   <style>
     body {
-      background-color: #333;
+      background-color: #fff;
     }
   </style>
   <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.min.js"></script>
@@ -17,28 +17,28 @@
   let links = [
 	  {                   // 节点间的关系数据
 		  target: "某二级公司0",
-		  source: "某一级公司",
+		  source: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  category: "隶属"              // 关系对象连接线上的标签内容
 	  },
 	  {
 		  target: "某二级公司1",
-		  source: "某一级公司",
+		  source: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  category: "隶属"
 	  }, {
 		  target: "某二级公司2",
-		  source: "某一级公司",
+		  source: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  category: "隶属"
 	  }, {
 		  target: "某二级公司3",
-		  source: "某一级公司",
+		  source: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  category: "隶属"
 	  }, {
 		  target: "戚某",
-		  source: "某一级公司",
+		  source: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  category: "参股"
 	  }, {
 		  target: "王某",
-		  source: "某一级公司",
+		  source: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  category: "董事"
 	  }, {
 		  target: "李某",
@@ -49,21 +49,21 @@
 		  source: "某二级公司3",
 		  category: "参股"
 	  }, {
-		  target: "某一级公司",
+		  target: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  source: "某二级公司3",
 		  category: "参股"
 	  }, {
-		  target: "某一级公司",
+		  target: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  source: "某二级公司3",
 		  category: "经营"
 	  }]
   let data = [
 	  {
-		  name: "某一级公司",
+		  name: "某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司某一级公司",
 		  draggable: true,                // 节点是否可拖拽，只在使用力引导布局的时候有用。
-		  symbolSize: [100, 100],         // 关系图节点标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
+		  symbolSize: [80, 80],         // 关系图节点标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10。
 		  itemStyle: {
-			  color: '#00b6c6'				// 关系图节点标记的颜色
+			  color: '#2f54eb'				// 关系图节点标记的颜色
 		  },
 		  category: "收入支出分析",         // 数据项所在类目的 index。
 		  info: '高新企业，掌握数十项技术'
@@ -73,7 +73,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#0183fe'
+			  color: '#0d85ff'
 		  },
 		  category: "隶属"
 	  },
@@ -82,7 +82,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#0183fe'
+			  color: '#0d85ff'
 		  },
 		  category: "隶属"
 	  },
@@ -91,7 +91,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#0183fe'
+			  color: '#0d85ff'
 		  },
 		  category: "隶属"
 	  },
@@ -100,7 +100,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#0183fe'
+			  color: '#0d85ff'
 		  },
 		  category: "隶属"
 	  },
@@ -109,7 +109,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#f25a2a'
+			  color: '#ff7254'
 		  },
 		  category: "参股",
 		  info: '黑名单受限人群'
@@ -119,7 +119,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#f25a2a'
+			  color: '#ff7254'
 		  },
 		  category: "董事"
 	  },
@@ -128,7 +128,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#f25a2a'
+			  color: '#ff7254'
 		  },
 		  category: "董事"
 	  },
@@ -137,7 +137,7 @@
 		  draggable: true,
 		  symbolSize: [80, 80],
 		  itemStyle: {
-			  color: '#f25a2a'
+			  color: '#ff7254'
 		  },
 		  category: "参股"
 	  }
@@ -169,7 +169,6 @@
 		},
 
 		series: [{
-
 			edgeSymbol: ['arrow', 'none'],
 			type: "graph",
 			top: '10%',
@@ -184,7 +183,7 @@
 			symbol: 'circle',
 			lineStyle: {
 				normal: {
-					color: '#fff',
+					color: '#333',
 					width: 1,
 					type: 'solid',
 					opacity: 0.5,
@@ -192,13 +191,26 @@
 				}
 			},
 			label: {
-				normal: {
-					show: true,
-					position: "inside",
-					textStyle: {
-						fontSize: 16
-					}
-				}
+        show: true,
+        position: "inside",
+        textStyle: {
+          fontSize: 16
+				},
+				formatter: params => {
+					let name = params.name
+          name = name.length > 15 ? name.substr(0,11) + '...': name
+					return [
+						'{a|'+name.replace(/(.{5})/g, '$1\n')+'}'
+					]
+				},
+        rich: {
+				  verticalAlign: 'center',
+	        a: {
+	        	fontSize: 14,
+		        color: '#fff',
+		        lineHeight: 20
+	        }
+        }
 			},
 			edgeLabel: {
 				normal: {

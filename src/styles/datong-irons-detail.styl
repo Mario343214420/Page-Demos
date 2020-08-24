@@ -1,0 +1,297 @@
+@import '../styles/datong-irons-font/iconfont.css'
+html, body
+  height: 100%
+  width: 100%
+#app
+  height: 100%
+  width: 100%
+  background-repeat: no-repeat
+  background-size: 100% auto
+  position relative
+  background-color: #f6f9fe
+  [flex]
+    display flex
+  [flex-box~="1"]
+    flex: 1
+  [bold]
+    font-weight: 700
+  .bin-form-item-content
+    display flex
+  .bin-scrollbar__wrap{overflow-x:hidden;}
+  .modal-title
+    text-align center
+    padding-bottom: 20px
+    font-size: 18px
+    color #8c939d
+  .verification-code
+    width: 100px
+    height: 100%
+    text-align center
+  .verification-input
+    flex 1
+  .login-btn
+    width: 100%
+    display block
+  .header
+    position absolute
+    top: 0
+    left: 0
+    z-index 10
+    width: 100%
+    height: 100px
+    display flex
+    align-items center
+    justify-content space-between
+    padding-left: 40px
+    padding-right: 40px
+    border-bottom: 1px solid rgba(255,255,255,0.2)
+    background-color: #1349f1
+    .login-container
+      color #fff
+      >span
+        a
+          color inherit
+          position relative
+          margin-right: 20px
+          .tip
+            position absolute
+            left: 50%
+            bottom: 50%
+            background-color: #fd0001
+            -webkit-border-radius: 10px
+            -moz-border-radius: 10px
+            border-radius: 10px
+            height: 20px
+            line-height: 20px
+            padding 0 6px
+        .username
+          margin 0 20px
+  .footer
+    position absolute
+    display flex
+    align-items center
+    flex-direction column
+    bottom: 0
+    left: 0
+    width: 100%
+    height: 100px
+    padding 20px
+    box-sizing border-box
+    background-color: #e9e9e9
+  .main
+    padding-top: 100px
+    padding-bottom: 100px
+    height 100%
+    position relative
+    .top-bg
+      content: ''
+      display block
+      position absolute
+      top: 100px
+      left: 0
+      height: 120px
+      width: 100%
+      background-image: url(../images/datong-irons/topbanner.jpg)
+      background-size: auto 100%;
+      background-position: center 0
+    .main-inner
+      width 1200px
+      margin: 0 auto
+      height 100%
+      display flex
+      flex-direction column
+      align-items center
+      .search-wrapper
+        display flex
+        width 800px
+        margin 40px auto
+        height: 40px
+        box-sizing border-box
+        .icon-ios-search:before
+          content '查询'
+          padding-right: 10px
+          color #1f7af6
+          font-weight: 700
+        .bin-input-icon
+          width 60px
+        .bin-input-search-icon
+          height: 40px
+          line-height: 40px
+          &::after
+            position absolute
+            left: -10px
+            top: 2px
+            content: ''
+            display block
+            width: 1px
+            height: 36px
+            background-color: #f4f4f4
+      .list-wrapper
+        padding-top: 20px
+        flex: 1
+        width: 1200px
+        overflow hidden
+        padding-bottom: 20px
+        display flex
+        flex-direction column
+        .sketch-card
+          background-color: #fff
+          padding 20px
+          margin-bottom: 20px
+          .company-abbreviation
+            background-color: #007aff
+            -webkit-border-radius: 16px
+            -moz-border-radius: 16px
+            border-radius: 16px
+            width: 80px
+            height: 80px
+            color #fff
+            text-align center
+            line-height: 80px
+            font-size: 22px
+          .company-search
+            display flex
+            flex-direction column
+            background-color: #f9fafc
+            padding 10px
+            height: 66px
+            span
+              text-align center
+          .company-msg
+            .top
+              padding 0 20px
+              >span
+                line-height: 36px
+                margin 0 10px
+              .name
+                font-size: 20px
+              .state
+                border: 1px solid #19cbcb
+                -webkit-border-radius: 4px
+                -moz-border-radius: 4px
+                border-radius: 4px
+                color #19cbcb
+                padding 4px 8px
+                background-color: rgba(25,203,203,0.1)
+              .attent
+                color #ffffff
+                background-color: #f4ad03
+                border: 1px solid #f4ad03
+                padding 4px 8px
+                -webkit-border-radius: 4px
+                -moz-border-radius: 4px
+                border-radius: 4px
+            .bot
+              padding 0 20px
+              display flex
+              flex-wrap wrap
+              span
+                padding: 0 10px
+                display inline-block
+                line-height: 32px
+                width 50%
+
+
+        .detail-card
+          flex: 1
+          display flex
+          flex-direction column
+          overflow hidden
+          background-color: #fff
+          .table-list
+            flex: 1
+            overflow hidden
+            .table-inner-wrapper
+              >div
+                -webkit-border-radius: 6px
+                -moz-border-radius: 6px
+                border-radius: 6px
+                margin 20px 20px 0
+                overflow hidden
+                border: 1px solid #efefef
+                .title
+                  background-color: #fcfbf7
+                  text-align center
+                  height: 40px
+                  line-height: 40px
+                  border-bottom: 1px solid #efefef
+                .content
+                  padding 10px
+                  .name
+                    @extend  .sketch-card .company-abbreviation
+              .representative-container
+                width 500px
+                .content
+                  .detail-msg
+                    flex: 1
+                    padding 0 20px
+                    line-height: 30px
+                    p
+                      &:nth-child(1)
+                        font-size: 18px
+                      &:nth-child(2)
+                        padding-left: 2px
+                        background-color: #f2f6f9
+                        color: #aaabad
+                    span
+                      i
+                        padding-right 8px
+                        font-weight: 700
+            .normal-card
+              padding: 0 20px 20px
+              .title
+                line-height: 60px
+                height: 60px
+                font-size: 20px
+                font-weight: 700
+                border-bottom: 2px solid #e8e8e8
+                i
+                  display block
+                  width: 100px
+                  position relative
+                  &::after
+                    content ''
+                    display block
+                    width: 100%
+                    height: 2px
+                    position absolute
+                    bottom: 0
+                    left: 0
+                    background-color: #6ea7e6
+              .normal-table
+                .table-body
+                  .group-title
+                    margin 20px 10px
+                    border-left: 2px solid #2c96ff
+                    padding-left: 20px
+                    font-weight: 700
+                    display flex
+                    justify-content space-between
+                    .iconfont
+                      color: #007aff;
+                  .group-container
+                    display flex
+                    flex-wrap wrap
+                    border-top: 1px solid #f9f9f9
+                    border-left: 1px solid #f9f9f9
+                    .item
+                      display flex
+                      width: 50%
+                      div
+                        border-right: 1px solid #f9f9f9
+                        border-bottom: 1px solid #f9f9f9
+                        padding-left: 20px
+                        line-height: 40px;
+                      .label
+                        width: 160px
+                        background-color: #fafafa
+                      .value
+                        flex: 1
+#chart
+  width 800px
+  height: 190px
+
+.bin-modal-wrap
+  display: flex;
+  align-items: center;
+  justify-content: space-around;

@@ -1,0 +1,130 @@
+px2rem(name, px) {
+  {name}: (px / 8)rem
+}
+[flex]
+  display flex
+[flex~="column"]
+  flex-direction column
+[flex~="center"]
+  justify-content center
+[flex~="end"]
+  justify-content flex-end
+[flex~="around"]
+  justify-content space-around
+[flex~="between"]
+  justify-content space-between
+[flex~="align:center"]
+  align-items center
+[flex-box="1"]
+  flex 1
+html
+  background-color: #f5f3f4
+#app
+  min-height 100%
+  px2rem('padding-top', 60)
+  px2rem('padding-bottom', 80)
+  px2rem('font-size', 18)
+  box-sizing border-box
+  .title-bar
+    width: 100%
+    position absolute
+    top: 0
+    left: 0
+    text-align center
+    px2rem('height', 60)
+    px2rem('line-height', 60)
+    px2rem('font-size', 22)
+  .handle-bar
+    width: 100%
+    position absolute
+    px2rem('height', 80)
+    bottom: 0
+    left: 0
+    background-color: #fff
+    px2rem('right', 80)
+    px2rem('padding-right',10)
+    i
+      background-color: #f9564d
+      color #fff6f6
+      px2rem('border-radius',34)
+      px2rem('font-size',22)
+      px2rem('padding-top',4)
+      px2rem('padding-bottom',4)
+      px2rem('padding-left',20)
+      px2rem('padding-right',8)
+      text-align center
+      letter-spacing 30px
+
+  .main-wrapper
+    .company-info-wrapper
+      px2rem('padding-bottom', 50)
+      background-image: url(../images/datong-mobile/top.png)
+      background-repeat: no-repeat
+      background-size: 100% auto;
+      .title
+        box-sizing border-box
+        px2rem('line-height', 60)
+        px2rem('padding-top', 40)
+        px2rem('padding-left', 30)
+        px2rem('padding-right', 10)
+        px2rem('font-size', 21)
+        color #fff
+        .title-icon
+          transform scale(1.2)
+      .info-bar
+        background-color: #fff
+        margin: 0 auto
+        px2rem('border-radius', 4)
+        px2rem('padding-top', 10)
+        px2rem('padding-bottom', 10)
+        px2rem('line-height', 40)
+        width: 90%
+        overflow hidden
+        transform translateY(4rem)
+        box-shadow 0 0 10px rgba(10,10,10,0.2)
+        span
+          i
+            &:first-child
+              color #9d9d9d
+        .gray-split-line
+          display block
+          px2rem('height', 60)
+          px2rem('width', 1)
+          background-color: #afafaf
+
+    .card-wrapper
+      width: 100%
+      .card
+        px2rem('margin-bottom', 20)
+        background-color: #fff
+        overflow hidden
+        width: 100%
+        .title
+          px2rem('font-size', 24)
+          px2rem('line-height', 60)
+          padding-left: 2rem
+          border-bottom: 1px solid #bdbdbd
+        .msg-wrapper
+          .item
+            width: 25%
+            px2rem('padding-top', 20)
+            px2rem('padding-bottom', 20)
+            position relative
+            &::after
+              content ''
+              display block
+              position absolute
+              right: -1px
+              background-color: #eee
+              px2rem('height',80)
+              px2rem('top',20)
+              width: 2px
+            img
+              width: auto
+              px2rem('height', 30)
+              margin-bottom 2rem
+            .num
+              position absolute
+              top: 20px
+              right: 20px
+              px2rem('font-size',14)
