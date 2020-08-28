@@ -1,3 +1,0 @@
-//移动端终极适配
-(function(){!(function(){var aNodes=document.querySelectorAll('a');for(var i=0;i<aNodes.length;i++){aNodes[i].addEventListener('touchstart',function(){window.location=this.href;});};})();!(function(){var width=document.documentElement.clientWidth;var styleNode=document.createElement('style');styleNode.innerHTML='html{font-size: '+width/16+'px !important;}';document.head.appendChild(styleNode);})();if('addEventListener'in document){document.addEventListener('DOMContentLoaded',function(){FastClick.attach(document.body);},false);}
-  if(!window.Promise){document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');}})()
