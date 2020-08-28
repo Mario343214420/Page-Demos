@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- import Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!-- import stylesheet -->
+  <link rel="stylesheet" href="https://unpkg.com/bin-ui@2.7.4/lib/styles/index.css">
+  <!-- import bin-ui -->
+  <script src="https://unpkg.com/bin-ui@2.7.4/lib/bin-ui.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <b-date-picker v-model="date" format="yyyy-MM-dd" type="daterange" placement="bottom-start" placeholder="Select date"></b-date-picker>
+  <div>{{date}}</div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+    		date: ''
+      }
+    },
+    watch:{
+    	date(n){
+		    console.log(n)
+	    }
+    },
+    mounted(){
+    	let date = new Date()
+	    console.dir(date)
+    }
+  })
+</script>
+</body>
+</html>
