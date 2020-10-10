@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../styles/preview.css">
+  <script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/bin-ui/bin-ui.min.js"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+  <div class="main">
+    <div class="top-bar" flex>
+      <div class="item" flex="align:center" flex-box="1">
+        <span><i class="iconfont icon-hetong"></i></span>
+        <span flex="dir:top">
+        <i>信用承诺归集总量</i>
+        <i class="num">1000条</i>
+      </span>
+      </div>
+      <div class="item" flex="align:center" flex-box="1">
+        <span><i class="iconfont icon-hetong1"></i></span>
+        <span flex="dir:top">
+        <i>本月新增数量</i>
+        <i class="num">1000条</i>
+      </span>
+      </div>
+      <div class="item" flex="align:center" flex-box="1">
+        <span><i class="iconfont icon-renyuan"></i></span>
+        <span flex="dir:top">
+        <i>自然人信用承诺</i>
+        <i class="num">1000条</i>
+      </span>
+      </div>
+      <div class="item" flex="align:center" flex-box="1">
+        <span><i class="iconfont icon-farendaibiao1"></i></span>
+        <span flex="dir:top">
+        <i>法人信用承诺</i>
+        <i class="num">1000条</i>
+      </span>
+      </div>
+    </div>
+    <div class="card-list">
+      <b-card class="box-card" head-tip>
+        <template v-slot:header>
+          <div flex="main:justify cross:center">
+            <span>合同追踪情况</span>
+          </div>
+        </template>
+        <div class="content">
+          <div class="toggle-wrapper" flex>
+            <div class="item"
+                 :class="traceFlag === 0?'active':''"
+                 @click="traceFlag = 0"
+                 flex-box="1"
+                 flex="align:center justify:center">
+              <span><i class="iconfont icon-fenzhijiedian"></i></span>
+              <span flex="dir:top align:center">
+                <i class="title">执行中</i>
+                <i class="count">累计数量  {{200}}  个</i>
+              </span>
+            </div>
+            <div class="item"
+                 :class="traceFlag === 1?'active':''"
+                 @click="traceFlag = 1"
+                 flex-box="1"
+                 flex="align:center justify:center">
+              <span><i class="iconfont icon-wancheng"></i></span>
+              <span flex="dir:top align:center">
+                <i class="title">执行中</i>
+                <i class="count">累计数量  {{200}}  个</i>
+              </span>
+            </div>
+            <div class="item"
+                 :class="traceFlag === 2?'active':''"
+                 @click="traceFlag = 2"
+                 flex-box="1"
+                 flex="align:center justify:center">
+              <span><i class="iconfont icon-carry-out"></i></span>
+              <span flex="dir:top align:center">
+                <i class="title">执行中</i>
+                <i class="count">累计数量  {{200}}  个</i>
+              </span>
+            </div>
+            <div class="item"
+                 :class="traceFlag === 3?'active':''"
+                 @click="traceFlag = 3"
+                 flex-box="1"
+                 flex="align:center justify:center">
+              <span><i class="iconfont icon-shalou2"></i></span>
+              <span flex="dir:top align:center">
+                <i class="title">执行中</i>
+                <i class="count">累计数量  {{200}}  个</i>
+              </span>
+            </div>
+          </div>
+          <b-table :columns="traceColumns" :data="traceData" border></b-table>
+          <div class="page-wrapper">
+            <b-page :total="100" :current.sync="traceCurrentPage" show-elevator></b-page>
+          </div>
+        </div>
+      </b-card>
+      <b-card class="box-card" head-tip>
+        <template v-slot:header>
+          <div flex="main:justify cross:center">
+            <span>违规预警信息</span>
+          </div>
+        </template>
+        <div class="content">
+          <b-table :columns="warningColumns" :data="warningData" border></b-table>
+          <div class="page-wrapper">
+            <b-page :total="100" :current.sync="warningCurrentPage" show-elevator></b-page>
+          </div>
+        </div>
+      </b-card>
+    </div>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return{
+		    traceColumns: [
+			    {
+				    title: '合同名称',
+				    key: 'pact'
+			    },
+			    {
+				    title: '统一社会信用代码',
+				    key: 'id'
+			    },
+			    {
+				    title: '企业名称',
+				    key: 'company'
+			    },
+			    {
+				    title: '类型',
+				    key: 'type'
+			    },
+			    {
+				    title: '合同金额（万元）',
+				    key: 'sum'
+			    }
+        ],
+		    traceData: [
+			    {
+				    pact: '合同模拟名',
+				    id: 1845643216356,
+				    company: '技术开发有限公司',
+				    type: '类型1',
+				    sum: '100'
+			    }
+        ],
+		    warningColumns: [
+			    {
+				    title: '合同名称',
+				    key: 'pact'
+			    },
+			    {
+				    title: '统一社会信用代码',
+				    key: 'id'
+			    },
+			    {
+				    title: '企业名称',
+				    key: 'company'
+			    },
+			    {
+				    title: '类型',
+				    key: 'type'
+			    },
+			    {
+				    title: '合同金额（万元）',
+				    key: 'sum'
+			    }
+        ],
+		    warningData: [
+			    {
+				    pact: '合同模拟名',
+				    id: 1845643216356,
+				    company: '技术开发有限公司',
+				    type: '类型1',
+				    sum: '100'
+			    }
+        ],
+		    traceCurrentPage: 1,
+		    warningCurrentPage: 1,
+		    traceFlag: 0
+      }
+    }
+  })
+</script>
+</body>
+</html>

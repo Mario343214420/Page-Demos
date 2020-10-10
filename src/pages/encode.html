@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+	var str = '坂井泉水';
+	function encode(str){
+		var encode = encodeURI(str);
+		var base64 = btoa(encode);
+		return base64;
+	}
+
+	function decode(base64){
+		var decode = atob(base64);
+		var str = decodeURI(decode);
+		return str;
+	}
+
+	console.log(encode(str));
+	console.log(decode(encode(str)));
+</script>
+</body>
+</html>

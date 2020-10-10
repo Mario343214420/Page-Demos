@@ -7,7 +7,6 @@
   <script src='../js/earth/TrackballControls.js'></script>
 </head>
 <body>
-
 <div id='three' style='overflow: hidden; left: 0; top: 0; position: absolute;'></div>
 <script>
 	const CITY_RADIUS = 100,
@@ -23,6 +22,7 @@
 		coneImg = ['../images/earth/lightray.jpg', '../images/earth/lightray_yellow.jpg'],
 		hexagonColor = [0xffffff, 0xffff00]
 
+	console.log(dotTexture)
 	main()
 
 	function main() {
@@ -33,12 +33,12 @@
 			earthCtx = earthCanvas.getContext('2d')
 			earthCanvas.width = earthImg.width
 			earthCanvas.height = earthImg.height
-			earthCtx.drawImage(earthImg, 0, 0, earthImg.width, earthImg.height)
-			earthImgData = earthCtx.getImageData(0, 0, earthImg.width, earthImg.height)
+			earthCtx.drawImage(earthImg, 0, 0, earthCanvas.width, earthCanvas.height)
+			earthImgData = earthCtx.getImageData(0, 0, earthCanvas.width, earthCanvas.height)
 			// basic scene
 			createBasicScene()
 			// 光锥
-			// createObjects()
+			createObjects()
 			// 球面打点
 			createEarthParticles()
 			// 云层
@@ -167,11 +167,11 @@
 			mat.opacity_coef_ = 1
 			materials.push(mat)
 		}
-		var spherical = new THREE.Spherical
+		var spherical = new THREE.Spherical()
 		spherical.radius = radius
 		const step = 250
 		for (let i = 0; i < step; i++) {
-			let vec = new THREE.Vector3
+			let vec = new THREE.Vector3()
 			let radians = step * (1 - Math.sin(i / step * Math.PI)) / step + .5 // 每个纬线圈内的角度均分
 			for (let j = 0; j < step; j += radians) {
 				let c = j / step, // 底图上的横向百分比
@@ -195,7 +195,7 @@
 		for (let i = 0; i < positions.length; i++) {
 			let pos = positions[i],
 				size = sizes[i],
-				bufferGeom = new THREE.BufferGeometry,
+				bufferGeom = new THREE.BufferGeometry(),
 				typedArr1 = new Float32Array(pos.positions.length),
 				typedArr2 = new Float32Array(size.sizes.length)
 			for (let j = 0; j < pos.positions.length; j++) {
@@ -338,6 +338,7 @@ gl_FragColor = vec4( texColor.rgb * diffuse, _a );
 		return 0 === earthImgData.data[4 * (o * earthImgData.width + n)] // 查找底图中对应像素点的rgba值并判断
 	}
 
+  // 地点光锥
 	var countries = [{
 		name: "中国",
 		position: [116.20, 39.55]

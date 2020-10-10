@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../styles/honour.css">
+  <script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/axios.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/echarts/echarts.min.js"></script>
+</head>
+<body>
+<div id="app" v-cloak flex>
+  <div class="side-panel">
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>合同类别分类统计</span>
+        </div>
+      </template>
+      <div id="classifyChart" style="width: 100%; height: 300px">
+
+      </div>
+    </b-card>
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>合同类型占比分析</span>
+        </div>
+      </template>
+      <div class="box" flex>
+        <div class="chart-container" style="width: 50%;">
+          <div id="typeChart" style="width: 100%; height: 300px"></div>
+          <div class="total" flex="dir:top">
+            <i>总量</i>
+            <i style="font-size: 18px;">{{typeTotal}}</i>
+          </div>
+        </div>
+        <div class="list" flex="dir:top justify:center">
+          <div class="row" v-for="(item, i) in typeList" :key="i" flex="align:center">
+            <i class="cir" :style="'background:' + colorList[i]"></i>
+            <i class="ellipsis name" :title="item.name">{{item.name}}</i>
+            <i class="percent">{{item.percent}}%</i>
+            <i class="count">{{item.count}}</i>
+          </div>
+        </div>
+      </div>
+    </b-card>
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>合同对象分析</span>
+        </div>
+      </template>
+      <div id="objectChart" style="width: 100%; height: 300px;"></div>
+    </b-card>
+  </div>
+  <div class="middle-panel">
+    <div class="top-bar" flex>
+      <div class="item" flex-box="1" flex="align:center">
+        <span class="icon"><i class="iconfont icon-dengji"></i></span>
+        <span flex="dir:top"><i>合同数量</i><i class="count">80000条</i></span>
+      </div>
+      <div class="item" flex-box="1" flex="align:center">
+        <span class="icon"><i class="iconfont icon-wj-djb"></i></span>
+        <span flex="dir:top"><i>合同数量</i><i class="count">80000条</i></span>
+      </div>
+      <div class="item" flex-box="1" flex="align:center">
+        <span class="icon"><i class="iconfont icon-buju"></i></span>
+        <span flex="dir:top"><i>合同数量</i><i class="count">80000条</i></span>
+      </div>
+    </div>
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>合同类型归集情况概览</span>
+        </div>
+      </template>
+      <div class="overview">
+        <div class="wrap" flex="wrap justify:between">
+          <div class="item" flex="dir:top" style="background-color: #ddfbfb;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+          <div class="item" flex="dir:top" style="background-color: #ecf6fc;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+          <div class="item" flex="dir:top" style="background-color: #eaf7fe;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+          <div class="item" flex="dir:top" style="background-color: #fcf6dc;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+        </div>
+        <div class="banner">
+          <img src="../../images/luohe-analyse/banner_pic.png" alt="">
+        </div>
+        <div class="wrap" flex="wrap justify:between">
+          <div class="item" flex="dir:top" style="background-color: #ecf6fc;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+          <div class="item" flex="dir:top" style="background-color: #ecf6fc;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+          <div class="item" flex="dir:top" style="background-color: #ecf6fc;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+          <div class="item" flex="dir:top" style="background-color: #e2f0ff;">
+            <i>合同名</i>
+            <i class="count">88条</i>
+          </div>
+        </div>
+      </div>
+    </b-card>
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>跟踪执行趋势</span>
+        </div>
+      </template>
+      <div id="trendChart" style="width: 100%; height: 300px;"></div>
+    </b-card>
+  </div>
+  <div class="side-panel">
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>履约跟踪执行预警</span>
+        </div>
+      </template>
+      <div>
+        <div class="table">
+          <div class="row">
+            <div class="cell">部门名称</div>
+            <div class="cell">合同情况</div>
+          </div>
+          <div class="row" v-for="(item, i) in executeList" :key="i">
+            <div class="cell">{{item.dept}}</div>
+            <div class="cell">{{item.stat}}</div>
+          </div>
+        </div>
+      </div>
+    </b-card>
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>违约类型</span>
+        </div>
+      </template>
+      <div class="box breach" flex>
+        <div class="chart-container" style="width: 50%;">
+          <div id="breachChart" style="width: 100%; height: 300px"></div>
+          <div class="total" flex="dir:top">
+            <i>总量</i>
+            <i style="font-size: 18px;">{{typeTotal}}</i>
+          </div>
+        </div>
+        <div class="list" flex="dir:top justify:center">
+          <div class="row" v-for="(item, i) in typeList" :key="i" flex="align:center">
+            <i class="cir" :style="'background:' + colorList[i]"></i>
+            <i class="ellipsis name" :title="item.name">{{item.name}}</i>
+            <i class="percent">{{item.percent}}%</i>
+            <i class="count">{{item.count}}</i>
+          </div>
+        </div>
+      </div>
+    </b-card>
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>最新填报部门</span>
+        </div>
+      </template>
+      <div>
+        <div class="table">
+          <div class="row">
+            <div class="cell">部门名称</div>
+            <div class="cell">资源信息（条）</div>
+          </div>
+          <div class="row" v-for="(item, i) in deptNewestList" :key="i">
+            <div class="cell">{{item.dept}}</div>
+            <div class="cell">{{item.res}}</div>
+          </div>
+        </div>
+      </div>
+    </b-card>
+  </div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+        typeTotal: 15781,
+        colorList: ['#0d85ff','#2bcfcf','#52c41a','#f4cd49','#e05667','#7c4bd8'],
+        typeList: [
+          {name:'类型1',percent: '28.79',count:4544},
+          {name:'类型2',percent: '21.04',count:3321},
+          {name:'类型3',percent: '19.73',count:3113},
+          {name:'类型4',percent: '14.83',count:2341},
+          {name:'类型5',percent: '7.80',count:1231},
+          {name:'类型6',percent: '7.80',count:1231},
+        ],
+		    executeList: [
+          {dept: '部门1', stat: '执行中'},
+          {dept: '部门2', stat: '执行中'},
+          {dept: '部门3', stat: '执行中'},
+          {dept: '部门4', stat: '执行中'}
+        ],
+		    deptNewestList: [
+          {dept: '部门1', res: 8000},
+          {dept: '部门2', res: 8000},
+          {dept: '部门3', res: 8000},
+          {dept: '部门4', res: 8000}
+        ],
+      }
+    },
+    methods: {
+      renderCharts(id, options){
+	      var myChart = echarts.init(document.getElementById(id));
+	      myChart.setOption(options);
+      },
+      getClassify(){
+      	//axios..then(()=>{调用render})
+        let options = {
+	        tooltip: {
+		        trigger: 'axis',
+		        axisPointer: {
+			        type: 'shadow'
+		        }
+	        },
+          color: ['#48c9b0'],
+	        grid: {
+	        	top: '6%',
+		        left: '3%',
+		        right: '6%',
+		        bottom: '6%',
+		        containLabel: true
+	        },
+	        xAxis: {
+		        type: 'value',
+		        axisLine: {
+			        show: false
+		        },
+            axisTick: {
+		        	show: false
+            }
+	        },
+	        yAxis: {
+		        type: 'category',
+		        data: ['合同类别1', '合同类别2', '合同类别3', '合同类别4', '合同类别5']
+	        },
+	        series: [
+		        {
+			        name: '2011年',
+			        type: 'bar',
+              barWidth: 20,
+			        data: [18203, 23489, 29034, 104970, 131744]
+		        }
+	        ]
+        }
+        this.renderCharts('classifyChart',options)
+      },
+      getType(){
+      	const colorList = this.colorList
+      	let options = {
+      		color: colorList,
+		      tooltip: {
+			      trigger: 'item',
+			      formatter: '{a} <br/>{b}: {c} ({d}%)'
+		      },
+		      series: [
+			      {
+				      name: '访问来源',
+				      type: 'pie',
+				      radius: ['50%', '70%'],
+				      avoidLabelOverlap: false,
+				      label: {
+					      show: false,
+					      position: 'center'
+				      },
+				      emphasis: {
+					      label: {
+						      show: false,
+						      fontSize: '30',
+						      fontWeight: 'bold'
+					      }
+				      },
+				      labelLine: {
+					      show: false
+				      },
+				      data: [
+					      {value: 335, name: '类型1'},
+					      {value: 310, name: '类型2'},
+					      {value: 234, name: '类型3'},
+					      {value: 135, name: '类型4'}
+				      ]
+			      }
+		      ]
+	      }
+	      this.renderCharts('typeChart',options)
+      },
+      getObject(){
+      	let options = {
+		      tooltip: {},
+          color: this.colorList,
+		      dataset: {
+			      source: [
+				      ['2020-1', 43.3, 85.8],
+				      ['2020-2', 83.1, 73.4],
+				      ['2020-3', 86.4, 65.2],
+				      ['2020-4', 72.4, 53.9]
+			      ]
+		      },
+		      xAxis: {
+		      	type: 'category',
+            axisLabel: {
+		      		rotate: -45,
+              align: 'left'
+            }
+          },
+		      yAxis: {},
+		      // Declare several bar series, each will be mapped
+		      // to a column of dataset.source by default.
+		      series: [
+			      {type: 'bar',
+				      barWidth: 20},
+			      {type: 'bar',
+				      barWidth: 20}
+		      ]
+	      }
+	      this.renderCharts('objectChart', options)
+      },
+      getTrend() {
+      	let options = {
+      		color: '#a1a1ff',
+		      xAxis: {
+			      type: 'category',
+			      boundaryGap: false,
+			      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+		      },
+		      yAxis: {
+			      type: 'value',
+            axisLine: {
+			      	show: false
+            },
+            axisTick: {
+			      	show: false
+            }
+		      },
+		      series: [{
+			      data: [820, 932, 901, 934, 1290, 1330, 1320],
+			      type: 'line',
+            smooth: true,
+			      areaStyle: {}
+		      }]
+	      }
+	      this.renderCharts('trendChart',options)
+      },
+	    getBreach(){
+		    const colorList = this.colorList
+		    let options = {
+			    color: colorList,
+			    tooltip: {
+				    trigger: 'item',
+				    formatter: '{a} <br/>{b}: {c} ({d}%)'
+			    },
+			    series: [
+				    {
+					    name: '访问来源',
+					    type: 'pie',
+					    radius: ['50%', '70%'],
+					    avoidLabelOverlap: false,
+					    label: {
+						    show: false,
+						    position: 'center'
+					    },
+					    emphasis: {
+						    label: {
+							    show: false,
+							    fontSize: '30',
+							    fontWeight: 'bold'
+						    }
+					    },
+					    labelLine: {
+						    show: false
+					    },
+					    data: [
+						    {value: 335, name: '类型1'},
+						    {value: 310, name: '类型2'},
+						    {value: 234, name: '类型3'},
+						    {value: 135, name: '类型4'}
+					    ]
+				    }
+			    ]
+		    }
+		    this.renderCharts('breachChart',options)
+	    },
+    },
+    mounted() {
+      this.getClassify()
+      this.getType()
+      this.getObject()
+      this.getTrend()
+      this.getBreach()
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../styles/luohe-chart-list.css">
+  <link rel="stylesheet" href="../js/lib/bin-ui/styles/base.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script type="text/javascript" src="../js/lib/echarts/echarts.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="charts-container">
+    <div class="row-wrapper">
+      <div class="chart-card">
+        <div class="pact-type-chart" ref="pactTypeChart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="pact-dispute-chart" ref="pactDisputeChart"></div>
+      </div>
+    </div>
+    <div class="row-wrapper">
+      <div class="chart-card">
+        <div class="pact-sum-chart" ref="pactSumChart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="pact-dispute-chart" ref="pactDisputeTrendChart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+      }
+    },
+    methods: {
+      renderChart(dom, option){
+	      const myChart = echarts.init(dom);
+	      myChart.setOption(option);
+      }
+    }
+  })
+</script>
+</body>
+</html>

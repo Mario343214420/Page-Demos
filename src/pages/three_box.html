@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <script src="../js/lib/vue.min.js"></script>
+  <script src="../js/lib/three/build/three.min.js"></script>
+  <style>
+    #app{
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<div id="app" ref="app">
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+      }
+    },
+    mounted(){
+    	const renderer = new THREE.WebGLRenderer()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      this.$refs.app.appendChild(renderer.domElement)
+	    const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+	    camera.position.set( 0, 0, 100 );
+	    camera.lookAt( 0, 0, 0 );
+	    const material = new THREE.LineBasicMaterial( { color: 0x0000ff } )
+	    const scene = new THREE.Scene();
+	    const points = [];
+	    points.push( new THREE.Vector3( - 10, 0, 0 ) );
+	    points.push( new THREE.Vector3( 0, 10, 0 ) );
+	    points.push( new THREE.Vector3( 10, 0, 0 ) );
+	    const geometry = new THREE.BufferGeometry().setFromPoints( points )
+	    const line = new THREE.Line( geometry, material );
+
+	    const boxGeo = new THREE.BoxBufferGeometry(20,20,20)
+	    const vertices = new Float32Array([
+		    0, 0.33, 0.5, 0.33, 0, 0, 0.5, 0, //  图片的左下
+		    0.5, 0.33, 1, 0.33, 0.5, 0, 1, 0, // 图片右下
+		    0, 0.66, 0.5, 0.66, 0, 0.33, 0.5, 0.33, // 图片中左
+		    0.5, 0.66, 1, 0.66, 0.5, 0.33, 1, 0.33, // 图片中右
+		    0, 1, 0.5, 1, 0, 0.66, 0.5, 0.66, //图片左上
+		    0.5, 1, 1, 1, 0.5, 0.66, 1, 0.66 // 图片右上
+	    ]);
+	    boxGeo.setAttribute('uv', new THREE.Float32BufferAttribute(vertices, 2))
+      const map = new THREE.TextureLoader().load('http://192.168.0.219:8000/six.jpg');
+	    console.log(map)
+      document.getElementById('app').innerHTML += map.image.outerHTML
+	    const boxMaterial = new THREE.MeshBasicMaterial({map})
+      const boxMesh = new THREE.Mesh(boxGeo, boxMaterial)
+	    const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+	    scene.add( light );
+	    scene.add( line );
+	    scene.add( boxMesh );
+
+	    renderer.render( scene, camera );
+    }
+  })
+</script>
+</body>
+</html>

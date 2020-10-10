@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../styles/analyse.css">
+  <script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/axios.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/echarts/echarts.min.js"></script>
+</head>
+<body>
+<div id="app" v-cloak flex>
+  <div class="side-panel">
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>信用承诺基本情况</span>
+        </div>
+      </template>
+      <div class="box">
+        <div class="box-title" flex="align:center">
+          <i class="iconfont icon-fsux_tubiao_zhifangtu"></i>
+          <i bold>信用数据总汇</i>
+        </div>
+        <div class="count-bar" flex="justify:between">
+          <div class="item" flex="dir:top">
+            <i>信用承诺总数(条)</i>
+            <i class="num">8888</i>
+          </div>
+          <div class="item" flex="dir:top">
+            <i>自然人承诺总数(条)</i>
+            <i class="num">8888</i>
+          </div>
+          <div class="item" flex="dir:top">
+            <i>法人承诺总数(条)</i>
+            <i class="num">8888</i>
+          </div>
+        </div>
+      </div>
+      <div class="box" flex>
+        <div class="chart-container" style="width: 50%;">
+          <div class="box-title" flex="align:center">
+            <i class="iconfont icon-fsux_tubiao_zhifangtu"></i>
+            <i bold>信用数据总汇</i>
+          </div>
+          <div id="typeChart" style="width: 100%; height: 300px"></div>
+          <div class="total" flex="dir:top">
+            <i>总量</i>
+            <i style="font-size: 18px;">{{typeTotal}}</i>
+          </div>
+        </div>
+        <div class="list" flex="dir:top justify:center">
+          <div class="row" v-for="(item, i) in typeList" :key="i" flex="align:center">
+            <i class="cir" :style="'background:' + colorList[i]"></i>
+            <i class="ellipsis name" :title="item.name">{{item.name}}</i>
+            <i class="percent">{{item.percent}}%</i>
+            <i class="count">{{item.count}}</i>
+          </div>
+        </div>
+      </div>
+    </b-card>
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>数据提报情况</span>
+        </div>
+      </template>
+      <div class="table">
+        <div class="row">
+          <div class="cell">主体名称</div>
+          <div class="cell" style="width: 105px; flex: none;">信用承诺类型</div>
+          <div class="cell">受理部门</div>
+          <div class="cell">承诺时间</div>
+        </div>
+        <div class="row" v-for="(item, i) in executeList" :key="i">
+          <div class="cell">{{item.main}}</div>
+          <div class="cell" style="width: 105px; flex: none;">{{item.type}}</div>
+          <div class="cell">{{item.dept}}</div>
+          <div class="cell">{{item.time}}</div>
+        </div>
+      </div>
+    </b-card>
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>自然人法人提报承诺对比</span>
+        </div>
+      </template>
+      <div id="natureSubmitChart" style="width: 100%; height: 322px;"></div>
+    </b-card>
+  </div>
+  <div class="middle-panel">
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>信用承诺信息概览</span>
+        </div>
+      </template>
+      <div class="analyse">
+        <div class="count-bar" flex="align:center">
+          <span>
+            <i class="iconfont icon-tubiaozhanshi"></i>
+          </span>
+          <span flex="dir:top" flex-box="1">
+            <i bold style="font-size: 16px;">归集总量</i>
+            <i>数据统计日期: {{'2020-09-12'}}</i>
+          </span>
+          <span>
+            <i class="num">91884749</i>
+          </span>
+        </div>
+        <div class="count-box" flex="align:center">
+          <img src="../../images/luohe-analyse/center_pic.png" alt="">
+          <div class="counts">
+            <span flex="dir:top">
+              <i bold>自然人承诺信息数量</i>
+              <i class="count">88条</i>
+            </span>
+            <span flex="dir:top">
+              <i bold>法人承诺信息数量</i>
+              <i class="count">88条</i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </b-card>
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>数据提报概览</span>
+        </div>
+      </template>
+      <div class="msg-list" flex="dir:top">
+        <div class="item" flex="align:center">
+          <span><i class="iconfont icon-qizi"></i></span>
+          <span flex="dir:top">
+            <span>
+              <i class="title" bold>主动承诺本学新增</i>
+            </span>
+            <span>
+              <i>法人数据新增：</i>
+              <i class="num">88条</i>
+              <i>自然人数据新增：</i>
+              <i class="num">88条</i>
+            </span>
+          </span>
+        </div>
+        <div class="item" flex="align:center">
+          <span><i class="iconfont icon-xing"></i></span>
+          <span flex="dir:top">
+            <span>
+              <i class="title" bold>主动承诺本学新增</i>
+            </span>
+            <span>
+              <i>法人数据新增：</i>
+              <i class="num">88条</i>
+              <i>自然人数据新增：</i>
+              <i class="num">88条</i>
+            </span>
+          </span>
+        </div>
+        <div class="item" flex="align:center">
+          <span><i class="iconfont icon-renyuandangan"></i></span>
+          <span flex="dir:top">
+            <span>
+              <i class="title" bold>主动承诺本学新增</i>
+            </span>
+            <span>
+              <i>法人数据新增：</i>
+              <i class="num">88条</i>
+              <i>自然人数据新增：</i>
+              <i class="num">88条</i>
+            </span>
+          </span>
+        </div>
+        <div class="item" flex="align:center">
+          <span><i class="iconfont icon-dengji"></i></span>
+          <span flex="dir:top">
+            <span>
+              <i class="title" bold>主动承诺本学新增</i>
+            </span>
+            <span>
+              <i>法人数据新增：</i>
+              <i class="num">88条</i>
+              <i>自然人数据新增：</i>
+              <i class="num">88条</i>
+            </span>
+          </span>
+        </div>
+      </div>
+    </b-card>
+  </div>
+  <div class="side-panel">
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>数据归集来源对比</span>
+        </div>
+      </template>
+      <div>
+        <div class="box breach" flex>
+          <div class="chart-container" style="width: 50%;">
+            <div id="sourceChart" style="width: 100%; height: 200px"></div>
+            <div class="total" flex="dir:top">
+              <i>总量</i>
+              <i style="font-size: 18px;">{{typeTotal}}</i>
+            </div>
+          </div>
+          <div class="list" flex="dir:top justify:center">
+            <div class="row" v-for="(item, i) in sourceList" :key="i" flex="align:center">
+              <i class="cir" :style="'background:' + colorList[i]"></i>
+              <i class="ellipsis name" :title="item.name">{{item.name}}</i>
+              <i class="percent">{{item.percent}}%</i>
+              <i class="count">{{item.count}}</i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </b-card>
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>信用承诺趋势分析</span>
+        </div>
+      </template>
+      <div id="promiseTrendChart" style="width: 100%; height: 300px;"></div>
+    </b-card>
+
+    <b-card class="box-card" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span bold>数据提报情况</span>
+        </div>
+      </template>
+      <div>
+        <div class="table">
+          <div class="row">
+            <div class="cell">部门名称</div>
+            <div class="cell">归集数据</div>
+            <div class="cell">承诺时间</div>
+          </div>
+          <div class="row" v-for="(item, i) in submitList" :key="i">
+            <div class="cell">{{item.dept}}</div>
+            <div class="cell">{{item.count}}</div>
+            <div class="cell">{{item.time}}</div>
+          </div>
+        </div>
+      </div>
+    </b-card>
+  </div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+        typeTotal: 15781,
+        colorList: ['#0d85ff','#2bcfcf','#52c41a','#f4cd49','#e05667','#7c4bd8'],
+        typeList: [
+          {name:'类型1',percent: '28.79',count:4544},
+          {name:'类型2',percent: '21.04',count:3321},
+          {name:'类型3',percent: '19.73',count:3113},
+          {name:'类型4',percent: '14.83',count:2341},
+          {name:'类型5',percent: '7.80',count:1231},
+          {name:'类型6',percent: '7.80',count:1231},
+        ],
+        sourceList: [
+          {name:'类型1',percent: '45.4',count:4544},
+          {name:'类型2',percent: '54.6',count:3321}
+        ],
+		    executeList: [
+          {dept: '部门1', type: '执行中', main: '主体1', time: '2020-09-12'},
+          {dept: '部门1', type: '执行中', main: '主体1', time: '2020-09-12'},
+          {dept: '部门1', type: '执行中', main: '主体1', time: '2020-09-12'},
+          {dept: '部门1', type: '执行中', main: '主体1', time: '2020-09-12'},
+          {dept: '部门1', type: '执行中', main: '主体1', time: '2020-09-12'}
+        ],
+		    submitList: [
+          {dept: '部门1', count: 8000, time: '2020-09-13'},
+          {dept: '部门2', count: 8000, time: '2020-09-13'},
+          {dept: '部门3', count: 8000, time: '2020-09-13'},
+          {dept: '部门4', count: 8000, time: '2020-09-13'}
+        ],
+      }
+    },
+    methods: {
+      renderCharts(id, options){
+	      var myChart = echarts.init(document.getElementById(id));
+	      myChart.setOption(options);
+      },
+      getType(){
+	      // axios请求后,  .them(()=>this.render)
+      	const colorList = this.colorList
+      	let options = {
+      		color: colorList,
+		      tooltip: {
+			      trigger: 'item',
+			      formatter: '{a} <br/>{b}: {c} ({d}%)'
+		      },
+		      series: [
+			      {
+				      name: '访问来源',
+				      type: 'pie',
+				      radius: ['50%', '70%'],
+				      avoidLabelOverlap: false,
+				      label: {
+					      show: false,
+					      position: 'center'
+				      },
+				      emphasis: {
+					      label: {
+						      show: false,
+						      fontSize: '30',
+						      fontWeight: 'bold'
+					      }
+				      },
+				      labelLine: {
+					      show: false
+				      },
+				      data: [
+					      {value: 335, name: '类型1'},
+					      {value: 310, name: '类型2'},
+					      {value: 234, name: '类型3'},
+					      {value: 135, name: '类型4'}
+				      ]
+			      }
+		      ]
+	      }
+	      this.renderCharts('typeChart',options)
+      },
+	    getSource(){
+      	const colorList = this.colorList
+      	let options = {
+      		color: colorList,
+		      tooltip: {
+			      trigger: 'item',
+			      formatter: '{a} <br/>{b}: {c} ({d}%)'
+		      },
+		      series: [
+			      {
+				      type: 'pie',
+				      radius: ['50%', '70%'],
+				      avoidLabelOverlap: false,
+				      label: {
+					      show: false,
+					      position: 'center'
+				      },
+				      emphasis: {
+					      label: {
+						      show: false,
+						      fontSize: '30',
+						      fontWeight: 'bold'
+					      }
+				      },
+				      labelLine: {
+					      show: false
+				      },
+				      data: [
+					      {value: 335, name: '自主申报'},
+					      {value: 310, name: '类型2'}
+				      ]
+			      }
+		      ]
+	      }
+	      this.renderCharts('sourceChart',options)
+      },
+      getNatureSubmit(){
+	      let options = {
+		      tooltip: {},
+		      color: this.colorList,
+		      dataset: {
+			      source: [
+				      ['2020-1', 43.3, 85.8],
+				      ['2020-2', 83.1, 73.4],
+				      ['2020-3', 86.4, 65.2],
+				      ['2020-4', 72.4, 53.9]
+			      ]
+		      },
+		      xAxis: {
+			      type: 'category',
+			      axisLabel: {
+				      rotate: -45,
+				      align: 'left'
+			      },
+            axisTick: {
+	            alignWithLabel: true
+            }
+		      },
+		      yAxis: {
+		      	axisLine: {
+		      		show: false
+            },
+            axisTick: {
+		      		show: false
+            }
+          },
+		      // Declare several bar series, each will be mapped
+		      // to a column of dataset.source by default.
+		      series: [
+			      {type: 'bar',
+				      barWidth: 20},
+			      {type: 'bar',
+				      barWidth: 20}
+		      ]
+	      }
+	      this.renderCharts('natureSubmitChart',options)
+      },
+      getPromiseTrend(){
+      	let options = {
+      		color: '#a1a1ff',
+		      xAxis: {
+			      type: 'category',
+			      boundaryGap: false,
+			      data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07']
+		      },
+		      yAxis: {
+			      type: 'value',
+            axisLine: {
+			      	show: false
+            },
+            axisTick: {
+			      	show: false
+            }
+		      },
+		      series: [{
+		      	symbol: 'none',
+			      data: [820, 932, 901, 934, 1290, 1330, 1320],
+			      type: 'line',
+			      areaStyle: {}
+		      }]
+	      }
+	      this.renderCharts('promiseTrendChart',options)
+      }
+    },
+    mounted() {
+      this.getType()
+      this.getSource()
+      this.getNatureSubmit()
+      this.getPromiseTrend()
+    }
+  })
+</script>
+</body>
+</html>

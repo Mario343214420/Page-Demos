@@ -1,0 +1,247 @@
+@import "luohe-font/iconfont.css"
+[flex]
+  display flex
+[dir~='top']
+  flex-direction column
+[flex~='justify:between']
+  justify-content space-between
+[flex~='justify:around']
+  justify-content space-around
+[flex~='justify:center']
+  justify-content center
+[flex~='justify:end']
+  justify-content flex-end
+[flex~='align:center']
+  align-items center
+[flex~='wrap']
+  flex-wrap wrap
+[flex-box~='1']
+  flex: 1
+.ellipsis
+  text-overflow:ellipsis
+  overflow hidden
+  white-space nowrap
+#app
+  min-width: 1400px
+  box-sizing border-box
+  padding 10px
+  background-color: #f6f6f6
+  .side-panel
+    width 400px
+  .middle-panel
+    flex: 1
+    margin 0 10px
+    .top-bar
+      .item
+        color #fff
+        padding 20px
+        .count
+          font-size: 20px
+        .icon
+          background-color: rgba(255,255,255,0.4)
+          -webkit-border-radius: 50%
+          -moz-border-radius: 50%
+          border-radius: 50%
+          display block
+          width: 50px
+          height: 50px
+          line-height: 50px
+          text-align center
+          margin-right: 40px
+          .iconfont
+            font-size: 22px
+        &:nth-child(1)
+          background-color: #0d85ff
+        &:nth-child(2)
+          background-color: #2bcfcf
+        &:nth-child(3)
+          background-color: #499df8
+  .box-card
+    margin-bottom: 10px
+    .table
+      $bdc = #e0e0e0
+      border-top: 1px solid $bdc
+      border-left: 1px solid $bdc
+      .row
+        display flex
+        line-height: 30px
+        &:first-child
+          background-color: #fafafa
+          font-weight: 700
+        .cell
+          padding-left: 10px
+          flex: 1
+          border-right: 1px solid $bdc
+          border-bottom: 1px solid $bdc
+    .box
+      .chart-container
+        position relative
+        .box-title
+          position absolute
+          top: 20px
+      .box-title
+        .iconfont
+          margin-right: 10px
+          color #fff
+          background-color: #0d85ff
+      .count-bar
+        background-color: #f8f8f8
+        line-height: 30px
+        margin-top: 20px
+        .item
+          padding 10px 0
+          text-align center
+          position relative
+          &:not(:last-child)::after
+            content ''
+            display block
+            width: 1px
+            height: 30px
+            position absolute
+            top: 40%
+            right: -6px
+            background-color: #d4d4d4
+          .num
+            font-weight: 700
+            color: #0d85ff;
+            font-size: 18px
+    .total
+      text-align center
+      position absolute
+      top: 50%
+      left: 50%
+      z-index 100
+      transform translate(-50%, -50%)
+    .list
+      .row
+        i
+          display inline-block
+          line-height: 30px
+        .cir
+          -webkit-border-radius: 50%
+          -moz-border-radius: 50%
+          border-radius: 50%
+          width: 10px
+          height: 10px
+          background-color: red
+          margin-right: 10px
+        .name
+          width: 80px
+        .percent
+          width: 60px
+          text-align right
+        .count
+          width: 50px
+          text-align right
+    .overview
+      .banner
+        text-align center
+      .wrap
+        .item
+          $bdrs = 6px
+          -webkit-border-radius: $bdrs
+          -moz-border-radius: $bdrs
+          border-radius: $bdrs
+          width: 49%
+          box-sizing border-box
+          padding-top: 15px
+          padding-bottom: 15px
+          padding-left: 40px
+          line-height: 26px
+          margin-bottom: 10px
+          .count
+            font-size: 18px
+            color #0d85ff
+    .analyse
+      .count-bar
+        height: 100px
+        background-color: #0d85ff
+        -webkit-border-radius: 6px
+        -moz-border-radius: 6px
+        border-radius: 6px
+        span
+          display block
+          color #fff
+          &:nth-child(1)
+            background-color: rgba(0,0,0,0.2)
+            -webkit-border-radius: 50%
+            -moz-border-radius: 50%
+            border-radius: 50%
+            width: 60px
+            height: 60px
+            margin-left: 20px
+            margin-right: 20px
+            text-align center
+            line-height: 60px
+            .iconfont
+              font-size: 20px
+          &:nth-child(3)
+            flex: 1
+            font-size: 42px
+            padding 0 10px
+            margin-left: 20px
+            margin-right: 20px
+            display flex
+            justify-content space-around
+            background-color: rgba(255,255,255,0.2)
+            .num
+              font-weight: 700
+              letter-spacing 6px
+      .count-box
+        .counts
+          display flex
+          flex-direction column
+          span
+            display flex
+            flex-direction column
+            justify-content center
+            line-height: 40px
+            padding-left: 20px
+            height: 120px
+            width: 200px
+            background-color: #f5f5f5
+            margin-bottom: 30px
+            font-size: 16px
+            .count
+              color #0d85ff
+    .msg-list
+      .item
+        margin-bottom: 10px
+        padding 20px 30px
+        line-height: 30px
+        .iconfont
+          font-size: 26px
+
+        .num
+          margin-right: 60px
+          color: #0d85ff
+        &:nth-child(1)
+          background-color: #fcf6dc
+          .iconfont
+            color: #fec200
+        &:nth-child(2)
+          background-color: #ddfbfb
+          .iconfont
+            color: #2bcfcf
+        &:nth-child(3)
+          background-color: #eaf7fe
+          .iconfont
+            color: #7bb3ec
+        &:nth-child(4)
+          background-color: #eef6ff
+          .iconfont
+            color: #6cb5ff
+        >span
+          display block
+          &:nth-child(1)
+            width: 60px
+            height: 60px
+            margin-right: 40px
+            line-height: 60px
+            text-align center
+            -webkit-border-radius: 50%
+            -moz-border-radius: 50%
+            border-radius: 50%
+            background-color: rgba(255,255,255,0.8)
+  [bold]
+    font-weight: 700

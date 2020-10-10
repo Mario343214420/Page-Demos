@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../../styles/reset.css">
+  <link rel="stylesheet" href="../../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../../styles/overview.css">
+  <script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script type="text/javascript" src="../../js/lib/axios.min.js"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+<div class="main">
+  <div class="top-bar" flex>
+    <div class="item" flex="align:center" flex-box="1">
+      <span><i class="iconfont icon-hetong"></i></span>
+      <span flex="dir:top">
+        <i>信用承诺归集总量</i>
+        <i class="num">1000条</i>
+      </span>
+    </div>
+    <div class="item" flex="align:center" flex-box="1">
+      <span><i class="iconfont icon-hetong1"></i></span>
+      <span flex="dir:top">
+        <i>本月新增数量</i>
+        <i class="num">1000条</i>
+      </span>
+    </div>
+    <div class="item" flex="align:center" flex-box="1">
+      <span><i class="iconfont icon-renyuan"></i></span>
+      <span flex="dir:top">
+        <i>自然人信用承诺</i>
+        <i class="num">1000条</i>
+      </span>
+    </div>
+    <div class="item" flex="align:center" flex-box="1">
+      <span><i class="iconfont icon-farendaibiao1"></i></span>
+      <span flex="dir:top">
+        <i>法人信用承诺</i>
+        <i class="num">1000条</i>
+      </span>
+    </div>
+  </div>
+  <div class="card-list" flex>
+    <b-card class="box-card" flex-box="1" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span>卡片名称</span>
+          <div class="tab-box">
+            <b-tabs v-model="activeTab" :data="tabs"></b-tabs>
+          </div>
+        </div>
+      </template>
+      <div class="show-board" v-show="activeTab==='tab1'">
+        <div class="filter-bar" flex="justify:end">
+          <div class="item active">
+            <i>类型名称</i>
+          </div>
+          <div class="item ellipsis"
+               v-for="(item, i) in typeList1"
+               @click="filter1 = i"
+               :class="filter1===i?'active':''"
+               :key="i"
+               :title="item">
+            <i>{{item}}</i>
+          </div>
+        </div>
+        <b-table :columns="columns" :data="data" border></b-table>
+      </div>
+      <div class="show-board" v-show="activeTab==='tab2'">
+        <div class="filter-bar" :style="'width:'" flex="justify:end">
+          <div class="item active">
+            <i>类型名称</i>
+          </div>
+          <div class="item ellipsis" v-for="(item, i) in typeList2"
+               :key="i"
+               @click="filter2 = i"
+               :class="filter2===i?'active':''"
+               :title="item">
+            <i>{{item}}</i>
+          </div>
+        </div>
+        <b-table :columns="columns" :data="data" border></b-table>
+      </div>
+    </b-card>
+    <b-card class="box-card" flex-box="1" head-tip>
+      <template v-slot:header>
+        <div flex="main:justify cross:center">
+          <span>卡片名称</span>
+          <div class="tab-box" style="height: 36px;">
+          </div>
+        </div>
+      </template>
+      <div flex>
+        <b-menu :active-name="menuFlag" v-on:on-select="console.log(1)" accordion>
+          <b-menu-item :name="i"
+                       v-for="(item, i) in menuList"
+                       :key="i">{{item}}</b-menu-item>
+        </b-menu>
+        <div class="content">
+          <p class="title">信用承诺类型1</p>
+          <p><i>信用承诺内容。</i></p>
+          <div class="page-select">
+            <b-page :total="100" :current.sync="currentPage"></b-page>
+          </div>
+        </div>
+      </div>
+    </b-card>
+  </div>
+</div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+        activeTab: 'tab1',
+		    currentPage: 1,
+        typeList1: [
+        	'法人类型1',
+        	'法人类型2',
+        	'法人类型3',
+        	'法人类型4',
+        	'法人类型5',
+        	'法人类型6'
+        ],
+        typeList2: [
+        	'自然人类型1',
+        	'自然人类型2',
+        	'自然人类型3',
+        	'自然人类型4'
+        ],
+		    menuList: [
+		    	'信用承诺***类型1',
+		    	'信用承诺***类型2',
+		    	'信用承诺***类型3',
+		    	'信用承诺***类型4',
+		    	'信用承诺***类型5',
+		    	'信用承诺***类型6'
+        ],
+		    menuFlag: 1,
+		    filter1:0,
+		    filter2:0,
+        tabs: [
+          {key: 'tab1',title:'法人'},
+          {key: 'tab2',title:'自然人'}
+        ],
+		    columns: [
+			    {
+				    title: '名称',
+				    key: 'name'
+			    },
+			    {
+				    title: '统一社会信用代码',
+				    key: 'id'
+			    },
+			    {
+				    title: '信用承诺类型',
+				    key: 'type'
+			    },
+			    {
+				    title: '承诺时间',
+				    key: 'time'
+			    }
+		    ],
+		    data: [
+			    {
+				    name: '公司名称',
+				    id: 1812245632144562,
+				    type: '类型名称AAA',
+				    time: '2020-09-12 14:10:40'
+			    }
+		    ]
+      }
+    },
+    watch:{
+    	// 利用监听替换页面内data
+      // 页面切换
+	    currentPage(newVal,oldVal){
+
+      },
+      // 类型过滤
+	    filter1(newVal,oldVal){
+
+	    }
+    },
+    mounted() {
+      this.getData()
+    },
+    methods: {
+      getData(){
+      	// 根据请求方式对照axios填写
+      }
+    }
+  })
+</script>
+</body>
+</html>

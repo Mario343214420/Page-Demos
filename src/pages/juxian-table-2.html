@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../styles/juxian-table.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../js/lib/bin-ui/bin-ui.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <b-card class="box-card" header="查询条件" style="margin-bottom: 20px;">
+    <template slot="header">
+      <div>
+        <b-icon name="ios-search" size="20" color="#656c7e" bold></b-icon>
+        <i style="color: #656c7e" bold>查询条件</i>
+      </div>
+    </template>
+    <div class="condition" flex>
+      <span flex>
+        <i>开始时间：</i>
+        <b-date-picker placement="bottom-start" placeholder="选择日期"></b-date-picker>
+      </span>
+      <span flex>
+        <i>结束时间：</i>
+        <b-date-picker placement="bottom-start" placeholder="选择日期"></b-date-picker>
+      </span>
+      <span flex>
+
+        <b-button type="primary">查询</b-button>
+        <b-button type="primary">清空</b-button>
+      </span>
+    </div>
+  </b-card>
+  <b-card class="box-card">
+    <template slot="header">
+      <div>
+        <b-icon name="ios-list" size="20" color="#656c7e" bold></b-icon>
+        <i style="color: #656c7e" bold>数据列表</i>
+      </div>
+    </template>
+    <div class="list">
+      <div>
+        <b-button icon="ios-cloud-download" type="primary" @click="$refs.table.exportCsv({filename: 'The original data' });">导出excel</b-button>
+      </div>
+      <div class="table" flex="col">
+        <div class="table-header">
+          <div class="title"></div>
+        </div>
+        <b-table ref="table" :columns="columns" :data="data" border :merge-method="handleSpan"></b-table>
+      </div>
+    </div>
+  </b-card>
+
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+		    columns: [
+			    { title: '序号',key: 'index'},
+			    { title: '项目',key: 'name'},
+			    { title: '子项目',key: 'childSub'},
+			    { title: '数量',key: 'count'}
+		    ],
+		    data: [
+			    {
+			    	index: 1,
+				    name: '模拟项目名',
+				    childSub: '模拟子项目',
+				    count: '199'
+			    },
+			    {
+				    index: 2,
+				    name: '模拟项目名',
+				    childSub: '模拟子项目',
+				    count: '199'
+			    },
+			    {
+				    index: 3,
+				    name: '模拟项目名',
+				    childSub: '模拟子项目',
+				    count: '199'
+			    },
+			    {
+				    index: 4,
+				    name: '模拟项目名',
+				    childSub: '模拟子项目',
+				    count: '199'
+			    }
+		    ]
+      }
+    },
+	  methods: {
+		  handleSpan ({ row, column, rowIndex, columnIndex }) {
+			  // 获取相同姓名的行是，0，1
+			  if (rowIndex === 2 && columnIndex === 0) {
+				  return {
+					  rowspan: 2,
+					  colspan: 1
+				  };
+			  } else if (rowIndex === 1 && columnIndex === 0) {
+				  return {
+					  rowspan: 0,
+					  colspan: 1
+				  };
+			  }
+			  // 合并列，这里将第三行，周小伟的日期和地址合并
+			  if (rowIndex === 3 && columnIndex === 2) {
+				  return [1, 2];
+			  } else if (rowIndex === 3 && columnIndex === 3) {
+				  return [0,0];
+			  }
+		  }
+	  }
+  })
+</script>
+</body>
+</html>

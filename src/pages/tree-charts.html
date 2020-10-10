@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../js/lib/vue.min.js"></script>
+  <!-- for echarts -->
+  <script src="../js/lib/echarts/echarts.min.js"></script>
+  <!-- for vue-org-tree -->
+  <script src="../js/lib/tree-org.js"></script>
+  <link rel="stylesheet" href="../styles/tree-org.css">
+</head>
+<body>
+<div id="app">
+
+<!-- for echarts -->
+  <div id="main" style="width: 1200px; height: 600px;"></div>
+
+<!-- for vue-org-tree -->
+  <div class="org-tree-container">
+    <div style="width: 1200px; height: 400px;">
+      <vue2-org-tree
+        :data="tree"
+        collapsable
+        :label-width="90"
+        :label-class-name="labelClass"
+        :render-content="renderContent"
+        @on-expand="onExpand"
+        @on-node-click="onNodeClick"
+        @on-node-mouseover="onNodeMouseOver"
+        @on-node-mouseout="onNodeMouseOut"
+        selected-class-name="selected-node"
+        selected-key="selectedKey"
+      />
+    </div>
+  </div>
+
+</div>
+<script>
+	new Vue({
+		el: '#app',
+		data() {
+			return {
+				tree: {
+					label: 'Owner',
+					children: [
+						{
+							label: 'Label 1',
+							children: [
+								{
+									label: 'LabelInner 1'
+								}, {
+									label: 'LabelInner 2'
+								}, {
+									label: 'LabelInner 3'
+								}
+							]
+						}, {
+							label: 'Label 2'
+						}, {
+							label: 'Label 3'
+						}
+					]
+				}
+			}
+		},
+		mounted() {
+			this.render()
+		},
+		methods: {
+
+			// for echarts
+			render() {
+				var myChart = echarts.init(document.getElementById('main'))
+				var data = {
+					"name": "flare",
+					"children": [
+						{
+							"name": "data",
+							"children": [
+								{
+									"name": "converters",
+									"children": [
+										{"name": "Converters", "value": 721},
+										{"name": "Delimited", "value": 4294}
+									]
+								},
+								{
+									"name": "DataUtil",
+									"value": 3322
+								}
+							]
+						},
+						{
+							"name": "display",
+							"children": [
+								{"name": "DirtySprite", "value": 8833},
+								{"name": "LineSprite", "value": 1732}
+							]
+						},
+						{
+							"name": "flex",
+							"children": [
+								{"name": "FlareVis", "value": 4116}
+							]
+						},
+						{
+							"name": "query",
+							"children": [
+								{"name": "Aggregate", "value": 1616},
+								{"name": "And", "value": 1027},
+								{
+									"name": "methods",
+									"children": [
+										{"name": "add", "value": 593},
+										{"name": "average", "value": 287}
+									]
+								}
+							]
+						}
+					]
+				}
+				var option = {
+					tooltip: {
+						trigger: 'item',
+						triggerOn: 'mousemove'
+					},
+					series: [
+						{
+							type: 'tree',
+							id: 0,
+							name: 'tree1',
+							data: [data],
+
+							top: '10%',
+							left: '8%',
+							bottom: '22%',
+							right: '20%',
+
+							symbolSize: 7,
+
+							edgeShape: 'polyline',
+							edgeForkPosition: '63%',
+							initialTreeDepth: 3,
+							orient: 'TB',
+
+							label: {
+								backgroundColor: '#fff',
+								position: 'left',
+								offset: [0, 20],
+								verticalAlign: 'middle',
+								align: 'center',
+								padding: [4, 6, 4, 6]
+							},
+
+							leaves: {
+								label: {
+									position: 'bottom',
+									verticalAlign: 'middle',
+									align: 'center'
+								}
+							},
+							lineStyle: {
+								normal: {
+									color: 'source',
+									curveness: 0.5
+								}
+							},
+							expandAndCollapse: true,
+							animationDuration: 550,
+							animationDurationUpdate: 750
+						}
+					]
+				}
+				myChart.setOption(option)
+			},
+
+      // for vue-org-tree
+			labelClass(data) {
+				return "bg_node"
+			},
+			renderContent(h, data) {
+				return data.label
+			},
+			onExpand(e, data) {
+				if ('expand' in data) {
+					data.expand = !data.expand
+					if (!data.expand && data.children) {
+						this.collapse(data.children)
+					}
+				} else {
+					this.$set(data, 'expand', true)
+				}
+			},
+			collapse(nodes) {
+				nodes.forEach(node => {
+					if (node.expand) {
+						node.expand = false
+					}
+
+					node.children && this.collapse(node.children)
+				})
+			},
+			onNodeClick(e, data) {
+				console.log('CLICK', e)
+				this.$set(data, 'selectedKey', !data['selectedKey'])
+			},
+			onNodeMouseOver(e, data) {
+				console.log('MOUSE OVER', e)
+			},
+			onNodeMouseOut(e, data) {
+				console.log('MOUSE OUT', e)
+			}
+		}
+	})
+</script>
+</body>
+</html>

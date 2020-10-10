@@ -1,0 +1,114 @@
+@import "../styles/luohe-font/iconfont.css"
+[flex]
+  display flex
+[dir~='top']
+  flex-direction column
+[flex~='justify:between']
+  justify-content space-between
+[flex~='justify:around']
+  justify-content space-around
+[flex~='justify:center']
+  justify-content center
+[flex~='justify:end']
+  justify-content flex-end
+[flex~='align:center']
+  align-items center
+[flex-box~='1']
+  flex: 1
+#app
+  padding: 10px
+  background-color: #f6f6f6
+  .main
+    .top-bar
+      .item
+        -webkit-border-radius: 6px
+        -moz-border-radius: 6px
+        border-radius: 6px
+        color #fff
+        background-color: #fff
+        padding 20px
+        &:not(:last-child)
+          margin-right: 20px
+        &:nth-child(1)
+          background-color: #4065e0
+        &:nth-child(2)
+          background-color: #0d85ff
+        &:nth-child(3)
+          background-color: #2bcfcf
+        &:nth-child(4)
+          background-color: #65afff
+        span
+          display block
+          line-height: 30px
+          &:first-child
+            text-align center
+            margin-right: 30px
+            font-weight: 700
+            -webkit-border-radius: 50%
+            -moz-border-radius: 50%
+            border-radius: 50%
+            background-color: rgba(255,255,255,0.4)
+            $square50 = 50px
+            width: $square50
+            height: $square50
+            line-height: $square50
+            i
+              font-size: 28px
+          &:last-child
+            .num
+              font-size: 18px
+    .card-list
+      .tab-box
+        width 160px
+      .filter-bar
+        height: 40px
+        line-height: 40px
+        -webkit-border-radius: 8px
+        -moz-border-radius: 8px
+        border-radius: 8px
+        overflow hidden
+        margin-bottom: 10px
+        .item
+          height: 40px
+          line-height: 40px
+          background-color: #f4f6fd
+          cursor pointer
+          padding 0 10px
+          width: 120px
+          text-align center
+          &:first-child
+            -webkit-border-radius: 8px 0 0 8px
+            -moz-border-radius: 8px 0 0 8px
+            border-radius: 8px 0 0 8px
+        .active
+          color: #fff;
+          background-color: #0d85ff
+      .box-card
+        margin-top: 20px
+        &:first-child
+          margin-right: 20px
+        .content
+          flex: 1
+          padding 40px 20px 100px
+          line-height: 40px
+          position relative
+          .title
+            font-weight: 700
+            text-align center
+            font-size: 20px
+            line-height: 60px
+          .page-select
+            text-align right
+            width: 100%
+            position absolute
+            bottom: 0
+            height: 50px
+            padding-right: 20px
+.bin-card .bin-card__header
+  padding-bottom: 0
+.bin-card .bin-card__header.has-tip::after
+  bottom: 2px
+.ellipsis
+  text-overflow:ellipsis
+  overflow hidden
+  white-space nowrap

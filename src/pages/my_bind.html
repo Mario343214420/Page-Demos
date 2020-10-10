@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  const obj = {
+  	objFun1(){
+  		console.log(this)
+    }
+  }
+  const obj2 = {
+  	s: '123'
+  }
+  obj.objFun1.bind(obj2)()
+
+  var person = {
+	  fullName() {
+	  	console.log(this)
+		  return this.firstName + " " + this.lastName;
+	  }
+  }
+  var person1 = {
+	  firstName: "Bill",
+	  lastName: "Gates",
+  }
+  console.log(person.fullName.apply(person1));
+</script>
+</body>
+</html>
