@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../js/lib/swiper/swiper.min.css">
+  <link rel="stylesheet" href="../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../styles/sys-analyse.css">
+</head>
+<body>
+<div id="app" flex="dir:col">
+  <div class="header">
+    <i class="title-font">友谊县数据分析专题</i>
+    <div class="select-btn">
+      <b-dropdown style="margin-left: 20px;">
+        <b-button type="primary">
+          选择其他县区
+          <b-icon name="ios-arrow-down"></b-icon>
+        </b-button>
+        <b-dropdown-menu slot="list">
+          <b-dropdown-item>县区一</b-dropdown-item>
+          <b-dropdown-item>县区二</b-dropdown-item>
+          <b-dropdown-item>县区三</b-dropdown-item>
+          <b-dropdown-item>县区四</b-dropdown-item>
+        </b-dropdown-menu>
+      </b-dropdown>
+    </div>
+  </div>
+  <div class="main" flex>
+    <div class="side-panel">
+      <div class="inner bg-blue-transparent border-light" flex="dir:col">
+        <div class="card" flex-box="1" flex="dir:col">
+          <div class="card-title">
+            <i>行政许可数据分析</i>
+          </div>
+          <div class="card-content" flex-box="1" flex="dir:col" style="overflow: hidden">
+            <div class="table-header">
+              <div class="row" flex="justify:between">
+                <div class="cell">
+                  部门名称
+                </div>
+                <div class="cell">
+                  资源信息（条）
+                </div>
+              </div>
+            </div>
+            <div v-if="list.length" class="swiper-container swiper-container1" flex-box="1">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item, index) in list" :key="index">
+                  <div class="row" flex="justify:between">
+                    <div class="cell">
+                      {{item.dept}}
+                    </div>
+                    <div class="cell">
+                      {{item.count}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" flex-box="1" flex="dir:col">
+          <div class="card-title">
+            <i>行政处罚数据分析</i>
+          </div>
+          <div class="card-content" flex-box="1" flex="dir:col" style="overflow: hidden">
+            <div class="table-header">
+              <div class="row" flex="justify:between">
+                <div class="cell">
+                  部门名称
+                </div>
+                <div class="cell">
+                  资源信息（条）
+                </div>
+              </div>
+            </div>
+            <div v-if="list.length" class="swiper-container swiper-container2" flex-box="1">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item, index) in list" :key="index">
+                  <div class="row" flex="justify:between">
+                    <div class="cell">
+                      {{item.dept}}
+                    </div>
+                    <div class="cell">
+                      {{item.count}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="center-panel" flex="dir:col">
+      <div class="inner" style="flex: 1;">
+        <div class="count-wrapper">
+          <span><i class="title">数据归集总量</i></span>
+          <span class="num-box">
+            <img v-for="(item, index) in totalCount" :key="index" :src="'../images/shuangyashan/' + item + '.png'" alt="">
+          </span>
+          <span><i>条</i></span>
+        </div>
+        <div class="center-pic">
+          <div class="top"></div>
+          <div class="mid"></div>
+          <div class="bot"></div>
+        </div>
+        <div class="center-distribute">
+          <div class="center-origin">
+            <div class="item">
+              <img src="../images/shuangyashan/icon_zrr.png" alt="">
+              <span><i>自然人数据总量</i></span>
+              <span><i class="num">123456</i><i>（条）</i></span>
+            </div>
+            <div class="item">
+              <img src="../images/shuangyashan/icon_fr.png" alt="">
+              <span><i>法人数据总量</i></span>
+              <span><i class="num">123456</i><i>（条）</i></span>
+            </div>
+            <div class="item">
+              <img src="../images/shuangyashan/icon_yztg.png" alt="">
+              <span><i>行政许可数据总量</i></span>
+              <span><i class="num">123456</i><i>（条）</i></span>
+            </div>
+            <div class="item">
+              <img src="../images/shuangyashan/icon_zdrq.png" alt="">
+              <span><i>行政处罚数据总量</i></span>
+              <span><i class="num">123456</i><i>（条）</i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="inner bg-blue-transparent border-light" style="height: 300px;" flex="dir:col">
+        <div class="card" flex-box="1" flex="dir:col">
+          <div class="card-title">
+            <i>数据采集趋势分析</i>
+          </div>
+          <div class="card-content" id="trendChart" flex-box="1"></div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="inner bg-blue-transparent border-light" flex="dir:col">
+        <div class="card" flex-box="1" flex="dir:col">
+          <div class="card-title">
+            <i>部门提报情况分析</i>
+          </div>
+          <div class="card-content" flex-box="1" flex="dir:col" style="overflow: hidden">
+            <div class="table-header">
+              <div class="row" flex="justify:between">
+                <div class="cell">
+                  部门名称
+                </div>
+                <div class="cell">
+                  资源信息（条）
+                </div>
+              </div>
+            </div>
+            <div v-if="list.length" class="swiper-container swiper-container3" flex-box="1">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item, index) in list" :key="index">
+                  <div class="row" flex="justify:between">
+                    <div class="cell">
+                      {{item.dept}}
+                    </div>
+                    <div class="cell">
+                      {{item.count}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" flex-box="1" flex="dir:col">
+          <div class="card-title">
+            <i>数据提报种类分析</i>
+          </div>
+          <div class="card-content" id="pieChart" flex-box="1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="../js/lib/vue.min.js"></script>
+<script type="text/javascript" src="../js/lib/swiper/swiper.min.js"></script>
+<script type="text/javascript" src="../js/lib/bin-ui/bin-ui.min.js"></script>
+<script type="text/javascript" src="../js/lib/echarts/echarts.min.js"></script>
+<script type="text/javascript">
+  let lineLabelColor = '#3b4461'
+  new Vue({
+    el: '#app',
+    data(){
+    	return{
+		    list: [],
+        trendOptions: {
+	        color: '#00ccff',
+	        xAxis: {
+		        type: 'category',
+		        boundaryGap: false,
+		        data: ['2011年', '2012年', '2013年', '2014年', '2015年', '2016年', '2017年'],
+            axisLine: {
+		        	lineStyle: {
+		        		color: lineLabelColor
+              }
+            },
+		        axisLabel: {
+		        	lineStyle: {
+		        		color: lineLabelColor
+              }
+            }
+	        },
+	        yAxis: {
+		        name: '（条）',
+		        type: 'value',
+		        axisLine: {
+			        lineStyle: {
+				        color: lineLabelColor
+			        }
+		        },
+		        axisLabel: {
+			        lineStyle: {
+				        color: lineLabelColor
+			        }
+		        },
+            splitLine: {
+		        	lineStyle: {
+				        color: lineLabelColor
+              }
+            }
+	        },
+	        series: [{
+	        	smooth: true,
+		        data: [820, 932, 901, 934, 1290, 1330, 1320],
+		        type: 'line',
+		        areaStyle: {
+	        		color: new echarts.graphic.LinearGradient(
+				        0, 0, 0, 1, [
+					        {offset: 0, color: '#00ccff'},
+					        {offset: 1, color: 'rgba(0, 200, 255, 0.1)'}
+				        ]
+			        )
+            }
+	        }]
+        },
+        classicOptions: {
+	        tooltip: {
+		        trigger: 'item',
+		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+	        },
+          color: [
+          	'#2f27ba',
+          	'#fe3a3b',
+          	'#fb9530',
+          	'#4dcea7',
+          	'#00ccff',
+          	'#0e31e3',
+          	'#c96858',
+          	'#001739',
+          ],
+	        series: [
+		        {
+			        name: '访问来源',
+			        type: 'pie',
+			        radius: ['45%', '65%'],
+			        avoidLabelOverlap: false,
+			        label: {
+                color: '#fff',
+				        formatter: (p) => {
+					        let {data, percent} = p
+					        return data.name + '\n ' + percent + '%'
+				        }
+			        },
+			        data: [
+				        {value: 335, name: '其他'},
+				        {value: 310, name: '特许'},
+				        {value: 234, name: '认可'},
+				        {value: 135, name: '核准'},
+				        {value: 1548, name: '登记'},
+				        {value: 1548, name: '普通'}
+			        ]
+		        },
+		        {
+			        name: '行政许可',
+			        type: 'pie',
+			        radius: [0, '35%'],
+			        avoidLabelOverlap: false,
+			        label: {
+                position: 'center',
+                color: '#fff',
+				        fontSize: 18,
+                lineHeight: 32,
+                formatter: (p) => {
+                	let {name, value} = p.data
+	                return name + '\n' + value + '(个)'
+                }
+			        },
+			        data: [
+				        {value: 3335, name: '行政许可'}
+			        ]
+		        }
+	        ]
+        },
+		    totalCount: [1,2,3,4,5,6,7]
+      }
+    },
+    mounted(){
+    	let req = () => new Promise((res, rej)=>{
+		    setTimeout(()=>{
+			    for(let i = 0; i < 20; i++){
+				    this.list.push({ dept: '部门名称', count: 100 })
+			    }
+			    res()
+		    }, 1000)
+	    })
+      req().then(
+	      ()=>{
+		      var mySwiper = new Swiper ('.swiper-container1', {
+			      direction: 'vertical',
+			      loop: true,
+			      slidesPerView: 8,
+			      autoplay: true,
+			      observer:true,
+			      observeParents:true,
+		      })
+
+		      var mySwiper = new Swiper ('.swiper-container2', {
+			      direction: 'vertical',
+			      loop: true,
+			      slidesPerView: 8,
+			      autoplay: true,
+			      observer:true,
+			      observeParents:true,
+		      })
+
+		      var mySwiper = new Swiper ('.swiper-container3', {
+			      direction: 'vertical',
+			      loop: true,
+			      slidesPerView: 8,
+			      autoplay: true,
+			      observer:true,
+			      observeParents:true,
+		      })
+
+          this.renderChart('pieChart', this.classicOptions)
+          this.renderChart('trendChart', this.trendOptions)
+	      }
+      )
+    },
+    methods: {
+    	renderChart(id, options){
+		    var myChart = echarts.init(document.getElementById(id));
+		    myChart.setOption(options);
+      }
+    }
+  })
+</script>
+</body>
+</html>

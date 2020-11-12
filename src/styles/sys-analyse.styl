@@ -1,0 +1,228 @@
+@import "reset.styl"
+html, body
+  margin: 0
+  padding: 0
+  height: 100%
+  width: 100%
+
+div
+  box-sizing border-box
+
+#app
+  width: 100%
+  height: 100%
+  background-color: #050a1e
+  color #fff
+  .header
+    text-align center
+    background-image: url(../images/shuangyashan/title_bg.png)
+    height: 80px
+    background-repeat: no-repeat
+    background-position: center 0
+    position relative
+    .select-btn
+      position absolute
+      z-index 20
+      right: 20px
+      top: 50%
+      transform translateY(-50%)
+      .bin-button
+        margin-top: 10px
+        -webkit-border-radius: 20px
+        -moz-border-radius: 20px
+        border-radius: 20px
+        background-color rgba(10, 120, 200, 0.4)
+      .bin-select-dropdown
+        background-color: rgba(10, 120, 200, 0.9)
+        .bin-dropdown-item
+          color #fff
+    .title-font
+      font-size: 40px;
+      background: linear-gradient(to bottom, #1fb1f2, #184fa8);
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 700
+      letter-spacing 4px
+  .main
+    flex: 1
+    overflow hidden
+    .bg-blue-transparent
+      background-color: rgba(20,50,100,0.2)
+    .side-panel
+      width 450px
+      height: 100%
+      box-sizing border-box
+      padding 16px
+      overflow hidden
+    .center-panel
+      flex: 1
+      padding 16px 0
+      overflow hidden
+    .inner
+      width: 100%
+      height: 100%
+      padding 10px
+      overflow hidden
+      .count-wrapper
+        display flex
+        justify-content center
+        align-items center
+        flex-wrap nowrap
+        .num-box
+          white-space nowrap
+        .title
+          font-weight: 700
+          font-size: 22px
+        span
+          padding 0 10px
+        img
+          margin 0 4px
+      .center-pic
+        position relative
+        top: 50%
+        transform translateY(-50%)
+        background-image: url(../images/shuangyashan/zhu.png)
+        background-position: bottom center
+        background-repeat: no-repeat
+        .top
+          height: 260px
+          width: 260px
+          margin 0 auto
+          background-repeat: no-repeat
+          background-position: bottom center
+          background-image: url(../images/shuangyashan/ball.png)
+          transform translateY(50px)
+        .mid
+          height: 300px
+          width: 500px
+          margin 0 auto
+          overflow hidden
+          background-repeat: no-repeat
+          background-position: center 0
+          background-image: url(../images/shuangyashan/pan.png)
+          &::before
+            content: ''
+            display block
+            width 400px
+            height: 130px
+            margin 0 auto
+            -webkit-border-radius: 50%
+            -moz-border-radius: 50%
+            border-radius: 50%
+            background-image: radial-gradient(transparent, rgba(40,130,220,0.6) 90%)
+          &::after
+            content: ''
+            display block
+            width 500px
+            height: 160px
+            margin 0 auto
+            transform translateY(-130px)
+            -webkit-border-radius: 50%
+            -moz-border-radius: 50%
+            border-radius: 50%
+            background-image: radial-gradient(transparent, rgba(40,130,220,0.6) 90%)
+      .center-distribute
+        position absolute
+        left: 50%
+        transform translateX(-50%)
+        top: 240px
+        width: 600px
+        height: 400px
+        .center-origin
+          position relative
+          width: 100%
+          height: 100%
+          .item
+            position absolute
+            display flex
+            flex-direction column
+            align-items center
+            &:nth-child(1)
+              left: 20px
+              top: 0
+            &:nth-child(2)
+              right: 20px
+              top: 0
+            &:nth-child(3)
+              left: -50px
+              bottom: 0
+            &:nth-child(4)
+              right: -50px
+              bottom: 0
+            img
+              height: 60px
+              width: 60px
+            .num
+              font-size: 20px
+              font-weight: 700
+              color #00addd
+    .border-light
+      border: 1px solid #081f37
+      position relative
+      &::before
+        position absolute
+        top: 0
+        left: 0
+        display block
+        content ''
+        height: 4px
+        width: 100%
+        border-left: 4px solid #00bbe4
+        border-right: 4px solid #00bbe4
+      &::after
+        display block
+        position absolute
+        bottom: 0
+        left: 0
+        height: 4px
+        width: 100%
+        content: ''
+        border-left: 4px solid #00bbe4
+        border-right: 4px solid #00bbe4
+    .card
+      overflow hidden
+      margin-top: 10px
+    .card-content
+      width: 100%
+      .table-header
+        background-color: #001739
+        height: 40px;
+        line-height: 40px
+      .swiper-slide
+        &:nth-child(even)
+          background-color: #001739
+      .row
+        height: 100%
+        align-items center
+        .cell
+          text-align left
+          padding-left: 10px
+          flex: 1
+          &:last-child
+            padding-left: 0
+            flex: none
+            text-align center
+            width 120px
+    .card-title
+      font-size: 22px
+      font-weight: 700
+      position relative
+      &::after
+        position absolute
+        bottom: 0
+        left: 0
+        width: 100%
+        height: 100%
+        content: ''
+        display block
+        background-image: linear-gradient(to right, #144992, transparent)
+        z-index 5
+        transform-origin 0 100%
+        transform skew(-45deg) scaleY(0.6)
+      i
+        line-height: 36px
+        padding-left: 10px
+        position relative
+        z-index 10
+    .swiper-container
+      width: 100%

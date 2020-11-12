@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "live-server --open=./src/pages/luohe-analyse/index-overview.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
+    "serve": "live-server --open=./src/pages/shuangyashan-analyse.html --port=8085 --proxy=/admin:http://localhost:8086/admin/",
     "build": "gulp build"
   },
   "author": "mario343214420",
