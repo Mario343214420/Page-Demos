@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../styles/shuangyashan_health.css">
+</head>
+<body>
+<script src="../js/lib/vue.min.js" type="text/javascript"></script>
+<div id="app">
+  <div class="main-wrapper">
+    <a href="javascript:;" class="img-wrapper">
+      <img src="../images/yq_top.jpg" alt="">
+    </a>
+    <div class="content-board">
+      <div class="card">
+        <div class="title-bar">
+          <div class="title">
+            <i>抗疫动态</i>
+          </div>
+          <div class="more">
+            <a href="javascript:;">更多</a>
+          </div>
+        </div>
+        <div class="card-content">
+          <a class="link-item" href="javascript:;" v-for="(item, index) in 10" :key="index">
+            <i class="sketch ellipsis">重要提示！与这两名无症状感染者有过交集须立即与疾控中心联系！</i>
+            <i class="time">2020-07-27</i>
+          </a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="title-bar">
+          <div style="display: flex">
+            <div @click="flag = 0" class="title can-click" :class=" flag === 0 ? 'active' : '' ">
+              <i>疫情防控红榜</i>
+            </div>
+            <div @click="flag = 1" class="title can-click" :class=" flag === 1 ? 'active' : '' " style="margin-left: 10px;">
+              <i>疫情期间失信信息</i>
+            </div>
+          </div>
+          <div class="more">
+            <a href="javascript:;">更多</a>
+          </div>
+        </div>
+        <div v-if="flag === 0" class="card-content">
+          <a class="link-item" href="javascript:;" v-for="(item, index) in 10" :key="index">
+            <i class="sketch ellipsis">0重要提示！与这两名无症状感染者有过交集须立即与疾控中心联系！</i>
+            <i class="time">2020-07-27</i>
+          </a>
+        </div>
+        <div v-if="flag === 1" class="card-content">
+          <a class="link-item" href="javascript:;" v-for="(item, index) in 10" :key="index">
+            <i class="sketch ellipsis">1重要提示！与这两名无症状感染者有过交集须立即与疾控中心联系！</i>
+            <i class="time">2020-07-27</i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+        flag: 0
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -12,18 +12,19 @@
   <div class="header">
     <i class="title-font">友谊县数据分析专题</i>
     <div class="select-btn">
-      <b-dropdown style="margin-left: 20px;">
+      <b-select style="width:200px" v-model="area" placeholder="选择其他区县">
+        <b-option v-for="(item, index) in [{value: '区县一'},{value: '区县二'}]" :value="item.value" :key="index">{{ item.value }}</b-option>
+      </b-select>
+      <!--当区县下有子区域切换时可替换-->
+      <!--<b-dropdown style="margin-left: 20px;" @click="()=>{console.log(event)}">
         <b-button type="primary">
-          选择其他县区
+          {{ area }}
           <b-icon name="ios-arrow-down"></b-icon>
         </b-button>
         <b-dropdown-menu slot="list">
-          <b-dropdown-item>县区一</b-dropdown-item>
-          <b-dropdown-item>县区二</b-dropdown-item>
-          <b-dropdown-item>县区三</b-dropdown-item>
-          <b-dropdown-item>县区四</b-dropdown-item>
+          <b-dropdown-item v-for="(item, index) in ['区县一', '区县二']" :name="item">县区一</b-dropdown-item>
         </b-dropdown-menu>
-      </b-dropdown>
+      </b-dropdown>-->
     </div>
   </div>
   <div class="main" flex>
@@ -196,6 +197,7 @@
     data(){
     	return{
 		    list: [],
+        area: '',
         trendOptions: {
 	        color: '#00ccff',
 	        xAxis: {
@@ -249,7 +251,7 @@
         classicOptions: {
 	        tooltip: {
 		        trigger: 'item',
-		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+		        formatter: '{b}: {c} ({d}%)'
 	        },
           color: [
           	'#2f27ba',
@@ -263,7 +265,7 @@
           ],
 	        series: [
 		        {
-			        name: '访问来源',
+			        name: '',
 			        type: 'pie',
 			        radius: ['45%', '65%'],
 			        avoidLabelOverlap: false,
