@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../styles/hanzhong-public.css">
+  <link rel="stylesheet" href="../js/lib/bin-ui/styles/index.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script type="text/javascript" src="../js/lib/echarts/echarts.min.js"></script>
+  <script src="../js/lib/echarts/map/hanzhong.js"></script></head>
+<body>
+<div id="app">
+<div class="board-wrapper">
+  <div class="breadcrumb">
+    <i>您所在的位置：</i><i>首页</i><i>></i><a href="javascript:;">双公示信息</a>
+  </div>
+  <div class="time-filter-bar" flex="align:center">
+    <i class="pd10px">请选择要查看的时间</i>
+    <div style="width: 220px">
+      <b-date-picker type="daterange" separator="  至  " :value="['2016-01-01', '2016-02-15']" format="yyyy/MM/dd" placeholder="Select date"></b-date-picker>
+    </div>
+    <b-button class="mlr20px" type="danger" size="small">查询</b-button>
+    <i>行政许可：</i>
+    <i class="pd10px f-c">{{xzxk}}</i>
+    <i>条</i>
+    <i>行政处罚：</i>
+    <i class="pd10px f-c">{{xzcf}}</i>
+    <i>条</i>
+  </div>
+  <div class="charts-wrapper mt20px" flex>
+    <div class="border-container" style="width: 500px">
+      <div class="inner-title"><i>各地市双公示发布量分布图</i></div>
+      <div id="map"></div>
+    </div>
+    <div class="border-container" style="width: 680px">
+      <div class="inner-title"><i>各地市双公示发布量分布图</i></div>
+      <div id="doc"></div>
+    </div>
+  </div>
+  <div class="content-wrapper mt20px">
+    <div class="border-container" style="width: 590px;">
+      <div class="inner-title"><i>各地市双公示发布量分布图</i>
+        <a class="more" href="javascript:;">更多</a>
+      </div>
+      <ul>
+        <li v-for="(item, index) in 10">
+          <a href="javascript:;">模拟许可名单内容</a>
+          <i class="time">2020-12-14</i>
+        </li>
+      </ul>
+    </div>
+    <div class="border-container" style="width: 590px;">
+      <div class="inner-title">
+        <i>各地市双公示发布量分布图</i>
+        <a class="more" href="javascript:;">更多</a>
+      </div>
+      <ul>
+        <li v-for="(item, index) in 10">
+          <a href="javascript:;">模拟许可名单内容</a>
+          <i class="time">2020-12-14</i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+		    mapData: [
+			    {
+				    name: '汉台区',
+				    value: 11,
+            punish: 1
+			    },	{
+				    name: '南郑区',
+				    value: 10,
+				    punish: 2
+			    },	{
+				    name: '宁强县',
+				    value: 9,
+				    punish: 3
+			    },	{
+				    name: '略阳县',
+				    value: 8,
+				    punish: 2
+			    },	{
+				    name: '勉县',
+				    value: 7,
+				    punish: 1
+			    },	{
+				    name: '留坝县',
+				    value: 6,
+				    punish: 2
+			    },	{
+				    name: '城固县',
+				    value: 5,
+				    punish: 1
+			    },	{
+				    name: '洋县',
+				    value: 4,
+				    punish: 2
+			    },	{
+				    name: '佛坪县',
+				    value: 3,
+				    punish: 3
+			    },	{
+				    name: '西乡县',
+				    value: 2,
+				    punish: 1
+			    },	{
+				    name: '镇巴县',
+				    value: 1,
+				    punish: 2
+			    }
+		    ],
+        xzxk: 10086,
+        xzcf: 10086
+      }
+    },
+    mounted() {
+	    this.renderMap({id: 'map', data: this.mapData})
+	    this.renderChart({id: 'doc', data: this.mapData})
+    },
+    methods: {
+      // 地图渲染
+	    renderMap: function (paramObj) {
+		    /* var chinaGeoCoordMap = {
+			    '汉台区': [107.028233,33.077674],
+			    '南郑区': [106.942393,33.003341],
+			    '城固县': [107.329887,33.153098],
+			    '洋县': [107.549962,33.223283],
+			    '西乡县': [107.765858,32.987961],
+			    '勉县': [106.680175,33.155618],
+			    '宁强县': [106.25739,32.830806],
+			    '略阳县': [106.153899,33.329638],
+			    '镇巴县': [107.89531,32.535854],
+			    '留坝县': [106.924377,33.61334],
+			    '佛坪县': [107.988582,33.520745]
+		    }; */
+		    var datas = paramObj.data
+		    var series = [];
+		    var chart = echarts.init(document.getElementById(paramObj.id));
+		    series.push({
+			    type: 'map',
+			    roam: false,
+          label: {
+			    	show: true,
+            color: '#683431'
+          },
+			    map: 'hanzhong',
+			    data: datas
+        })
+		    var option = {
+			    tooltip:{
+			    	formatter(p){
+					    console.log(p)
+              return `${p.data.name} <br> 行政许可：${p.data.value}<br>行政处罚：${p.data.punish}`
+				    }
+          },
+			    visualMap: {
+			    	text: ['高', '低'],
+			    	right: 0,
+				    min: 0,
+				    max: 12,
+            color: ['#016fdd','#defdff'],
+				    calculable: true,
+				    show: true
+			    },
+			    series: series
+		    };
+		    chart.setOption(option);
+	    },
+      renderChart: function (paramObj) {
+	      var myChart = echarts.init(document.getElementById(paramObj.id));
+	      const data = {
+	      	citys: [],
+	      	xzxk: [],
+	      	xzcf: []
+        }
+	      paramObj.data.map(
+	      	item => {
+	      		console.log(item)
+            data.citys.push(item.name)
+            data.xzxk.push(item.value)
+            data.xzcf.push(item.punish)
+          }
+        )
+	      var option = {
+		      tooltip: {
+			      trigger: 'axis'
+		      },
+		      legend: {
+			      data: ['行政许可', '行政处罚']
+		      },
+		      toolbox: {
+			      show: false,
+			      feature: {
+				      mark: true,
+				      dataView: {
+					      readOnly: false
+				      },
+				      magicType: ['line', 'bar'],
+				      restore: true,
+				      saveAsImage: true
+			      }
+		      },
+		      calculable: true,
+		      xAxis: [{
+			      type: 'category',
+			      data: data.citys,
+			      axisLabel: {
+				      interval: 0,
+				      rotate: 45, //倾斜度 -90 至 90 默认为0
+				      margin: 2,
+				      textStyle: {
+					      fontWeight: "bolder",
+					      color: "#000000"
+				      }
+			      },
+		      }],
+		      yAxis: [{
+			      type: 'value',
+			      splitArea: {
+				      show: true
+			      }
+		      }],
+		      series: [{
+			      name: '行政许可',
+			      type: 'bar',
+			      data: data.xzxk,
+			      itemStyle: {
+				      normal: {
+					      color: '#4ad2ff'
+				      }
+			      },
+		      },
+			      {
+				      name: '行政处罚',
+				      type: 'bar',
+				      data: data.xzcf
+			      }
+		      ]
+	      };
+
+	      myChart.setOption(option);
+      }
+    }
+  })
+</script>
+</body>
+</html>

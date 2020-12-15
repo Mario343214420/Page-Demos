@@ -1,0 +1,101 @@
+#app
+  background-color: #f6f6f6
+  [flex]
+    display flex
+  [flex~='align:center']
+    align-items center
+  .mt20px
+    margin-top: 20px
+  .board-wrapper
+    width: 1200px
+    margin 0 auto
+    box-sizing border-box
+    padding 30px 0
+    .breadcrumb
+      line-height: 40px
+      height: 40px
+      font-size: 16px
+      i
+        padding 0 6px
+      a
+        color #ea3e3e
+    .time-filter-bar
+      border-left: 4px solid #ea3e3e
+      background-color: #ebf7ff
+      height: 80px
+      line-height: 80px
+      padding-left: 30px
+      .f-c
+        color #ea3e3e
+      .pd10px
+        padding: 10px
+      .mlr20px
+        margin: 0 20px
+    .charts-wrapper
+      display flex
+      justify-content space-between
+      #map
+        height: 400px
+      #doc
+        box-sizing border-box
+        padding-top: 20px
+        height: 400px
+    .border-container
+      box-sizing border-box
+      padding 0 10px 10px
+      border: 1px solid #CCC
+    .content-wrapper
+      display flex
+      justify-content space-between
+      div
+        ul
+          padding 10px 0
+          li
+            line-height: 30px
+            height: 30px
+            position relative
+            padding-left: 10px
+            padding-right: 10px
+            box-sizing border-box
+            display flex
+            justify-content space-between
+            &::before
+              font-weight: 700
+              content: '·'
+              position absolute
+              left: 0
+              top: 50%
+              transform translateY(-50%)
+            .time
+              color #929292
+    .inner-title
+      position relative
+      display flex
+      justify-content space-between
+      padding-left: 20px
+      height: 40px
+      line-height: 40px
+      font-size: 16px
+      .more
+        padding-right: 20px
+        color #adadad
+      &::before
+        content: ''
+        display block
+        width 4px
+        height: 24px
+        background-color: #ea3e3e
+        position absolute
+        left: 0
+        top: 50%
+        transform translateY(-50%)
+      &::after
+        position absolute
+        bottom: 0
+        left: 0
+        content: ''
+        display block
+        width: 100%
+        border-bottom: 1px solid #cccccc
+      i
+        color #ea3e3e

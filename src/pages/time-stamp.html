@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>记录基金结束时间小工具</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="time-bar">
+    <div>now(time stamp): <i>{{now}}</i></div>
+    <input type="text" v-model="daysToNow" @keyup.enter="enter">
+  </div>
+  <table style="width: 300px" border="1">
+    <tr><th>结束时间</th><th>额度</th></tr>
+    <tr v-for="(item, index) in list" :key="index"><td>{{item.reTime}}</td><td>{{item.sum}}</td></tr>
+  </table>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+    		now: Date.parse(new Date()),
+		    daysToNow: 0,
+        list: [],
+      }
+    },
+    watch: {
+    	daysToNow(n){
+		    console.log(n)
+	    }
+    },
+    mounted() {},
+    methods: {
+	    enter() {
+		    let sum = parseInt(prompt('请输入金额'))
+		    if (sum) {
+			    let stamp = this.daysToNow * 24 * 3600 * 1000
+			    let reDate = new Date(parseInt(this.now) + stamp)
+			    let reTime =  `${reDate.getFullYear()}年${ reDate.getMonth() + 1}月${ reDate.getDate()}日`
+			    this.list.push({reTime, sum})
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>
