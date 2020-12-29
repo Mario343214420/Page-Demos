@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../js/lib/bin-ui/styles/index.css">
+  <link rel="stylesheet" href="../styles/daiyue_login.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../js/lib/bin-ui/bin-ui.min.js"></script>
+  <script type="text/javascript" src="../js/lib/three.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="inner-bg-group">
+    <div class="main-wrapper">
+
+      <div class="logo">
+        <img src="../images/daiyue/daiyue_login.png" alt="">
+      </div>
+      <div class="left">
+        <div class="model-container" ref="modelContainer">
+          <div class="cir-container">
+            <div class="cir">数据采集</div>
+            <div class="cir">信用管理</div>
+            <div class="cir">数据分析</div>
+            <div class="cir">信用应用</div>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <b-form label-position="left" :label-width="60" :model="formValidate" ref="form" :rules="ruleValidate" :label-width="100">
+          <b-form-item label="账号" prop="account">
+            <b-input size="large" v-model="formValidate.account"></b-input>
+          </b-form-item>
+          <b-form-item label="密码" prop="password">
+            <b-input size="large" v-model="formValidate.password"></b-input>
+          </b-form-item>
+          <b-form-item label="验证码" prop="captcha">
+            <div flex>
+              <b-input size="large" v-model="formValidate.captcha"></b-input>
+              <span class="captcha">验证码</span>
+            </div>
+          </b-form-item>
+          <b-form-item>
+            <b-button size="large" style="width: 100%;" @click="login" type="primary">登  录</b-button>
+          </b-form-item>
+        </b-form>
+      </div>
+    </div>
+    <div class="plane-bg" ref="con"></div>
+  </div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+		    ruleValidate: {
+		    	account: [{ message: '账号不能为空', trigger: 'blur' }],
+			    password: [{ message: '密码不能为空', trigger: 'blur' }],
+			    captcha: [{ message: '验证码不能为空', trigger: 'blur' }]
+        },
+		    formValidate: {
+			    account: '',
+			    password: '',
+			    captcha: ''
+        },
+		    scene: null,
+		    camera: null,
+		    renderer: null,
+		    clock: null,
+		    control: null,
+		    axes: null,
+		    earthParticles: null,
+		    options: {
+			    CITY_RADIUS: 100,
+			    CITY_MARGIN: 1,
+			    BLINT_SPEED: 0.05,
+			    HEXAGON_RADIUS: 5,
+			    radius: 100
+		    },
+		    animation: null,
+
+		    plane: null,
+		    bgCamera: null,
+		    bgScene: null,
+		    bgRenderer: null,
+		    uniforms: {
+			    resolution: {
+				    value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+			    },
+			    iTime: {
+				    type: 'f',
+				    value: 1.0
+			    },
+			    iResolution: {
+				    type: 'v2',
+				    value: new THREE.Vector2()
+			    },
+			    iMouse: {
+				    type: 'v2',
+				    value: new THREE.Vector2()
+			    }
+		    }
+      }
+    },
+    methods: {
+	    login() {
+		    console.log('login')
+	    },
+	    main() {
+		    const img = document.createElement('img')
+		    img.src = '../images/earth.jpg'
+		    img.onload = () => {
+			    const cvs = document.createElement('canvas')
+			    const ctx = cvs.getContext('2d')
+			    cvs.width = img.width
+			    cvs.height = img.height
+			    ctx.drawImage(img, 0, 0, cvs.width, cvs.height)
+			    const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height)
+			    this.createBasicScene() // 基本渲染容器
+			    this.createEarthParticles(img, imgData) // 渲染地球粒子
+			    this.animate()
+		    }
+	    },
+	    createBasicScene() {
+		    let _self = this
+		    let width = this.$refs.modelContainer.offsetWidth
+		    let height = this.$refs.modelContainer.offsetHeight
+		    _self.scene = new THREE.Scene()
+		    _self.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000)
+		    _self.camera.position.z = 340
+		    _self.renderer = new THREE.WebGLRenderer({ alpha: true })
+		    _self.renderer.setSize(width, height)
+		    _self.renderer.setClearColor(0xEEEEEE, 0.0)
+		    _self.renderer.autoClearColor = new THREE.Color(1, 0, 0, 0)
+		    _self.$refs.modelContainer.appendChild(this.renderer.domElement)
+		    _self.clock = new THREE.Clock()
+		    _self.axes = new THREE.AxesHelper(this.options.CITY_RADIUS + 10)
+		    _self.earthParticles = new THREE.Object3D()
+	    },
+	    isLandByUV(img, imgData, c, f) {
+		    if (!imgData) { // 底图数据
+			    console.error('data error!')
+		    }
+		    let n = parseInt(img.width * c) // 根据横纵百分比计算图象坐标系中的坐标
+		    let o = parseInt(img.height * f) // 根据横纵百分比计算图象坐标系中的坐标
+		    return imgData.data[4 * (o * imgData.width + n)] === 0 // 查找底图中对应像素点的rgba值并判断
+	    },
+	    createEarthParticles(img, imgData) {
+		    let positions = []
+		    let materials = []
+		    let sizes = []
+		    for (let i = 0; i < 2; i++) {
+			    positions[i] = {
+				    positions: []
+			    }
+			    sizes[i] = {
+				    sizes: []
+			    }
+			    let mat = new THREE.PointsMaterial()
+			    mat.size = 4
+			    mat.color = new THREE.Color('#079cd1')
+			    let img = '../images/dot.png'
+			    mat.map = new THREE.TextureLoader().load(img)
+			    // const cvs = document.createElement('canvas')
+			    // mat.map = new THREE.CanvasRenderer ().load('../../assets/images/dot.png')
+			    mat.depthWrite = false
+			    mat.transparent = true
+			    mat.opacity = 0
+			    mat.side = THREE.FrontSide
+			    mat.blending = THREE.AdditiveBlending
+			    let n = i / 2
+			    mat.t_ = n * Math.PI * 2
+			    mat.speed_ = this.options.BLINT_SPEED
+			    mat.min_ = 0.2 * Math.random() + 0.5
+			    mat.delta_ = 0.1 * Math.random() + 0.1
+			    mat.opacity_coef_ = 1
+			    materials.push(mat)
+		    }
+		    const spherical = new THREE.Spherical()
+		    spherical.radius = this.options.radius
+		    const step = 200
+		    for (let i = 0; i < step; i++) {
+			    let vec = new THREE.Vector3()
+			    let radians = step * (1 - Math.sin(i / step * Math.PI)) / step + 0.5
+			    for (let j = 0; j < step; j += radians) {
+				    let c = j / step
+				    let f = i / step
+				    let index = Math.floor(2 * Math.random())
+				    let pos = positions[index]
+				    let size = sizes[index]
+				    if (this.isLandByUV(img, imgData, c, f)) { // 根据横纵百分比判断在底图中的像素值
+					    spherical.theta = c * Math.PI * 2 - Math.PI / 2 // 横纵百分比转换为theta和phi夹角
+					    spherical.phi = f * Math.PI // 横纵百分比转换为theta和phi夹角
+					    vec.setFromSpherical(spherical) // 夹角转换为世界坐标
+					    pos.positions.push(vec.x)
+					    pos.positions.push(vec.y)
+					    pos.positions.push(vec.z)
+					    if (j % 3 === 0) {
+						    size.sizes.push(6.0)
+					    }
+				    }
+			    }
+		    }
+		    for (let i = 0; i < positions.length; i++) {
+			    let pos = positions[i]
+			    let size = sizes[i]
+			    let bufferGeom = new THREE.BufferGeometry()
+			    let typedArr1 = new Float32Array(pos.positions.length)
+			    let typedArr2 = new Float32Array(size.sizes.length)
+			    for (let j = 0; j < pos.positions.length; j++) {
+				    typedArr1[j] = pos.positions[j]
+			    }
+			    for (let j = 0; j < size.sizes.length; j++) {
+				    typedArr2[j] = size.sizes[j]
+			    }
+			    bufferGeom.setAttribute('position', new THREE.BufferAttribute(typedArr1, 3))
+			    bufferGeom.setAttribute('size', new THREE.BufferAttribute(typedArr2, 1))
+			    bufferGeom.computeBoundingSphere()
+			    let particle = new THREE.Points(bufferGeom, materials[i])
+			    this.earthParticles.add(particle)
+		    }
+		    this.scene.add(this.earthParticles)
+	    },
+	    render() {
+		    this.renderer.render(this.scene, this.camera)
+	    },
+	    animate() {
+		    // 球面粒子闪烁
+		    let objects = this.earthParticles.children
+		    objects.forEach(obj => {
+			    let material = obj.material
+			    material.t_ += material.speed_
+			    material.opacity = (Math.sin(material.t_) * material.delta_ + material.min_) * material.opacity_coef_
+			    material.needsUpdate = true
+		    })
+		    this.earthParticles.rotation.y += 0.01
+		    requestAnimationFrame(this.animate)
+		    this.render()
+	    },
+      initBg() {
+	      var self = this
+        var con = self.$refs.con
+	      function init() {
+		      self.bgCamera = new THREE.Camera()
+		      self.bgCamera.position.z = 1
+		      self.bgScene = new THREE.Scene()
+		      var geometry = new THREE.PlaneBufferGeometry(2, 2)
+		      var material = new THREE.ShaderMaterial({
+			      uniforms: self.uniforms,
+			      vertexShader: 'void main() { gl_Position = vec4( position, 1.0 ); }',
+			      fragmentShader: `
+uniform vec2 iResolution;
+uniform float iTime;
+float grid(vec2 uv, float battery)
+{
+    vec2 size = vec2(uv.y, uv.y * uv.y * 0.2) * 0.01;
+    uv += vec2(0.0, iTime * 4.0 * (battery + 0.05));
+    uv = abs(fract(uv) - 0.5);
+    vec2 lines = smoothstep(size, vec2(0.0), uv);
+    lines += smoothstep(size * 2.0, vec2(0.0), uv) * 0.4 * battery;
+    return clamp(lines.x + lines.y, 0.0, 3.0);
+}
+void main()
+{
+    vec2 uv = (4.0 * gl_FragCoord.xy - iResolution.xy)/iResolution.y * 1.2;
+    float battery = 0.6;
+    {
+        // Grid
+        float fog = smoothstep(0.08, -0.04, abs(uv.y + 0.2));
+        vec3 col = vec3(0.0, 0.1, 0.2);
+        if (uv.y < -0.2)
+        {
+            uv.y = 2.6 / (abs(uv.y + 0.2) + 0.2);
+            uv.x *= uv.y * 1.0;
+            float gridVal = grid(uv, battery);
+            col = mix(col, vec3(0.2, 0.8, 1.4), gridVal);
+        }
+        else
+        {
+            uv.y -= battery * 1.1 - 0.4;
+        }
+        col += fog * fog * fog;
+        col = mix(vec3(col.r, col.r, col.r) * 0.8, col, battery * 0.7);
+        gl_FragColor = vec4(col, 0.2);
+    }
+}
+`
+		      })
+		      this.plane = new THREE.Mesh(geometry, material)
+		      self.bgScene.add(this.plane)
+		      self.bgRenderer = new THREE.WebGLRenderer({ alpha: true })
+		      self.bgRenderer.setPixelRatio(window.devicePixelRatio)
+          var dom = self.bgRenderer.domElement
+		      con.appendChild(dom)
+		      onWindowResize()
+		      window.addEventListener('resize', onWindowResize, false)
+	      }
+	      function onWindowResize(event) {
+		      self.bgRenderer.setSize(window.innerWidth, window.innerHeight)
+		      self.uniforms.iResolution.value.x = self.bgRenderer.domElement.width
+		      self.uniforms.iResolution.value.y = self.bgRenderer.domElement.height
+	      }
+	      init()
+      },
+      bgAnimate() {
+	      requestAnimationFrame(this.bgAnimate)
+	      this.bgRender()
+      },
+      bgRender() {
+	      this.uniforms.iTime.value += 0.01
+	      this.bgRenderer.render(this.bgScene, this.bgCamera)
+      }
+    },
+    mounted() {
+      this.main()
+      this.initBg()
+      this.bgAnimate()
+    }
+  })
+</script>
+</body>
+</html>

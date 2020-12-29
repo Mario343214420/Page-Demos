@@ -1,0 +1,41 @@
+html, bpdy
+  overflow-x hidden
+  min-width 1200px
+#app
+  &.demonstration2
+    background-color: #f7f9f8
+  .list-wrapper
+    width 1200px
+    margin 0 auto
+    padding 40px 0
+    .content
+      height: 519px
+      display block
+      text-align center
+      position relative
+      &.title
+        height: 60px
+      img
+        position absolute
+        z-index 5
+        max-width none
+        left: 50%
+        transform translateX(-50%)
+      .text-left
+        position absolute
+        z-index 10
+        width: 450px
+        text-align left
+        left 100px
+        line-height: 40px
+        //top: 50%
+        //transform translateY(-50%)
+      .text-right
+        right: 180px
+        width: 450px
+        position absolute
+        //top: 50%
+        //transform translateY(-50%)
+        z-index 10
+        text-align left
+        line-height: 36px

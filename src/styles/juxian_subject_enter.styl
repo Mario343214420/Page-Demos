@@ -1,0 +1,211 @@
+#app
+  .subject-main-wrapper
+    position relative
+    padding 30px 0 80px
+    &::before
+      content: ''
+      position absolute
+      left: 0
+      bottom: 0
+      display block
+      width: 551px
+      height: 367px
+      background-image: url(../images/juxian/yun1.png)
+    &::after
+      content: ''
+      position absolute
+      right: 0
+      bottom: 0
+      display block
+      width: 422px
+      height: 202px
+      background-image: url(../images/juxian/yun2.png)
+    .links
+      width: 1200px
+      margin 0 auto
+      .inner
+        width: 1200px
+        display flex
+        justify-content space-around
+        .link-item
+          display block
+          position relative
+          width: 227px
+          height: 600px
+          overflow hidden
+          .link-title
+            position absolute
+            top: 50%
+            left: 50%
+            transform translate(-50%, -50%)
+            font-size: 24px
+            font-family fangsong
+            font-weight: 700
+            display block
+            width 40px
+            text-align center
+            border-left: 1px solid #000
+            border-right: 1px solid #000
+          &:nth-child(1)
+            background-color: #d7be7e
+            img:nth-child(2)
+              transform translate(-10px, -10px)
+              transition ease-in-out 0.6s
+            &:hover
+              img:nth-child(2)
+                transform translateX(0)
+          &:nth-child(2)
+            background-color: #c9ad95
+            img:nth-child(2)
+              transform translate(-4px, -4px)
+              transition ease-in-out 0.6s
+            img:nth-child(3)
+              right: 0
+              top: 80px
+              left auto
+              transform translate(4px, -4px)
+              transition ease-in-out 0.6s
+            &:hover
+              img:nth-child(2)
+                transform translate(0, 0)
+              img:nth-child(3)
+                transform translate(0, 0)
+          &:nth-child(3)
+            background-color: #b8beb4
+            img:last-child
+              bottom: -50px;
+            img:nth-child(2)
+              bottom: 20px
+              top: auto
+              right: 20px
+              left: auto;
+              transform translate(0, 0)
+              transition ease-in-out 0.6s
+              z-index 10
+            img:nth-child(3)
+              transform scale(1)
+              transition ease-in-out 0.6s
+            &:hover
+              img:nth-child(2)
+                transform translate(-2px, -2px)
+              img:nth-child(3)
+                transform scale(1.1)
+          &:nth-child(4)
+            background-color: #a1bda6
+            img:nth-child(2)
+              left: 50%
+              top: 80px
+              transform translateX(-50%)
+              transition ease-in-out 0.6s
+            img:nth-child(3)
+              left: 50%
+              top: auto;
+              bottom: 20px
+              z-index 10
+              transform translateX(-50%) scale(0.9)
+            &:hover
+              img:nth-child(2)
+                transform translateX(-50%) scale(1.1)
+          &:nth-child(5)
+            background-color: #89a9c7
+            img:nth-child(2)
+              left: auto;
+              right: 0
+              transform translate(4px, 0)
+              transition ease-in-out 0.6s
+            &:hover
+              img:nth-child(2)
+                transform translate(0, 4px)
+          img
+            position absolute
+            top: 0
+            left: 0
+            &:last-child
+              top: auto;
+              bottom: 0
+              transform scale(1)
+              transition ease-in-out 0.6s
+            &:first-child
+              top: 50%
+              left: 50%
+              transform translate(-50%, -50%)
+              transition ease-in-out 0.6s
+          &:hover
+            img
+              &:last-child
+                transform scale(1.2)
+              &:first-child
+                transform scale(1.1) translate(-50%, -50%)
+  .news-wrapper
+    height: 462px
+    width: 1200px
+    margin 20px auto
+    background-image: url(../images/juxian/newsbg.png)
+    background-repeat: no-repeat
+    display flex
+    justify-content center
+    align-items center
+    .left
+      width: 550px
+      height: 400px
+      overflow hidden
+      box-sizing border-box
+      padding 20px
+      .swiper-container
+        width: 100%
+        height: 100%
+        .swiper-wrapper
+          .swiper-slide
+            a
+              display block
+              width: 510px
+              height: 360px
+              position relative
+              img
+                width: 510px
+                height: 360px
+                display block
+              .ellipsis
+                width: 510px
+                position absolute
+                box-sizing border-box
+                line-height: 40px
+                bottom: 0
+                left: 0
+                padding-right: 80px
+                padding-left: 10px
+                overflow hidden
+                white-space: nowrap;
+                text-overflow:ellipsis
+                z-index 0
+                background-color: rgba(0,0,0,0.4)
+                color #fff
+        .swiper-pagination
+          text-align right
+          padding-right: 10px
+
+    .right
+      width: 550px
+      height: 400px
+      overflow hidden
+      box-sizing border-box
+      padding 20px
+      .new-list
+        width: 100%
+        .title
+          display block
+          width: 100%
+          color: #e12323
+          font-size: 22px
+          line-height: 50px
+        .divide-line
+          height: 1px
+          margin 20px 0
+          background-color: #f3f3f3
+        .new-item
+          display flex
+          justify-content space-between
+          line-height: 38px
+          .time
+            white-space nowrap
+

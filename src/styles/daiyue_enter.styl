@@ -1,0 +1,187 @@
+html, body, #app
+  height: 100%
+#app
+  background-image: linear-gradient(to right, #146bef, #0043ff)
+  overflow hidden
+  position relative
+  .title
+    position absolute
+    z-index 20
+    top: 13%
+    left: 25%
+    p
+      color: #fff;
+      font-size: 40px
+      line-height: 80px
+      font-weight: 700
+  .left-part
+    position absolute
+    left: 0
+    top: 16%
+    width: 400px;
+    height 400px
+    .inner
+      width: 100%
+      height: 100%
+      position relative
+      img
+        position absolute
+        display block
+        width 140px
+        height: 80px
+        right: 20px
+        top: 210px
+        z-index 10
+        animation float 4s ease-in-out infinite
+      .cloud
+        width: 100px
+        height: 100px
+        top: 160px;
+        right 40px
+        z-index 15
+        animation-delay 0.5s
+      .shield
+        width: 50px
+        height: 70px
+        top: 185px;
+        right 73px
+        z-index 18
+        animation-delay 0.8s
+  .bottom-part
+    position absolute
+    left: 0
+    bottom: 0
+    width: 100%;
+    height 600px
+    .inner
+      position relative
+      img
+        position absolute
+        top: 190px;
+        left: 30%;
+        width: 295px;
+        height: 165px;
+        z-index 10
+        animation float 4s ease-in-out infinite
+        &.cloud
+          width: 170px;
+          z-index: 15;
+          left: 34%;
+          top: 124px;
+          animation-delay 0.5s
+        &.up-arrow
+          width: 116px;
+          height: 118px;
+          z-index: 15;
+          left: 35%;
+          top: 164px;
+          animation-delay 0.8s
+        &.board
+          width: 200px;
+          height: 220px;
+          left: 51%;
+          top: 320px;
+        &.data
+          left: 62%;
+          top: 333px;
+          height: 200px
+          width: 230px
+        &.foundation1
+          left: 72%;
+          top: 130px;
+          height: 244px;
+          width: 340px;
+          &.float1
+            width: 150px;
+            height: 100px;
+            left: 77%;
+            top: 190px;
+            animation-delay 0.5s
+        &.foundation2
+          left: 61%;
+          top: 35px;
+          width 140px
+          height: 96px
+          &.float2
+            width: 115px;
+            height: 131px;
+            top: 0
+            left: 62%
+            animation-delay 0.5s
+        &.foundation3
+          left: 90%;
+          top: 20px;
+          width 140px
+          height: 96px
+          &.float3
+            width: 100px;
+            height: 157px;
+            top: -67px;
+            left: 91%;
+            animation-delay 0.5s
+      .line2
+        width: 100%
+        height: 600px
+        z-index 5
+  .bg
+    width: 100%
+    height: 100%
+    position absolute
+    top: 0
+    left: 0
+    z-index 1
+  .main-inner
+    position relative
+    z-index 10
+    width: 100%
+    height: 100%
+    background-image: url(../images/daiyue/bg-all.png)
+    -webkit-background-size: 1920px 775px
+    background-size: 1920px 775px
+    background-position: center center
+    background-repeat: no-repeat
+svg
+  display: block;
+  position: absolute;
+  z-index 5
+  &.line1
+    width: 400px;
+    height 400px
+    path
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 0;
+      animation: dash 4s linear;
+    @keyframes dash {
+      from {
+        stroke-dashoffset: 1000;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  &.line2
+    width: 400px;
+    height 400px
+    path
+      stroke-dasharray: 2000;
+      stroke-dashoffset: 0;
+      animation: dash2 4s linear;
+    @keyframes dash2 {
+      from {
+        stroke-dashoffset: 1000;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+@keyframes float {
+  0% {
+    transform translateY(0)
+  }
+  50% {
+    transform translateY(5px)
+  }
+  100% {
+    transform translateY(0)
+  }
+}
