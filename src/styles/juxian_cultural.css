@@ -1,0 +1,44 @@
+#app .cultural-bg {
+  width: 100%;
+  padding: 60px 0;
+  background-repeat: no-repeat;
+  background-position: 0 bottom;
+  background-image: url("../images/juxian_cultural/bg_shan.jpg");
+}
+#app .cultural-wrapper {
+  width: 1200px;
+  margin: 0 auto;
+}
+#app .cultural-wrapper .title {
+  text-align: center;
+  margin: 30px 0;
+}
+#app .cultural-wrapper .inner-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+#app .cultural-wrapper .inner-container .item {
+  width: 240px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+#app .cultural-wrapper .inner-container .item .item-title {
+  text-align: center;
+  width: 140px;
+  background-image: url("../images/juxian_cultural/bg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 10px 0;
+  font-weight: 700;
+  font-family: fangsong;
+  font-size: 20px;
+  margin: 30px 0 10px;
+}
+#app .cultural-wrapper .inner-container .item .text {
+  padding: 20px 20px;
+  line-height: 36px;
+  font-size: 14px;
+}

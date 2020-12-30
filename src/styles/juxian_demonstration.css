@@ -1,0 +1,45 @@
+html,
+bpdy {
+  overflow-x: hidden;
+  min-width: 1200px;
+}
+#app.demonstration2 {
+  background-color: #f7f9f8;
+}
+#app .list-wrapper {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+#app .list-wrapper .content {
+  height: 519px;
+  display: block;
+  text-align: center;
+  position: relative;
+}
+#app .list-wrapper .content.title {
+  height: 60px;
+}
+#app .list-wrapper .content img {
+  position: absolute;
+  z-index: 5;
+  max-width: none;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#app .list-wrapper .content .text-left {
+  position: absolute;
+  z-index: 10;
+  width: 450px;
+  text-align: left;
+  left: 100px;
+  line-height: 40px;
+}
+#app .list-wrapper .content .text-right {
+  right: 180px;
+  width: 450px;
+  position: absolute;
+  z-index: 10;
+  text-align: left;
+  line-height: 36px;
+}

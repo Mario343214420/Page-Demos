@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../styles/daiyue_oversee_medicare.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="title"><img src="../images/daiyue_oversee_medicare/logo.png" alt=""></div>
+  <div class="center">
+    <div class="inner">
+      <img src="../images/daiyue_oversee_medicare/mid.png" alt="" class="center-img">
+      <div class="cir-1"></div>
+      <div class="cir-2"></div>
+      <div class="cir-3"></div>
+      <img class="float-tip-1" src="../images/daiyue_oversee_medicare/1.png" alt="">
+      <img class="float-tip-2" src="../images/daiyue_oversee_medicare/2.png" alt="">
+      <img class="float-tip-3" src="../images/daiyue_oversee_medicare/3.png" alt="">
+      <img class="float-tip-4" src="../images/daiyue_oversee_medicare/4.png" alt="">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+		    a: 1
+      }
+    },
+    mounted() {
+    	this.renderCanvas()
+    },
+    methods: {
+    	renderCanvas() {
+        this.initCanvas()
+		    this.drawCanvas()
+		    window.onresize = () => {
+			    document.getElementById('cvs').width = window.innerWidth
+			    this.drawCanvas()
+        }
+      },
+      drawCanvas () {
+	      let num = 60;//气泡数量
+	      let ballX = [];//球心的横坐标
+	      let ballY = [];//球心的纵坐标
+	      let ballR = [];//球的半径
+	      let ballF = [];//小球左右摆动幅度
+	      let speed = [];//小球向上移动速度
+	      let colors = ["rgba(91,155,213,1)","rgba(180,199,231,1)","rgba(0,0,255,1)","rgba(46,177,182,1)","rgba(68,114,196,1)"];//小球颜色
+	      let finalCol=[];
+
+	      let cvs = document.getElementById('cvs')
+        //在随机位置产生num个随机半径的球，储存变量
+	      for(let i = 0;i < num; i++) {
+		      let radius = Math.floor(Math.random() * 15 + 10);
+		      let x = Math.floor(Math.random() * cvs.offsetWidth);
+		      let y = Math.floor(Math.random() * 300);
+		      let scope = Math.floor(Math.random() * 10 + 5);
+		      let sp = Math.floor(Math.random() * 30 + 5);
+		      let color = colors[Math.floor(Math.random() * colors.length)];
+		      ballX.push(x);
+		      ballY.push(y);
+		      ballR.push(radius);
+		      ballF.push(scope);
+		      speed.push(sp);
+		      finalCol.push(color);
+	      }
+
+	      let reX;
+	      let reY;
+	      let ballK=[];
+
+        //使小球移动(向上做曲线运动)
+
+	      let alpha = 0.8
+	      function move(){
+	      	const cvs = document.getElementById('cvs')
+          const ctx = cvs.getContext('2d')
+		      ctx.clearRect(0, 0, cvs.offsetWidth, 300);
+		      for(let i = 0;i < num; i++) {
+			      (function (i) {
+				      if(ballK[i] == null){
+					      ballK[i] = 0;
+				      }
+				      reY = ballK[i] * speed[i] + ballY[i];
+				      reX = Math.sin(ballK[i]) * ballF[i] + ballX[i];
+				      if(reY + ballR[i] <= 0){
+					      ballY[i] = 320;
+					      ballK[i] = 0;
+					      reY = ballK[i] * speed[i] + ballY[i];
+				      }
+				      ctx.beginPath();
+				      ctx.fillStyle = finalCol[i];
+				      reY > 40 ? ctx.globalAlpha = alpha * reY / 400 : ctx.globalAlpha = 0
+				      ctx.arc(reX, reY, ballR[i], 0, Math.PI * 2);
+				      ctx.fill();
+				      ballK.splice(i,1,ballK[i]);
+				      ballK[i]-=0.1;
+			      })(i);
+		      }
+		      requestAnimationFrame(move)
+	      }
+        move()
+      },
+      initCanvas() {
+	      const dom = document.getElementById('app')
+	      const canvas = document.createElement('canvas')
+	      canvas.width = window.innerWidth
+	      canvas.height = 400
+        canvas.style.height = '400px'
+        canvas.style.position = 'absolute'
+        canvas.style.bottom = '-100px'
+        canvas.style.left = 0
+        canvas.style['z-index'] = 1
+	      canvas.id = 'cvs'
+	      dom.appendChild(canvas)
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+#app .bg-container {
+  background-repeat: no-repeat;
+  background-image: url("../images/juxian_city/bg-bot-re.png");
+  background-position: center bottom;
+}
+#app .association-wrapper {
+  padding: 40px 0 300px;
+  width: 1200px;
+  margin: 0 auto;
+}
+#app .association-wrapper .title {
+  text-align: center;
+  margin: 20px 0;
+}
+#app .association-wrapper .association-container {
+  display: flex;
+  width: 1200px;
+  overflow: hidden;
+}
+#app .association-wrapper .association-container .item {
+  overflow: hidden;
+  display: flex;
+}
+#app .association-wrapper .association-container .item .item-title {
+  position: relative;
+}
+#app .association-wrapper .association-container .item .item-title p {
+  position: absolute;
+  color: #fff;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  text-align: center;
+  font-family: KaiTi;
+  font-size: 24px;
+}
+#app .association-wrapper .association-container .item .content {
+  width: 0;
+  height: 100%;
+  overflow: hidden;
+  transition: width ease-in-out 0.6s;
+  box-sizing: border-box;
+}
+#app .association-wrapper .association-container .item .content .inner {
+  width: 560px;
+  height: 527px;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 20px;
+  background-repeat: no-repeat;
+  -webkit-background-size: 100% 100%;
+  background-size: 100% 100%;
+  background-image: url("../images/juxian_association/kuang.png");
+}
+#app .association-wrapper .association-container .item .content .inner .img {
+  height: 60px;
+  width: 120px;
+}
+#app .association-wrapper .association-container .item .content .inner p {
+  line-height: 32px;
+  padding: 20px 10px;
+}
+#app .association-wrapper .association-container .item .content.w1 {
+  width: 600px;
+}

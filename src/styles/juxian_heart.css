@@ -1,0 +1,47 @@
+#app .city-introduce-wrapper {
+  padding: 30px 0;
+}
+#app .city-introduce-wrapper .title {
+  text-align: center;
+  margin: 20px;
+}
+#app .city-introduce-wrapper .contents-wrapper {
+  position: relative;
+  width: 1200px;
+  height: 360px;
+  margin: 0 auto;
+  -webkit-background-size: 100% 100%;
+  background-size: 100% 100%;
+  background-image: url("../images/juxian_city/newsbg.png");
+  background-position: center 0;
+  background-repeat: no-repeat;
+  padding-right: 430px;
+  padding-left: 80px;
+  line-height: 40px;
+  padding-top: 50px;
+}
+#app .city-introduce-wrapper .contents-wrapper img {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 260px;
+  width: 370px;
+}
+#app .city-introduce-wrapper .swiper-container {
+  width: 1200px;
+  box-sizing: border-box;
+  padding: 30px;
+}
+#app .city-introduce-wrapper .swiper-container .swiper-wrapper .swiper-slide {
+  text-align: center;
+}
+#app .city-introduce-wrapper .swiper-container .swiper-wrapper .swiper-slide p {
+  text-align: center;
+  width: 159px;
+  height: 43px;
+  margin: 0 auto;
+  line-height: 36px;
+  background-repeat: no-repeat;
+  background-image: url("../images/juxian_city/title02.png");
+}
