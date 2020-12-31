@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../js/lib/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+  {{a}}
+</div>
+<script>
+class MyVue extends Vue{
+	constructor(...z) {
+    super(...z)
+		console.log(this)
+
+	}
+}
+new MyVue({
+  el: '#app',
+  data() {
+  	return {
+  		a: 'a'
+    }
+  },
+  mounted(){
+  	this.c()
+  },
+  methods: {
+  	c(){
+		  console.log('c')
+	  }
+  }
+},1,2)
+</script>
+</body>
+</html>
