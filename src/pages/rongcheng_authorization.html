@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <link rel="stylesheet" href="../js/lib/bin-ui/styles/index.css">
+  <script type="text/javascript" src="../js/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../js/lib/three.min.js"></script>
+  <script type="text/javascript" src="../js/lib/bin-ui/bin-ui.min.js"></script>
+  <style>
+    .earth-bg{
+      width: 700px;
+      height: 700px;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .plane-bg{
+      opacity: 0.4;
+    }
+    #app{
+      background-image: url(../images/earth/full_bg.jpg);
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+    .board{
+      position: absolute;
+      z-index: 12;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 440px;
+      height: 460px;
+      padding: 30px;
+      background-color: #fff;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 4px #032852;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 36px;
+    }
+    .title-font{
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .title-font p:first-child{
+      font-size: 24px;
+      color: #6c6463;
+    }
+    .title-font p:last-child{
+      color: #b4b4b4;
+    }
+    .footer{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      line-height: 100px;
+      background-color: #0e46a3;
+      color: #ffffff;
+      height: 100px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .form-body{
+      width: 100%;
+    }
+    .bin-input{
+      height: 42px;
+      line-height: 42px;
+    }
+    .bin-input-prefix i{
+      height: 42px;
+      line-height: 42px;
+    }
+    .bin-form-item{
+      margin-bottom: 34px;
+    }
+    .light-point{
+      background-image: radial-gradient(rgba(140,225,255, 0.6) 10%, rgba(140,225,255,0.6) 15%, transparent 50%);
+      height: 120px;
+      position: absolute;
+      left: 50%;
+      bottom: 18%;
+      width: 60%;
+      z-index: 10;
+      transform: translateX(-50%);
+    }
+    .avt-container{
+      height: 228px;
+    }
+    .avt-container .tip{
+      font-size: 18px;
+      text-align: center;
+      line-height: 40px;
+      padding-top: 20px;
+    }
+    .avt-container .iconfont{
+      font-size: 100px;
+      color: #cbcbcb;
+    }
+    .avt-container .avt{
+      background-color: #eaeaea;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      padding: 10px;
+    }
+
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="earth-bg" ref="modelContainer"></div>
+  <div class="plane-bg" ref="con"></div>
+  <div class="board">
+    <div class="title-font">
+      <p>系统登陆授权</p>
+      <p>&nbsp;</p>
+    </div>
+    <div class="avt-container">
+      <div class="avt"><i class="iconfont icon-ios-person"></i></div>
+      <div class="tip"><i>管理员</i></div>
+    </div>
+    <b-button type="primary" style="width: 100%; height: 46px; line-height: 40px;">确认授权</b-button>
+  </div>
+  <div class="light-point"></div>
+  <div class="footer">
+    <div><i>Copyright:</i><i>荣成市信用办</i><i>技术支持：</i><i>徐州金蝶</i></div>
+  </div>
+</div>
+<script type="text/javascript">
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+		    scene: null,
+		    camera: null,
+		    renderer: null,
+		    clock: null,
+		    control: null,
+		    axes: null,
+		    earthParticles: null,
+		    options: {
+			    CITY_RADIUS: 100,
+			    CITY_MARGIN: 1,
+			    BLINT_SPEED: 0.05,
+			    HEXAGON_RADIUS: 5,
+			    radius: 100
+		    },
+		    animation: null,
+
+		    plane: null,
+		    bgCamera: null,
+		    bgScene: null,
+		    bgRenderer: null,
+		    uniforms: {
+			    resolution: {
+				    value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+			    },
+			    iTime: {
+				    type: 'f',
+				    value: 1.0
+			    },
+			    iResolution: {
+				    type: 'v2',
+				    value: new THREE.Vector2()
+			    },
+			    iMouse: {
+				    type: 'v2',
+				    value: new THREE.Vector2()
+			    }
+		    },
+		    formValidate: {
+			    name: '',
+			    password: '',
+			    captcha: ''
+		    }
+      }
+    },
+	  methods: {
+		  login() {
+			  console.log('login')
+		  },
+		  main() {
+			  const img = document.createElement('img')
+			  img.src = '../images/earth/earth.jpg'
+			  img.onload = () => {
+				  const cvs = document.createElement('canvas')
+				  const ctx = cvs.getContext('2d')
+          const container = this.$refs.modelContainer
+				  cvs.width = img.width
+				  cvs.height = img.height
+				  ctx.drawImage(img, 0, 0, cvs.width, cvs.height)
+				  const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height)
+				  this.createBasicScene(container) // 基本渲染容器
+				  this.createEarthParticles(img, imgData) // 渲染地球粒子
+				  this.animate()
+			  }
+		  },
+		  createBasicScene(dom) {
+			  let _self = this
+			  // let width = dom.offsetWidth
+			  // let height = dom.offsetHeight
+			  let width = innerWidth
+			  let height = innerHeight
+			  _self.scene = new THREE.Scene()
+			  _self.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 800)
+			  _self.camera.position.z = 300
+			  _self.renderer = new THREE.WebGLRenderer({ alpha: true })
+			  _self.renderer.setSize(700, 700)
+			  _self.renderer.setClearColor(0xEEEEEE, 0.0)
+			  _self.renderer.autoClearColor = new THREE.Color(1, 0, 0, 0)
+			  dom.appendChild(this.renderer.domElement)
+			  _self.clock = new THREE.Clock()
+			  _self.axes = new THREE.AxesHelper(this.options.CITY_RADIUS + 10)
+			  _self.earthParticles = new THREE.Object3D()
+		  },
+		  isLandByUV(img, imgData, c, f) {
+			  if (!imgData) { // 底图数据
+				  console.error('data error!')
+			  }
+			  let n = parseInt(img.width * c) // 根据横纵百分比计算图象坐标系中的坐标
+			  let o = parseInt(img.height * f) // 根据横纵百分比计算图象坐标系中的坐标
+			  return imgData.data[4 * (o * imgData.width + n)] === 0 // 查找底图中对应像素点的rgba值并判断
+		  },
+		  createEarthParticles(img, imgData) {
+			  let positions = []
+			  let materials = []
+			  let sizes = []
+			  for (let i = 0; i < 2; i++) {
+				  positions[i] = {
+					  positions: []
+				  }
+				  sizes[i] = {
+					  sizes: []
+				  }
+				  let mat = new THREE.PointsMaterial()
+				  mat.size = 4
+				  mat.color = new THREE.Color('#079cd1')
+				  let img = '../images/earth/dot.png'
+				  mat.map = new THREE.TextureLoader().load(img)
+				  // const cvs = document.createElement('canvas')
+				  // mat.map = new THREE.CanvasRenderer ().load('../../assets/images/dot.png')
+				  mat.depthWrite = false
+				  mat.transparent = true
+				  mat.opacity = 0
+				  mat.side = THREE.FrontSide
+				  mat.blending = THREE.AdditiveBlending
+				  let n = i / 2
+				  mat.t_ = n * Math.PI * 2
+				  mat.speed_ = this.options.BLINT_SPEED
+				  mat.min_ = 0.4 * Math.random() + 0.5
+				  mat.delta_ = 0.1 * Math.random() + 0.5
+				  mat.opacity_coef_ = 1
+				  materials.push(mat)
+			  }
+			  const spherical = new THREE.Spherical()
+			  spherical.radius = this.options.radius
+			  const step = 200
+			  for (let i = 0; i < step; i++) {
+				  let vec = new THREE.Vector3()
+				  let radians = step * (1 - Math.sin(i / step * Math.PI)) / step + 0.5
+				  for (let j = 0; j < step; j += radians) {
+					  let c = j / step
+					  let f = i / step
+					  let index = Math.floor(2 * Math.random())
+					  let pos = positions[index]
+					  let size = sizes[index]
+					  if (this.isLandByUV(img, imgData, c, f)) { // 根据横纵百分比判断在底图中的像素值
+						  spherical.theta = c * Math.PI * 2 - Math.PI / 2 // 横纵百分比转换为theta和phi夹角
+						  spherical.phi = f * Math.PI // 横纵百分比转换为theta和phi夹角
+						  vec.setFromSpherical(spherical) // 夹角转换为世界坐标
+						  pos.positions.push(vec.x)
+						  pos.positions.push(vec.y)
+						  pos.positions.push(vec.z)
+						  if (j % 3 === 0) {
+							  size.sizes.push(6.0)
+						  }
+					  }
+				  }
+			  }
+			  for (let i = 0; i < positions.length; i++) {
+				  let pos = positions[i]
+				  let size = sizes[i]
+				  let bufferGeom = new THREE.BufferGeometry()
+				  let typedArr1 = new Float32Array(pos.positions.length)
+				  let typedArr2 = new Float32Array(size.sizes.length)
+				  for (let j = 0; j < pos.positions.length; j++) {
+					  typedArr1[j] = pos.positions[j]
+				  }
+				  for (let j = 0; j < size.sizes.length; j++) {
+					  typedArr2[j] = size.sizes[j]
+				  }
+				  bufferGeom.setAttribute('position', new THREE.BufferAttribute(typedArr1, 3))
+				  bufferGeom.setAttribute('size', new THREE.BufferAttribute(typedArr2, 1))
+				  bufferGeom.computeBoundingSphere()
+				  let particle = new THREE.Points(bufferGeom, materials[i])
+				  this.earthParticles.add(particle)
+			  }
+			  this.scene.add(this.earthParticles)
+		  },
+		  render() {
+			  this.renderer.render(this.scene, this.camera)
+		  },
+		  animate() {
+			  // 球面粒子闪烁
+			  let objects = this.earthParticles.children
+			  objects.forEach(obj => {
+				  let material = obj.material
+				  material.t_ += material.speed_
+				  material.opacity = (Math.sin(material.t_) * material.delta_ + material.min_) * material.opacity_coef_
+				  material.needsUpdate = true
+			  })
+			  this.earthParticles.rotation.y += 0.01
+			  requestAnimationFrame(this.animate)
+			  this.render()
+		  },
+		  initBg() {
+			  var self = this
+			  var con = self.$refs.con
+			  function init() {
+				  self.bgCamera = new THREE.Camera()
+				  self.bgScene = new THREE.Scene()
+				  var geometry = new THREE.PlaneBufferGeometry(2, 2)
+				  var material = new THREE.ShaderMaterial({
+					  uniforms: self.uniforms,
+					  vertexShader: 'void main() { gl_Position = vec4( position, 1.0 ); }',
+					  fragmentShader: `
+uniform vec2 iResolution;
+uniform float iTime;
+float grid(vec2 uv, float battery)
+{
+    vec2 size = vec2(uv.y, uv.y * uv.y * 0.1) * 0.01;
+    uv += vec2(0.0, iTime * 2.0 * (battery + 0.1));
+    uv = abs(fract(uv) - 0.5);
+    vec2 lines = smoothstep(size, vec2(0.0), uv);
+    lines += smoothstep(size * 8.0, vec2(0.01), uv) * 0.4 * battery;
+    return clamp(lines.x + lines.y, 0.4, 3.0);
+}
+void main()
+{
+    vec2 uv = (2.0 * gl_FragCoord.xy - iResolution.xy)/iResolution.y * 1.2;
+    float battery = 0.7;
+    {
+        // Grid
+        float fog = smoothstep(0.6, -0.1, abs(uv.y + 0.6));
+        vec3 col = vec3(0.0, 0.1, 0.2);
+        if (uv.y < -0.6)
+        {
+            uv.y = 6.0 / (abs(uv.y + 0.4) + 0.4);
+            uv.x *= (uv.y * 1.25 - 0.4) * 0.8;
+            float gridVal = grid(uv, battery);
+            col = mix(col, vec3(0.1, 0.8, 1.4), gridVal);
+        }
+        else
+        {
+            uv.y -= battery * 1.2 - 0.6;
+        }
+        col += fog * fog * fog;
+        col = mix(vec3(col.r, col.r, col.r) * 0.8, col, battery * 0.8);
+        gl_FragColor = vec4(col, 0.2);
+    }
+}
+`
+				  })
+				  this.plane = new THREE.Mesh(geometry, material)
+				  self.bgScene.add(this.plane)
+				  self.bgRenderer = new THREE.WebGLRenderer({ alpha: true })
+				  self.bgRenderer.setPixelRatio(window.devicePixelRatio)
+				  var dom = self.bgRenderer.domElement
+				  con.appendChild(dom)
+				  onWindowResize()
+				  window.addEventListener('resize', onWindowResize, false)
+			  }
+			  function onWindowResize(event) {
+				  self.bgRenderer.setSize(window.innerWidth, window.innerHeight)
+				  self.uniforms.iResolution.value.x = self.bgRenderer.domElement.width
+				  self.uniforms.iResolution.value.y = self.bgRenderer.domElement.height
+			  }
+			  init()
+		  },
+		  bgAnimate() {
+			  requestAnimationFrame(this.bgAnimate)
+			  this.bgRender()
+		  },
+		  bgRender() {
+			  this.uniforms.iTime.value += 0.01
+			  this.bgRenderer.render(this.bgScene, this.bgCamera)
+		  }
+	  },
+	  mounted() {
+		  this.main()
+		  this.initBg()
+		  this.bgAnimate()
+	  }
+  })
+</script>
+</body>
+</html>
