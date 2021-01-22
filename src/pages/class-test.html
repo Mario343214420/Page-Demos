@@ -8,17 +8,18 @@
 <script>
   class testClass{
   	static a = 1
-  	constructor(param){
+  	constructor(){
   		this.param = 1
     }
   }
   const a = new testClass()
-  console.dir(testClass)
+  console.log('class',testClass)
   class testExtends extends testClass{
 
   }
-  console.dir(testExtends.a)
-  console.dir(a)
+  console.log('static',testExtends.a)
+  console.log('new',a)
+  console.log('extends',new testExtends())
 </script>
 </body>
 </html>

@@ -1,0 +1,150 @@
+{
+  “rules”: {
+// TS特征
+
+“member-access”: true, // 设置成员工具的接见权限（public,private,protect)
+
+“member-ordering”: [
+// 设置修饰符顺序
+
+true,
+{
+“order”: [
+“public-static-field”,
+“public-static-method”,
+“protected-static-field”,
+“protected-static-method”,
+“private-static-field”,
+
+“private-static-method”,
+“public-instance-field”,
+“protected-instance-field”,
+“private-instance-field”,
+“public-constructor”,
+
+“protected-constructor”,
+“private-constructor”,
+“public-instance-method”,
+“protected-instance-method”,
+“private-instance-method”
+]
+
+}
+],
+“no-empty-interface”: true, // 不允许空接口
+
+“no-parameter-reassignment”: true, // 不允许修改方式输入参数
+
+“prefer-for-of”: true, // 若是for循环中没有使用索引，建议是使用for-of
+
+// 功效特征
+
+“await-promise”: true, // 不允许没有Promise的情况下使用await
+
+“curly”: true, // if/for/do/while强制使用大括号
+
+“forin”: true, // 使用for in语句时，强制举行hasOwnProperty检查
+
+“no-arg”: true, // 不允许使用arguments.callee
+
+// “no-bitwise”:true, // 不允许使用特殊运算符 &, &=, |, |=, ^, ^=, <<, <<=, >>, >>=, >>>, >>>=, ~
+
+“no-conditional-assignment”: true, // do while/for/if/while 语句中将会对例如if(a=b)举行检查
+
+// “no-console”:true,// 不允许使用console工具
+
+“no-debugger”: true, // 不允许使用debugger
+
+“no-duplicate-super”: true, // 不允许super() 两次使用在组织函数中
+
+“no-empty”: true, // 函数体不允许空
+
+“no-eval”: false, // 不允许使用eval
+
+“no-for-in-array”: true, // 不允许对Array使用for-in
+
+“no-invalid-template-strings”: true, // 只允许在模板字符串中使用${
+
+“no-invalid-this”: false, // 不允许在class之外使用this
+
+“no-null-keyword”: true, // 不允许使用null,使用undefined取代null，指代空指针工具
+
+“no-sparse-arrays”: true, // 不允许array中有空元素
+
+“no-string-throw”: true, // 不允许throw一个字符串
+
+“no-switch-case-fall-through”: true, // 不允许case段落中在没有使用breack的情况下，在新启一段case逻辑
+
+“no-unsafe-finally”: true, // 不允许在finally语句中使用return/continue/break/throw
+
+“no-unused-expression”: true, // 不允许使用未使用的表达式
+
+“no-use-before-declare”: true, // 在使用前必须声明
+
+“no-var-keyword”: true, // 不允许使用var
+
+“radix”: true, // parseInt时，必须输入radix精度参数
+
+“restrict-plus-operands”: true, // 不允许自动类型转换，若是已设置不允许使用要害字var该设置无效
+
+“triple-equals”: true, // 必须使用恒等号，举行即是对照
+
+“use-isnan”: true, // 只允许使用isNaN方式检查数字是否有用
+
+// 维护性功效
+
+“indent”:[true, “spaces”, 4], // 每行最先以4个空格符最先
+
+“linebreak-style”:[“off”, ”windows”], // 换行符花样 CR/LF可以通用使用在windows和osx
+
+“max-classes-per-file”:[true, 1], // 每个文件中可界说类的个数
+
+“max-file-line-count”:[true, 1000], // 界说每个文件代码行数
+
+“max-line-length”:[false, 120], // 界说每行代码数
+
+“no-default-export”: true, // 克制使用export default要害字，由于当export工具名称发生变化时，需要修改import中的工具名。https://github.com/palantir/tslint/issues/1182#issue-151780453
+
+“no-duplicate-imports”: true, // 克制在一个文件内，多次引用统一module
+
+// 花样
+
+“align”:[true, ”parameters”, ”arguments”,”statements”, ”members”, ”elements”], // 界说对齐气概
+
+“array-type”:[true, ”array”], // 建议使用T[]方式声明一个数组工具
+
+“class-name”: true, // 类名以大驼峰花样命名
+
+“comment-format”:[true, “check-space”], // 界说注释花样
+
+“encoding”: true, // 界说编码花样默认utf-8
+
+“import-spacing”: true, // import要害字后加空格
+
+“interface-name”:[true, ”always-prefix”], // interface必须以I开头
+
+“jsdoc-format”: true, // 注释基于jsdoc气概
+
+“new-parens”: true, // 挪用组织函数时需要用括号
+
+“no-consecutive-blank-lines”:[true, 2], // 不允许有空行
+
+“no-trailing-whitespace”: [
+// 不允许空格末端
+
+true,
+“ignore-comments”,
+“ignore-jsdoc”
+],
+“no-unnecessary-initializer”: true, // 不允许没有必要的初始化
+
+“variable-name”:[
+false, ”check-format”, // 界说变量命名规则
+
+“allow-leading-underscore”,
+
+“allow-trailing-underscore”,
+“ban-keywords”
+]
+}
+}

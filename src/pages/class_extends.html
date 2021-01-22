@@ -11,12 +11,15 @@
 </div>
 <script>
 class MyVue extends Vue{
+	static describe = 'this is my Vue extends from Vue'
 	constructor(...z) {
     super(...z)
 		console.log(this)
-
+		console.log(z)
 	}
 }
+
+console.log(MyVue.describe)
 new MyVue({
   el: '#app',
   data() {
@@ -29,10 +32,10 @@ new MyVue({
   },
   methods: {
   	c(){
-		  console.log('c')
+		  console.log('inner methods:','c')
 	  }
   }
-},1,2)
+},1,2,3,4)
 </script>
 </body>
 </html>
