@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/three/build/three.min.js"></script>
+  <style>.container{width: 600px; height: 400px}</style>
+</head>
+<body>
+<div id="app">
+  <div class="container" ref="container"></div>
+  <canvas id="canvas"></canvas>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+	  data() {
+		  return {
+			  gl: null,
+			  vertexs: new Float32Array([
+				  -0.5, 0.5, 0.0,
+				  -0.5, -0.5, 0.0,
+				  0.5, -0.5, 0.0,
+				  0.5, 0.5, 0.0,
+				  0.0, 0.0, 0.0]),
+			  vertexShaderSource: `
+                attribute vec4 a_Position;
+                void main(){
+                gl_Position = a_Position;
+            }`,
+			  fragmentShaderSource: `
+                precision mediump float;
+                void main(){
+                    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            }`
+		  }
+	  },
+
+	  methods: {
+
+		  initShader() {
+			  let vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);// 创建顶点着色器
+			  this.gl.shaderSource(vertexShader, this.vertexShaderSource);// 绑定顶点着色器源码
+			  this.gl.compileShader(vertexShader);// 编译定点着色器
+
+
+			  let fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);// 创建片元着色器
+			  this.gl.shaderSource(fragmentShader, this.fragmentShaderSource);// 绑定片元着色器源码
+			  this.gl.compileShader(fragmentShader);// 编译片元着色器
+
+			  let shaderProgram = this.gl.createProgram();// 创建着色器程序
+			  this.gl.attachShader(shaderProgram, vertexShader);// 指定顶点着色器
+			  this.gl.attachShader(shaderProgram, fragmentShader);// 指定片元着色色器
+
+
+			  this.gl.linkProgram(shaderProgram);// 链接程序
+			  this.gl.useProgram(shaderProgram);//使用着色器
+			  this.gl.program = shaderProgram;
+			  return true
+		  },
+
+		  initVertexs() {
+
+			  let vertexsBuffer = this.gl.createBuffer();
+
+
+			  if (vertexsBuffer === null) {
+				  console.log("vertexsBuffer is null");
+				  return false;
+			  }
+			  this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexsBuffer);
+
+
+			  this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertexs, this.gl.STATIC_DRAW);
+
+			  let a_Position = this.gl.getAttribLocation(this.gl.program, "a_Position");
+			  if (a_Position < 0) {
+				  console.log("a_Position < 0");
+				  return false;
+			  }
+
+			  //将顶点坐标的位置赋值
+			  this.gl.vertexAttribPointer(a_Position, 3, this.gl.FLOAT, false, this.vertexs.BYTES_PER_ELEMENT * 3, 0);
+			  this.gl.enableVertexAttribArray(a_Position);
+
+			  return true;
+		  },
+
+
+		  renderImage() {
+			  if (!this.initShader()) {
+				  console.log('initShader is failed')
+				  return;
+			  }
+			  if (!this.initVertexs()) {
+				  console.log('drawVertexs is failed')
+				  return;
+			  }
+
+			  this.gl.drawArrays(this.gl.LINE_LOOP, 0, 5);
+		  }
+
+	  },
+	  mounted() {
+		  this.gl = document.getElementById('canvas').getContext("webgl");
+		  this.renderImage();
+	  }
+  })
+</script>
+</body>
+</html>
