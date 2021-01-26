@@ -44,22 +44,50 @@
           }
         `
         const fragmentShader = `
-
+        varying vec2 vUv;
+        uniform float iTime;
+        uniform vec2 iResolution;
+        float reline(vec2 p1, vec2 p2, vec2 pos, float w) {
+          vec2 a = (p2-p1)/length(p2-p1);
+          vec2 b = pos - p1;
+          vec2 p = clamp(dot(a, b), 0., length(p2-p1)) * a + p1;
+          // clamp(x,a,b)
+          // 如果 x 值小于 a，则返回 a；如果 x 值大于 b，返回 b；否则，返回 x
+          // dot(A,B)
+          // 返回 A 和 B 的点积(dot product)
+          return length(p - pos) - w;
+        }
+        void main() {
+          vec2 position = - 10.0 + 20.0 * vUv;
+          position.x = position.y;
+          vec2 point1 = vec2(9.,9.);
+          vec2 point2 = vec2(9.,-9.);
+          vec2 point3 = vec2(-9.,-9.);
+          vec2 point4 = vec2(-9.,9.);
+          // distance( pt1, pt2)
+          // 两点间欧几里得距离
+          vec3 l1 = vec3 (reline(point1, point2, position, 1.));
+          vec3 l2 = vec3 (reline(point2, point3, position, 1.));
+          vec3 l3 = vec3 (reline(point3, point4, position, 1.));
+          vec3 l4 = vec3 (reline(point4, point1, position, 1.));
+          vec3 res_color = vec3 (1.,1.,1.);
+          res_color = mix(res_color, l1, l2);
+          res_color = mix(res_color, l3, l4);
+          gl_FragColor = vec4(res_color, 1.0);
+        }`
+        const f = `
         varying vec2 vUv;
         uniform float iTime;
         uniform vec2 iResolution;
         void main() {
-          vec2 position = - 1.0 + 2.0 * vUv;
-          vec2 uv = position.xy / iResolution.xy;
-          uv.x *= iResolution.x / iResolution.y;
-          float p1 = vec2(0,0);
-          float p2 = vec2(0,1);
-          float p3 = vec2(1,1);
-          float p4 = vec2(1,0);
-          vec2 p = (position.xy - 0.5*iResolution.xy)/iResolution.y;
-          float l1 = line(p, p1, p2);
-          vec3 color = mix(l1,l2,l3);
-          gl_FragColor = vec4(color);
+          // vec2 position = - 10.0 + 20.0 * vUv;
+          vec2 st = vUv.xy / iResolution.xy;
+          float aspect = iResolution.x / iResolution.y;
+          vec3 color = vec3(1.0);
+          vec2 bl = step(vec2(.1), st);
+          vec2 tr = step(vec2(.1), 1.-st);
+          color = vec3(bl.x * bl.y * tr.x * tr.y);
+          gl_FragColor = vec4(color,0.5);
         }`
 		    const shaderToy = new THREE.ShaderMaterial({
 			    vertexShader,
@@ -70,10 +98,10 @@
 		    })
     		const container = this.$refs.container
 		    this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
-		    this.camera.position.z = 24
+		    this.camera.position.z = 100
         this.scene = new THREE.Scene()
 		    this.renderer = new THREE.WebGLRenderer({antialias: true})
-		    const geometry = new THREE.BoxGeometry(10, 10, 10)
+		    const geometry = new THREE.BoxGeometry(20, 20, 20)
 		    // const material = new THREE.MeshNormalMaterial()
 		    const mesh = new THREE.Mesh(geometry, shaderToy)
 		    this.group = new THREE.Group()
