@@ -11,31 +11,32 @@
 <div id="app">
   <div class="container" ref="container"></div>
 </div>
+</body>
 <script>
-  new Vue({
-    el: '#app',
-    data(){
-    	return {
-		    camera: null,
-		    scene: null,
-		    renderer: null,
-		    mesh: null,
-        group: null,
-		    uniforms: {
-			    resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-			    iTime: { type: 'f', value: 0 },
-			    iResolution: { type: 'v2', value: new THREE.Vector3(100, 100, 1) },
-			    iMouse: { type: 'v2', value: new THREE.Vector2() }
-		    }
-      }
-    },
-    mounted(){
-    	this.initThree()
-	    this.animate()
-    },
-    methods: {
-    	initThree(){
-		    const vertexShader = `
+	new Vue({
+		el: '#app',
+		data(){
+			return {
+				camera: null,
+				scene: null,
+				renderer: null,
+				mesh: null,
+				group: null,
+				uniforms: {
+					resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+					iTime: { type: 'f', value: 0 },
+					iResolution: { type: 'v2', value: new THREE.Vector3(100, 100, 1) },
+					iMouse: { type: 'v2', value: new THREE.Vector2() }
+				}
+			}
+		},
+		mounted(){
+			this.initThree()
+			this.animate()
+		},
+		methods: {
+			initThree(){
+				const vertexShader = `
 		      varying vec2 vUv;
           void main(){
             vUv = uv;
@@ -43,7 +44,7 @@
             gl_Position = projectionMatrix * mvPosition;
           }
         `
-        const fragmentShader = `
+				const fragmentShader = `
         varying vec2 vUv;
         uniform float iTime;
         uniform vec2 iResolution;
@@ -75,7 +76,7 @@
           res_color = mix(res_color, l3, l4);
           gl_FragColor = vec4(res_color, 1.0);
         }`
-        const f = `
+				const f = `
         varying vec2 vUv;
         uniform float iTime;
         uniform vec2 iResolution;
@@ -89,36 +90,110 @@
           color = vec3(bl.x * bl.y * tr.x * tr.y);
           gl_FragColor = vec4(color,0.5);
         }`
-		    const shaderToy = new THREE.ShaderMaterial({
-			    vertexShader,
-			    fragmentShader,
-			    transparent: true,
-			    uniforms: this.uniforms,
-			    side: THREE.DoubleSide
-		    })
-    		const container = this.$refs.container
-		    this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
-		    this.camera.position.z = 100
-        this.scene = new THREE.Scene()
-		    this.renderer = new THREE.WebGLRenderer({antialias: true})
-		    const geometry = new THREE.BoxGeometry(20, 20, 20)
-		    // const material = new THREE.MeshNormalMaterial()
-		    const mesh = new THREE.Mesh(geometry, shaderToy)
-		    this.group = new THREE.Group()
-		    this.group.add(mesh)
-		    this.scene.add(this.group)
-        this.renderer.setSize(container.clientWidth, container.clientHeight)
-		    container.appendChild(this.renderer.domElement)
-      },
-	    animate() {
-		    requestAnimationFrame(this.animate)
-		    this.group.rotation.x += 0.005
-		    this.group.rotation.y += 0.005
-        this.uniforms.iTime.value += 0.01
-		    this.renderer.render(this.scene, this.camera)
-	    }
-    }
-  })
+				const ten = `
+        varying vec2 vUv;
+        uniform float iTime;
+        uniform vec2 iResolution;
+        void main() {
+          vec2 position = - 10.0 + 20.0 * vUv;
+          vec2 uv = position.xy /iResolution.xy;
+          float pixelSize = 0.1/iResolution.y; //单个像素的在y方向上的精度
+          float lineWidth = 10.;
+          vec3 lineColor = vec3(0., 0.4, 1. );
+          vec3 background = vec3(1., 1., 1. );
+          float y = step(0., -uv.x);
+          float y_ = step(0.,uv.x);
+          float x_ = step(0.,uv.y);
+          float x = step(0.,-uv.y);
+          vec3 col = vec3(.0);
+          if( abs( uv.y - y) < pixelSize * lineWidth){
+            gl_FragColor = vec4(lineColor, 1.0);
+          }else if( abs( uv.y -y_) < pixelSize * lineWidth){
+            gl_FragColor = vec4(lineColor, 1.0);
+          }else if( abs( uv.x -x) < pixelSize * lineWidth){
+            gl_FragColor = vec4(lineColor, 1.0);
+          }else if( abs( uv.x -x_) < pixelSize * lineWidth){
+            gl_FragColor = vec4(lineColor, 1.0);
+          }else{
+            gl_FragColor = vec4(background, 0.0);
+          }
+        }
+        `
+        const newest = `
+        varying vec2 vUv;
+        uniform float iTime;
+        uniform vec2 iResolution;
+        void main() {
+          vec2 position = - 10.0 + 20.0 * vUv;
+          vec2 uv = position.xy / iResolution.xy;
+          float pixelSize = 0.1 / iResolution.y; //单个像素的在y方向上的精度
+          float lineWidth = 10.;
+          vec3 lineColor = vec3(0., 0.4, 1. );
+          vec3 background = vec3(1., 1., 1. );
+          float x = smoothstep(0.0, 1.0, uv.x );
+          float y = smoothstep(0.0, 1.0, uv.y );
+          if( abs( uv.y - y + .1 ) < pixelSize * lineWidth){
+            gl_FragColor = vec4(lineColor, 1.0);
+          }else if( abs( uv.x - x + .1 ) < pixelSize * lineWidth){
+            gl_FragColor = vec4(lineColor, 1.0);
+          }else{
+            gl_FragColor = vec4(background, 0.0);
+          }
+        }
+        `
+        const frame = `
+          varying vec2 vUv;
+          uniform float iTime;
+          uniform vec2 iResolution;
+          void main()
+            {
+              vec2 position = - 10.0 + 20.0 * vUv;
+              vec2 uv = position.xy / iResolution.xy;
+              float m = max(abs(uv.x), abs(uv.y));
+              // smoothstep(min, max, x)
+              // 值 x 位于 min、max 区间中。如果 x=min，返回 0；
+              // 如果 x=max，返回 1；
+              // 如果 x 在两者之间，按照下列公式返回数据：
+              // x−min                  x−min
+              // −2*( )3 +3*(  )2
+              // max−min                 max−min
+              m = smoothstep(0.098,0.098,m);
+              if (m==1.0){
+                gl_FragColor = vec4(0.,0.6,0.8,1.0);
+              }else{
+                gl_FragColor = vec4(0,0,0,.0);
+              }
+            }
+        `
+				const shaderToy = new THREE.ShaderMaterial({
+					vertexShader,
+					fragmentShader: frame,
+					transparent: true,
+					uniforms: this.uniforms,
+					side: THREE.DoubleSide
+				})
+				const container = this.$refs.container
+				this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
+				this.camera.position.z = 100
+				this.scene = new THREE.Scene()
+				this.renderer = new THREE.WebGLRenderer({antialias: true})
+				const geometry = new THREE.BoxGeometry(20, 20, 20)
+				// const material = new THREE.MeshNormalMaterial()
+				const mesh = new THREE.Mesh(geometry, shaderToy)
+				this.group = new THREE.Group()
+				this.group.add(mesh)
+				this.scene.add(this.group)
+				this.renderer.setSize(container.clientWidth, container.clientHeight)
+				container.appendChild(this.renderer.domElement)
+			},
+			animate() {
+				requestAnimationFrame(this.animate)
+				this.group.rotation.x += 0.05
+				this.group.rotation.y += 0.05
+				this.uniforms.iTime.value += 0.01
+				this.renderer.render(this.scene, this.camera)
+			}
+		}
+	})
 </script>
-</body>
 </html>
