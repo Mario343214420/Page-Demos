@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../js/lib/vue.min.js"></script>
+  <script src="../js/lib/three/build/three.min.js"></script>
+  <script src="../js/lib/three/js/controls/OrbitControls.js"></script>
+  <style>.container{width: 600px; height: 400px}</style>
+</head>
+<body>
+<div id="app">
+  <div class="container" ref="container"></div>
+</div>
+</body>
+<script>
+	new Vue({
+		el: '#app',
+		data(){
+			return {
+				camera: null,
+				scene: null,
+				renderer: null,
+				mesh: null,
+				group: null,
+				controls: null,
+				uniforms: {
+					resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+					iTime: { type: 'f', value: 0 },
+					iResolution: { type: 'v2', value: new THREE.Vector3(100, 100, 1) },
+					iMouse: { type: 'v2', value: new THREE.Vector2() }
+				}
+			}
+		},
+		mounted(){
+			this.initThree()
+			this.animate()
+		},
+		methods: {
+			initThree(){
+				const vertexShader = `
+		      varying vec2 vUv;
+          void main(){
+            vUv = uv;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `
+				const fragmentShader = `
+          varying vec2 vUv;
+          uniform float iTime;
+          uniform vec2 iResolution;
+          void main()
+            {
+              vec2 position = - 10.0 + 20.0 * vUv;
+              vec2 uv = position.xy / iResolution.xy;
+              float m = max(abs(uv.x), abs(uv.y));
+              // smoothstep(min, max, x)
+              // 值 x 位于 min、max 区间中。如果 x=min，返回 0；
+              // 如果 x=max，返回 1；
+              // 如果 x 在两者之间，按照下列公式返回数据：
+              // x−min                  x−min
+              // −2*( )3 +3*(  )2
+              // max−min                 max−min
+              m = smoothstep(0.095,0.095,m);
+              if (m==1.0){
+                gl_FragColor = vec4(0.,0.6,0.8,1.0);
+              }else{
+                gl_FragColor = vec4(0,0,0,.0);
+              }
+            }
+        `
+				const shaderMaterial = new THREE.ShaderMaterial({
+					vertexShader,
+					fragmentShader,
+					transparent: true,
+					uniforms: this.uniforms,
+					side: THREE.DoubleSide
+				})
+				const container = this.$refs.container
+				this.renderer = new THREE.WebGLRenderer({antialias: true})
+				this.renderer.setSize(container.clientWidth, container.clientHeight)
+				container.appendChild(this.renderer.domElement)
+
+				this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
+				this.camera.position.z = 100
+				this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement)
+				this.scene = new THREE.Scene()
+				this.group = new THREE.Group()
+        function addCube(l){
+					let geo =  new THREE.BoxGeometry(l, l, l)
+          let mesh = new THREE.Mesh(geo, shaderMaterial)
+          this.group.add(mesh)
+        }
+        addCube.call(this,20)
+        addCube.call(this,30)
+        addCube.call(this,40)
+				console.log(this.group)
+				this.scene.add(this.group)
+      },
+			animate() {
+				requestAnimationFrame(this.animate)
+				// this.group.rotation.x += 0.05
+				this.uniforms.iTime.value += 0.01
+				// this.controls.update()
+				this.renderer.render(this.scene, this.camera)
+			}
+		}
+	})
+</script>
+</html>
