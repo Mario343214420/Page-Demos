@@ -20,10 +20,19 @@
   // 引用fastclick处理移动端300ms延迟
 	if ('addEventListener' in document) {
 		document.addEventListener('DOMContentLoaded', function () {
-			FastClick.attach(document.body)
+			var script = document.createElement('script')
+			script.src = 'https://cdn.bootcdn.net/ajax/libs/fastclick/1.0.6/fastclick.min.js'
+			script.onload = function () {
+				console.log('fastclick加载完成')
+			};
+			document.head.appendChild(script)
+			if(!FastClick){
+				// document.writeln('<script src=""></script>')
+				FastClick.attach(document.body)
+			}
 		}, false)
 	}
 	if (!window.Promise) {
-		document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"' + '>' + '<' + '/' + 'script>')
+		document.writeln('<script src="https://cdn.bootcdn.net/ajax/libs/es6-promise/4.2.8/es6-promise.min.js"></script>')
 	}
 })()

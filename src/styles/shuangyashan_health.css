@@ -1,0 +1,77 @@
+#app {
+  background-color: #f6f6f6;
+}
+#app .main-wrapper {
+  width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+#app .main-wrapper .img-wrapper {
+  display: block;
+  width: 100%;
+  padding-top: 20px;
+}
+#app .main-wrapper .img-wrapper img {
+  display: block;
+  width: 100%;
+}
+#app .main-wrapper .card {
+  width: 49%;
+}
+#app .main-wrapper .card .title-bar {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #d9d9d9;
+  line-height: 36px;
+}
+#app .main-wrapper .card .title-bar .title {
+  position: relative;
+  font-size: 20px;
+  font-weight: 700;
+  color: #e22323;
+}
+#app .main-wrapper .card .title-bar .title.can-click {
+  cursor: pointer;
+  color: #1a1a1a;
+}
+#app .main-wrapper .card .title-bar .title.can-click.active {
+  color: #e22323;
+}
+#app .main-wrapper .card .title-bar .title::after {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  background-color: #e22323;
+  display: block;
+  content: '';
+  height: 4px;
+  width: 100%;
+}
+#app .main-wrapper .card .title-bar .more a {
+  color: #a6a6a6;
+}
+#app .main-wrapper .content-board {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+#app .main-wrapper .content-board .card .card-content .link-item {
+  display: flex;
+  color: #3a3a3a;
+  border-bottom: 1px dashed #d9d9d9;
+  line-height: 40px;
+  transition: color linear 0.4s;
+}
+#app .main-wrapper .content-board .card .card-content .link-item:hover {
+  color: #e22323;
+}
+#app .main-wrapper .content-board .card .card-content .link-item .sketch {
+  flex: 1;
+  padding-right: 20px;
+}
+#app .main-wrapper .content-board .card .card-content .link-item .time {
+  display: block;
+  width: 100px;
+}

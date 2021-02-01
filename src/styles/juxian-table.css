@@ -1,0 +1,72 @@
+[bold] {
+  font-weight: 700;
+}
+[flex] {
+  display: flex;
+}
+[flex~='justify:center'] {
+  justify-content: center;
+}
+[flex~='justify:between'] {
+  justify-content: space-between;
+}
+[flex~='justify:around'] {
+  justify-content: space-around;
+}
+[flex~='align:center'] {
+  align-items: center;
+}
+[flex~='wrap'] {
+  flex-wrap: wrap;
+}
+[flex-box='1'] {
+  flex: 1;
+}
+[flex-box='2'] {
+  flex: 2;
+}
+[flex-box='3'] {
+  flex: 3;
+}
+[flex~='col'] {
+  flex-direction: column;
+}
+#app {
+  padding: 20px;
+}
+#app .bin-card .bin-card__header {
+  background-color: #dee7f8;
+  padding: 10px 20px;
+}
+#app .condition span {
+  padding: 0 10px;
+  line-height: 32px;
+}
+#app .condition span i {
+  white-space: nowrap;
+}
+#app .table-title {
+  line-height: 60px;
+  font-size: 24px;
+  text-align: center;
+}
+#app .table {
+  width: 100%;
+  color: #505f76;
+  border-top: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
+}
+#app .table tr {
+  width: 100%;
+}
+#app .table tr th,
+#app .table tr td {
+  line-height: 40px;
+  text-indent: 1em;
+  border-right: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+}
+#app .table tr caption {
+  line-height: 60px;
+  font-size: 24px;
+}

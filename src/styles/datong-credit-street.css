@@ -1,0 +1,147 @@
+[flex] {
+  display: flex;
+}
+[flex~="column"] {
+  flex-direction: column;
+}
+[flex~="center"] {
+  justify-content: center;
+}
+[flex~="end"] {
+  justify-content: flex-end;
+}
+[flex~="around"] {
+  justify-content: space-around;
+}
+[flex~="between"] {
+  justify-content: space-between;
+}
+[flex~="align:center"] {
+  align-items: center;
+}
+[flex-box="1"] {
+  flex: 1;
+}
+html {
+  background-color: #f5f3f4;
+}
+#app {
+  min-height: 100%;
+  padding-top: 7.5rem;
+  padding-bottom: 10rem;
+  font-size: 2.25rem;
+  box-sizing: border-box;
+}
+#app .title-bar {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  height: 7.5rem;
+  line-height: 7.5rem;
+  font-size: 2.75rem;
+}
+#app .handle-bar {
+  width: 100%;
+  position: absolute;
+  height: 10rem;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  right: 10rem;
+  padding-right: 1.25rem;
+}
+#app .handle-bar i {
+  background-color: #f9564d;
+  color: #fff6f6;
+  border-radius: 4.25rem;
+  font-size: 2.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+  text-align: center;
+  letter-spacing: 30px;
+}
+#app .main-wrapper .company-info-wrapper {
+  padding-bottom: 6.25rem;
+  background-image: url("../images/datong-mobile/top.png");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+#app .main-wrapper .company-info-wrapper .title {
+  box-sizing: border-box;
+  line-height: 7.5rem;
+  padding-top: 5rem;
+  padding-left: 3.75rem;
+  padding-right: 1.25rem;
+  font-size: 2.625rem;
+  color: #fff;
+}
+#app .main-wrapper .company-info-wrapper .title .title-icon {
+  transform: scale(1.2);
+}
+#app .main-wrapper .company-info-wrapper .info-bar {
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  line-height: 5rem;
+  width: 90%;
+  overflow: hidden;
+  transform: translateY(4rem);
+  box-shadow: 0 0 10px rgba(10,10,10,0.2);
+}
+#app .main-wrapper .company-info-wrapper .info-bar span i:first-child {
+  color: #9d9d9d;
+}
+#app .main-wrapper .company-info-wrapper .info-bar .gray-split-line {
+  display: block;
+  height: 7.5rem;
+  width: 0.125rem;
+  background-color: #afafaf;
+}
+#app .main-wrapper .card-wrapper {
+  width: 100%;
+}
+#app .main-wrapper .card-wrapper .card {
+  margin-bottom: 2.5rem;
+  background-color: #fff;
+  overflow: hidden;
+  width: 100%;
+}
+#app .main-wrapper .card-wrapper .card .title {
+  font-size: 3rem;
+  line-height: 7.5rem;
+  padding-left: 2rem;
+  border-bottom: 1px solid #bdbdbd;
+}
+#app .main-wrapper .card-wrapper .card .msg-wrapper .item {
+  width: 25%;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  position: relative;
+}
+#app .main-wrapper .card-wrapper .card .msg-wrapper .item::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -1px;
+  background-color: #eee;
+  height: 10rem;
+  top: 2.5rem;
+  width: 2px;
+}
+#app .main-wrapper .card-wrapper .card .msg-wrapper .item img {
+  width: auto;
+  height: 3.75rem;
+  margin-bottom: 2rem;
+}
+#app .main-wrapper .card-wrapper .card .msg-wrapper .item .num {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.75rem;
+}

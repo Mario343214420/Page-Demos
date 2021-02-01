@@ -1,0 +1,165 @@
+i {
+  font-style: normal;
+}
+#app {
+  background-color: #f5f5f5;
+}
+#app header {
+  background-image: url("../images/mobile/top_bg.png");
+  -webkit-webkit-background-size: 18rem 8.7rem;
+  -moz-webkit-background-size: 18rem 8.7rem;
+  -ms-webkit-background-size: 18rem 8.7rem;
+  -o-webkit-background-size: 18rem 8.7rem;
+  -khtml-webkit-background-size: 18rem 8.7rem;
+  webkit-background-size: 18rem 8.7rem;
+  background-size: 18rem 8.7rem;
+  height: 8.7rem;
+}
+#app header .web-title {
+  padding-top: 0.9375rem;
+}
+#app header .web-title .emblem {
+  height: 1.4rem;
+  display: inline-block;
+  margin-left: 0.7rem;
+}
+#app header .web-title .title-text {
+  display: inline-block;
+}
+#app header .web-title .title-text > p {
+  font-size: 0.8125rem;
+  font-family: "SimSun";
+  font-weight: 700;
+  color: #fff;
+}
+#app header .web-title .title-text > p:nth-child(2) {
+  font-size: 0.4rem;
+  font-weight: 300;
+  font-family: Arial;
+}
+#app header .search-wrapper {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #fff;
+  margin: 1.6rem 0.7rem 0;
+  overflow: hidden;
+  font-size: 0.7rem;
+}
+#app header .search-wrapper .tab {
+  display: flex;
+  line-height: 1.875rem;
+  border-bottom: 1px solid #fb7772;
+  justify-content: space-between;
+}
+#app header .search-wrapper .tab > span {
+  -webkit-border-radius: 0 0 0 8px;
+  -moz-border-radius: 0 0 0 8px;
+  border-radius: 0 0 0 8px;
+  position: relative;
+  width: 50%;
+  text-align: center;
+}
+#app header .search-wrapper .tab > span:nth-child(1) {
+  -webkit-border-radius: 0 0 8px 0;
+  -moz-border-radius: 0 0 8px 0;
+  border-radius: 0 0 8px 0;
+}
+#app header .search-wrapper .tab > span.active {
+  background-color: #fb7772;
+  color: #fff;
+}
+#app header .search-wrapper .tab > span.active::before {
+  width: 1.6875rem;
+  height: 2rem;
+  content: '';
+  display: inline-block;
+  position: absolute;
+  background-image: url("../images/mobile/left_tip.png");
+  left: -1.4375rem;
+  background-position: 0 0;
+  -webkit-background-size: contain;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#app header .search-wrapper .tab > span.active::after {
+  width: 1.6875rem;
+  height: 2rem;
+  content: '';
+  display: inline-block;
+  position: absolute;
+  background-image: url("../images/mobile/right_tip.png");
+  background-repeat: no-repeat;
+  -webkit-background-size: contain;
+  background-size: contain;
+  background-position: 0 0;
+  right: -1.4375rem;
+}
+#app header .search-wrapper .search-input {
+  padding: 0 10px;
+}
+#app header .search-wrapper .search-input .search > input {
+  line-height: 2.34rem;
+  width: 100%;
+  outline: none;
+}
+#app main .card {
+  margin-top: 0.625rem;
+  background-color: #fff;
+}
+#app main .card .card-title {
+  line-height: 1.875rem;
+  font-size: 0.7rem;
+  border-bottom: 1px solid #f3f1f1;
+  position: relative;
+}
+#app main .card .card-title .active {
+  color: #fb7772;
+}
+#app main .card .card-title .bar {
+  position: absolute;
+  height: 0.1rem;
+  width: 1.4rem;
+  margin: 0 1.3rem;
+  background-color: #fb7772;
+  left: 0;
+  bottom: 0;
+  transition: left 0.4s ease-in-out;
+}
+#app main .card .card-banner .swiper-container .swiper-wrapper .swiper-slide {
+  text-align: center;
+}
+#app main .card .card-banner .swiper-container .swiper-wrapper .swiper-slide > img {
+  width: 2rem;
+  margin: 1rem 0 0.5rem;
+}
+#app main .card .card-banner .swiper-container .swiper-wrapper .swiper-slide > p {
+  text-align: center;
+  font-size: 0.6rem;
+  padding: 0 0.8rem 0.8rem;
+}
+#app main .card .card-content .card-item {
+  padding: 0.7rem;
+  border-bottom: 1px solid #f3f1f1;
+}
+#app main .card .card-content .card-item .item-title {
+  font-size: 0.7rem;
+  line-height: 1rem;
+}
+#app main .card .card-content .card-item .item-msg {
+  color: #9b9b9b;
+  font-size: 0.5rem;
+  line-height: 0.7rem;
+  margin-top: 0.5rem;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  -webkit-background-size: 15px 15px;
+  background-size: 15px 15px;
+}
+.swiper-button-prev {
+  left: 0px;
+}
+.swiper-button-next {
+  right: 0px;
+}

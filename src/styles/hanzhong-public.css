@@ -1,0 +1,126 @@
+#app {
+  background-color: #f6f6f6;
+}
+#app [flex] {
+  display: flex;
+}
+#app [flex~='align:center'] {
+  align-items: center;
+}
+#app .mt20px {
+  margin-top: 20px;
+}
+#app .board-wrapper {
+  width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 30px 0;
+}
+#app .board-wrapper .breadcrumb {
+  line-height: 40px;
+  height: 40px;
+  font-size: 16px;
+}
+#app .board-wrapper .breadcrumb i {
+  padding: 0 6px;
+}
+#app .board-wrapper .breadcrumb a {
+  color: #ea3e3e;
+}
+#app .board-wrapper .time-filter-bar {
+  border-left: 4px solid #ea3e3e;
+  background-color: #ebf7ff;
+  height: 80px;
+  line-height: 80px;
+  padding-left: 30px;
+}
+#app .board-wrapper .time-filter-bar .f-c {
+  color: #ea3e3e;
+}
+#app .board-wrapper .time-filter-bar .pd10px {
+  padding: 10px;
+}
+#app .board-wrapper .time-filter-bar .mlr20px {
+  margin: 0 20px;
+}
+#app .board-wrapper .charts-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+#app .board-wrapper .charts-wrapper #map {
+  height: 400px;
+}
+#app .board-wrapper .charts-wrapper #doc {
+  box-sizing: border-box;
+  padding-top: 20px;
+  height: 400px;
+}
+#app .board-wrapper .border-container {
+  box-sizing: border-box;
+  padding: 0 10px 10px;
+  border: 1px solid #ccc;
+}
+#app .board-wrapper .content-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+#app .board-wrapper .content-wrapper div ul {
+  padding: 10px 0;
+}
+#app .board-wrapper .content-wrapper div ul li {
+  line-height: 30px;
+  height: 30px;
+  position: relative;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+#app .board-wrapper .content-wrapper div ul li::before {
+  font-weight: 700;
+  content: '·';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#app .board-wrapper .content-wrapper div ul li .time {
+  color: #929292;
+}
+#app .board-wrapper .inner-title {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+}
+#app .board-wrapper .inner-title .more {
+  padding-right: 20px;
+  color: #adadad;
+}
+#app .board-wrapper .inner-title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 24px;
+  background-color: #ea3e3e;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#app .board-wrapper .inner-title::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: '';
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+#app .board-wrapper .inner-title i {
+  color: #ea3e3e;
+}

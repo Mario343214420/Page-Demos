@@ -5,13 +5,21 @@
   <title>Title</title>
   <style>
     :root{
-      --main-color: #eee
+      --main-color: #eee;
+      --screen-height: '100px';
+      --screen-width: '100px';
     }
     html{
       background-color: var(--main-color);
     }
+    .cube{
+      width: var(--screen-width);
+      height: var(--screen-height);
+      background-color: #000;
+    }
   </style>
 </head>
 <body>
+<div class="cube"></div>
 </body>
 </html>
