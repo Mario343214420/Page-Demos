@@ -35,19 +35,19 @@
 			environment: new echarts.graphic.LinearGradient(
         0, 0, 0, 1, [
           { // 配置为垂直渐变的背景
-            offset: 0, color: '#00aaff' // 天空颜色
+            offset: 0, color: '#e2f3f5' // 天空颜色
           }, {
-            offset: 0.7, color: '#998866' // 地面颜色
+            offset: 0.7, color: '#22d1ee' // 地面颜色
           }, {
-            offset: 1, color: '#998866' // 地面颜色
+            offset: 1, color: '#0e153a' // 地面颜色
           }
         ], false
       ),
 
 			label: { // 标签的相关设置
 				show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-//distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
-//formatter:, // 标签内容格式器
+        //distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
+        //formatter:, // 标签内容格式器
 				textStyle: { // 标签的字体样式
 					color: '#000', // 地图初始化区域字体颜色
 					fontSize: 8, // 字体大小
@@ -60,7 +60,7 @@
 				color: 'rgba(95,158,160,0.5)', // 地图板块的颜色
 				opacity: 1, // 图形的不透明度 [ default: 1 ]
 				borderWidth: 0.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-				borderColor: '#000' // 图形描边的颜色。[ default: #333 ]
+				borderColor: '#404040' // 图形描边的颜色。[ default: #333 ]
 			},
 
 			emphasis: { // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
@@ -83,17 +83,17 @@
 
 			regions: [
 				{ // 可对单个地图区域进行设置
-				name: '玉屏侗族自治县', // 所对应的地图区域的名称
-//regionHeight: '', // 区域的高度，可以设置不同的高度用来表达数据的大小。当 GeoJSON 为建筑的数据时，也可以通过这个值表示简直的高度。
-				itemStyle: { // 单个区域的样式设置
+          name: '区域1', // 所对应的地图区域的名称
+  //regionHeight: '', // 区域的高度，可以设置不同的高度用来表达数据的大小。当 GeoJSON 为建筑的数据时，也可以通过这个值表示简直的高度。
+          itemStyle: { // 单个区域的样式设置
 					color: '#00FF00',
 					opacity: 1,
 					borderWidth: 0.4,
 					borderColor: '#5F9EA0'
-				},
-			},
+          },
+        },
         {
-          name: '碧江区',
+          name: '区域2',
           itemStyle: {
             color: '#EEEE00',
             opacity: 1,
