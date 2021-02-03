@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地图下钻</title>
+  <style>
+      #main {
+          height: 100vh;
+          width: 100vw;
+      }
+  </style>
+</head>
+
+<body>
+<div id="main"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+<script>
+	let publicUrl = 'https://geo.datav.aliyun.com/areas_v2/bound/';
+	// let publicUrl = 'http://192.168.0.219:8000/';
+
+	async function initChart() {
+		let chart = echarts.init(document.getElementById('main'));
+		let alladcode = await getGeoJson('all.json')
+		let chinaGeoJson = await getGeoJson('100000_full.json')
+		initEcharts(chinaGeoJson, '全国', chart, alladcode)
+	}
+	initChart();
+
+	//echarts绘图
+	function initEcharts(geoJson, name, chart, alladcode) {
+		echarts.registerMap(name, geoJson);
+		let option = {
+			title: {
+				text: name,
+				left: 'center'
+			},
+			series: [{
+				type: 'map',
+				map: name,
+				itemStyle: {
+					areaColor: '#1890ff'
+				}
+			}]
+		}
+		chart.setOption(option)
+		// 解绑click事件
+		chart.off("click");
+		//给地图添加监听事件
+		chart.on('click', params => {
+			let clickRegionCode = alladcode.filter(areaJson => areaJson.name === params.name)[0].adcode;
+			getGeoJson(clickRegionCode + '_full.json').then(regionGeoJson => initEcharts(regionGeoJson, params.name, chart, alladcode))
+				.catch(err => {
+					getGeoJson('100000_full.json').then(
+						chinaGeoJson=>initEcharts(chinaGeoJson, '全国', chart, alladcode)
+					)
+
+				})
+		})
+	}
+	//获取地图json数据
+	async function getGeoJson(jsonName) {
+		return await $.get(publicUrl + jsonName)
+	}
+</script>
+</body>
+
+</html>
