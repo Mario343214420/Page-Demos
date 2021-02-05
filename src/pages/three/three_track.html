@@ -57,26 +57,55 @@
         ])
         const path = new THREE.Path(curve.getPoints( 50 ))
 		    const spacedPoints = path.getPoints( 50 );
-        /*
-        // 移动
+
 		    // 声明一个数组用于存储时间序列
 		    let arr = []
-		    for (let i = 0; i < 101; i++) {
+		    for (let i = 0; i < 51; i++) {
 			    arr.push(i)
 		    }
-        // 生成一个时间序列
+		    // 生成一个时间序列
 		    const times = new Float32Array(arr);
+		    let pointBuf = []
+		    spacedPoints.forEach(item=>pointBuf.push(item.x,item.y,0))
+        let keyframe = new THREE.KeyframeTrack('cube.position', times, new Float32Array(pointBuf))
+
+		    let duration = 50;
+        let clip = new THREE.AnimationClip('boxAnimation', duration, [
+			    keyframe
+		    ]);
+		    let mixer = new THREE.AnimationMixer(this.group);
+		    // 通过混合器获取AnimationAction对象，来进一步的对动画进行控制
+		    let action = mixer.clipAction(clip);
+
+		    /* 可以调节播放速度 默认值为 1 */
+		    action.timeScale = 40;
+
+		    /* 开始播放  setLoop()设置循环换模式和次数， play()播放动画*/
+		    action.setLoop(THREE.LoopPingPong, 4).play();
+		    let clock = new THREE.Clock();// three.js 时钟对象
+		    function update() {
+			    mixer.update(clock.getDelta());// 更新每一帧的混合器
+		    }
+		    /*
+        // 移动
+        // 声明一个数组用于存储时间序列
+        let arr = []
+        for (let i = 0; i < 101; i++) {
+          arr.push(i)
+        }
+        // 生成一个时间序列
+        const times = new Float32Array(arr);
         let pointBuf = []
-		    spacedPoints.forEach(item=>pointBuf.push(item.x, item.y,0))
+        spacedPoints.forEach(item=>pointBuf.push(item.x, item.y,0))
         let values = new Float32Array(pointBuf)
         // 创建一个帧动画的关键帧数据，曲线上的位置序列对应一个时间序列
-		    const posTrack = new THREE.KeyframeTrack('.position', times, values);
-		    let duration = 101;
-		    let clip = new THREE.AnimationClip("default", duration, [posTrack]);
-		    const mixer = new THREE.AnimationMixer(cube);
-		    let AnimationAction = mixer.clipAction(clip);
-		    AnimationAction.timeScale = 20;
-		    AnimationAction.play();
+        const posTrack = new THREE.KeyframeTrack('.position', times, values);
+        let duration = 101;
+        let clip = new THREE.AnimationClip("default", duration, [posTrack]);
+        const mixer = new THREE.AnimationMixer(cube);
+        let AnimationAction = mixer.clipAction(clip);
+        AnimationAction.timeScale = 20;
+        AnimationAction.play();
         */
 
         /*
@@ -93,6 +122,7 @@
 		    animate = () => {
           this.renderer.render(this.scene, this.camera)
           requestAnimationFrame(animate)
+			    update()
         }
 		    animate()
       }
