@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../../js/lib/three.min.js"></script>
+  <script src="../../js/lib/vue.min.js"></script>
+  <style>
+    #main{
+        width: 800px;
+        height: 600px;
+        border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+<div id="main"></div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+		    camera: null,
+		    scene: null,
+		    renderer: null,
+		    mesh: null,
+		    group: null
+      }
+    },
+    mounted() {
+    	this.init()
+    },
+    methods: {
+    	init() {
+		    const container = document.getElementById('main')
+		    this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
+		    this.camera.position.z = 10
+    		this.scene = new THREE.Scene()
+		    this.renderer = new THREE.WebGLRenderer({antialias: true})
+		    var curve = new THREE.CatmullRomCurve3([
+			    new THREE.Vector3(-6, 0, -5),
+			    new THREE.Vector3(-6, 0, -10),
+			    new THREE.Vector3(10, 0, -5),
+			    new THREE.Vector3(0, 0, 0),
+			    new THREE.Vector3(-6, 0, -3),
+			    new THREE.Vector3(-3, 0, -7),
+			    new THREE.Vector3(10, 0, -5)
+		    ], false/*是否闭合*/);
+
+
+		    var tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.1, 50, false);
+		    var tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false })
+		    var tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+
+
+		    var points = curve.getPoints(3000);
+
+		    var _material = new THREE.LineBasicMaterial({
+			    color: 0xff0000
+		    });
+		    var _geometry = new THREE.BufferGeometry();
+		    var _pointsBuf = [
+			    // 10,0,0,
+			    // 0,0,10,
+		    ]
+		    var _vertices = new Float32Array(_pointsBuf);
+		    _geometry.addAttribute('position', new THREE.BufferAttribute(_vertices, 3));
+		    var _lineA = new THREE.Line(_geometry, _material);
+		    var box = new THREE.BoxGeometry(5, 5, 5);
+		    var material = new THREE.MeshLambertMaterial({
+			    color: 0x0000ff
+		    }); //材质对象
+		    var mesh = new THREE.Mesh(box, material);
+		    this.scene.add(_lineA);
+
+		    let _i = 0;
+		    setTimeout(() => {
+			    setInterval(() => {
+				    _pointsBuf.push(points[_i].x, points[_i].y, points[_i].z)
+				    _vertices = new Float32Array(_pointsBuf)
+				    _geometry.addAttribute('position', new THREE.BufferAttribute(_vertices, 3));
+
+				    mesh.position.set(points[_i].x, points[_i].y, points[_i].z);
+				    mesh.lookAt(points[_i+1].x, points[_i+1].y, points[_i+1].z)
+				    _i++;
+				    if(_i>3000-1) _i=0
+            this.renderer.render(this.scene, this.camera)
+			    }, 10);
+		    }, 3000);
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/three.min.js"></script>
+  <style>
+    #main{
+        width: 800px;
+        height: 600px;
+        border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="main" ref="main"></div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+		    camera: null,
+		    scene: null,
+		    renderer: null,
+		    group: null
+      }
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+    	init () {
+		    const container = this.$refs.main
+		    this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
+		    this.scene = new THREE.Scene()
+		    this.group = new THREE.Group();
+
+		    const geometry = new THREE.BoxGeometry(5, 5, 5);
+
+		    const material1 = new THREE.MeshBasicMaterial({color: 0xff0000});
+		    const material2 = new THREE.MeshBasicMaterial({color: 0x00ff00});
+		    const material3 = new THREE.MeshBasicMaterial({color: 0x0000ff});
+
+		    const box1 = new THREE.Mesh(geometry, material1);
+		    const box2 = new THREE.Mesh(geometry, material2);
+		    const box3 = new THREE.Mesh(geometry, material3);
+		    box1.name = 'box1';
+		    box2.name = 'box2';
+		    box3.name = 'box3';
+
+		    this.group.add(box1, box2, box3);
+		    this.scene.add(this.group);
+
+		    /*1、创建帧动画序列 KeyframeTrack */
+		    let times = [0, 10];
+
+		    /* 离散的时间点序列 */
+		    let position_x = [0, 0, 0, 100, 0, 0];
+		    let position_y = [0, 0, 0, 0, 100, 0];
+		    let position_z = [0, 0, 0, 0, 0, 100];
+
+		    /* 在 times 时间执行的过渡值  Float32Array 类型 */
+		    let color_r = [1, 0, 0, 0, 1, 0];
+		    let color_g = [0, 1, 0, 0, 0, 1];
+		    let color_b = [0, 0, 1, 1, 0, 0];
+
+		    /* 创建 KeyframeTrack 对象 0 -- 10 之内位置变化*/
+		    let pos1_Keyframe = new THREE.KeyframeTrack('box1.position', times, position_x);
+		    let pos2_Keyframe = new THREE.KeyframeTrack('box2.position', times, position_y);
+		    let pos3_Keyframe = new THREE.KeyframeTrack('box3.position', times, position_z);
+
+		    /* 0 -- 10 之内颜色的变化 */
+		    let color1_Keyframe = new THREE.KeyframeTrack('box1.material.color', times, color_r);
+		    let color2_Keyframe = new THREE.KeyframeTrack('box2.material.color', times, color_g);
+		    let color3_Keyframe = new THREE.KeyframeTrack('box3.material.color', times, color_b);
+
+		    /* 2、 剪辑keyframeTrack 对象 */
+		    let duration = 10;
+
+		    /* 多个帧动画创建一个 剪辑对象 命名为 boxAnimation */
+		    let clip = new THREE.AnimationClip('boxAnimation', duration, [
+			    pos1_Keyframe,
+			    pos2_Keyframe,
+			    pos3_Keyframe,
+			    color1_Keyframe,
+			    color2_Keyframe,
+			    color3_Keyframe
+		    ]);
+
+		    let mixer = new THREE.AnimationMixer(this.group);
+        // 通过混合器获取AnimationAction对象，来进一步的对动画进行控制
+		    let action = mixer.clipAction(clip);
+
+		    /* 可以调节播放速度 默认值为 1 */
+		    action.timeScale = 5;
+
+		    /* 开始播放  setLoop()设置循环换模式和次数， play()播放动画*/
+		    action.setLoop(THREE.LoopPingPong, 4).play();
+		    let clock = new THREE.Clock();// three.js 时钟对象
+		    function update() {
+			    mixer.update(clock.getDelta());// 更新每一帧的混合器
+		    }
+
+		    this.camera.position.z = 20;
+		    this.renderer = new THREE.WebGLRenderer({antialias: true})
+		    this.renderer.setSize(container.clientWidth, container.clientHeight)
+		    container.appendChild(this.renderer.domElement)
+		    // this.renderer.render(this.scene, this.camera)
+		    animate = () => {
+			    this.renderer.render(this.scene, this.camera)
+			    requestAnimationFrame(animate)
+			    update()
+		    }
+		    animate()
+      }
+    }
+  })
+</script>
+</body>
+</html>

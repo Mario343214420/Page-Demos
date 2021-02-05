@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/three.min.js"></script>
+  <style>
+    .view{
+        width: 800px;
+        height: 600px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="view" ref="main"></div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+		    camera: null,
+		    scene: null,
+		    renderer: null,
+		    group: null
+      }
+    },
+    mounted() {
+    	this.init()
+    },
+    methods: {
+    	init() {
+    		const container = this.$refs.main
+		    this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000)
+        this.scene = new THREE.Scene()
+		    const geometry = new THREE.BoxGeometry();
+		    const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		    const cube = new THREE.Mesh( geometry, material );
+		    this.camera.position.z = 5;
+		    this.group = new THREE.Group()
+        this.group.add(cube)
+        this.scene.add(this.group)
+		    this.camera.position.z = 20;
+        this.renderer = new THREE.WebGLRenderer({antialias: true})
+		    this.renderer.setSize(container.clientWidth, container.clientHeight)
+		    container.appendChild(this.renderer.domElement)
+
+        // 轨迹
+        const curve = new THREE.CatmullRomCurve3 ([
+	        new THREE.Vector3( -10, 0, 10 ),
+	        new THREE.Vector3( -5, 5, 5 ),
+	        new THREE.Vector3( 0, 0, 0 ),
+	        new THREE.Vector3( 5, -5, 5 ), //设置线经过的坐标
+	        new THREE.Vector3( 10, 0, 10 )
+        ])
+        const path = new THREE.Path(curve.getPoints( 50 ))
+		    const spacedPoints = path.getPoints( 50 );
+        /*
+        // 移动
+		    // 声明一个数组用于存储时间序列
+		    let arr = []
+		    for (let i = 0; i < 101; i++) {
+			    arr.push(i)
+		    }
+        // 生成一个时间序列
+		    const times = new Float32Array(arr);
+        let pointBuf = []
+		    spacedPoints.forEach(item=>pointBuf.push(item.x, item.y,0))
+        let values = new Float32Array(pointBuf)
+        // 创建一个帧动画的关键帧数据，曲线上的位置序列对应一个时间序列
+		    const posTrack = new THREE.KeyframeTrack('.position', times, values);
+		    let duration = 101;
+		    let clip = new THREE.AnimationClip("default", duration, [posTrack]);
+		    const mixer = new THREE.AnimationMixer(cube);
+		    let AnimationAction = mixer.clipAction(clip);
+		    AnimationAction.timeScale = 20;
+		    AnimationAction.play();
+        */
+
+        /*
+        // 关键帧
+        var times = [0, 10];
+        var pos_Keyframe = new THREE.KeyframeTrack('box.position', times, position_x);
+
+        */
+
+		    const geo = new THREE.Geometry().setFromPoints( spacedPoints )
+		    const mat = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+		    const splineObject = new THREE.Line( geo, mat );
+		    this.scene.add(splineObject)
+		    animate = () => {
+          this.renderer.render(this.scene, this.camera)
+          requestAnimationFrame(animate)
+        }
+		    animate()
+      }
+    }
+  })
+</script>
+</body>
+</html>
