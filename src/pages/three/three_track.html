@@ -121,6 +121,7 @@
 		    this.scene.add(splineObject)
 		    animate = () => {
           this.renderer.render(this.scene, this.camera)
+			    cube.rotation.y += 0.1
           requestAnimationFrame(animate)
 			    update()
         }

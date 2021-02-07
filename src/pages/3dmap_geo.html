@@ -27,7 +27,6 @@
 		series: [{
 			type: 'map3D',
 			symbolSize: 50,
-			data: [[-1, -1, -1], [0, 0, 0], [1, 1, 1]],
 			name: 'map3D', // 系列名称
 			map: 'xuzhou', // 地图类型。echarts-gl 中使用的地图类型同 geo 组件相同(ECharts 中提供了两种格式的地图数据，一种是可以直接 script 标签引入的 js 文件，引入后会自动注册地图名字和数据。还有一种是 JSON 文件，需要通过 AJAX 异步加载后手动注册。)
 
@@ -46,11 +45,11 @@
 
 			label: { // 标签的相关设置
 				show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-        //distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
-        //formatter:, // 标签内容格式器
+        // distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
+        // formatter:, // 标签内容格式器
 				textStyle: { // 标签的字体样式
 					color: '#000', // 地图初始化区域字体颜色
-					fontSize: 8, // 字体大小
+					fontSize: 14, // 字体大小
 					opacity: 1, // 字体透明度
 					backgroundColor: 'rgba(0,23,11,0)' // 字体背景色
 				},
@@ -58,7 +57,7 @@
 
 			itemStyle: { // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
 				color: 'rgba(95,158,160,0.5)', // 地图板块的颜色
-				opacity: 1, // 图形的不透明度 [ default: 1 ]
+				opacity: 0.5, // 图形的不透明度 [ default: 1 ]
 				borderWidth: 0.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
 				borderColor: '#404040' // 图形描边的颜色。[ default: #333 ]
 			},
@@ -81,21 +80,24 @@
 				color: '#aaa' // 地面颜色。[ default: '#aaa' ]
 			},
 
-			regions: [
-				{ // 可对单个地图区域进行设置
-          name: '区域1', // 所对应的地图区域的名称
-  //regionHeight: '', // 区域的高度，可以设置不同的高度用来表达数据的大小。当 GeoJSON 为建筑的数据时，也可以通过这个值表示简直的高度。
+			data: [
+				{ // 可对单个地图区域进行设置（官方文档为geo3D. regions设置）
+          name: '淮海烈士纪念塔',
+          // 所对应的地图区域的名称
+          // regionHeight: '',
+          // 区域的高度，可以设置不同的高度用来表达数据的大小。当 GeoJSON 为建筑的数据时，也可以通过这个值表示简直的高度。
+
           itemStyle: { // 单个区域的样式设置
-					color: '#00FF00',
-					opacity: 1,
-					borderWidth: 0.4,
-					borderColor: '#5F9EA0'
+          	color: '#ffffff',
+            opacity: 0.6,
+            borderWidth: 0.4,
+            borderColor: '#333'
           },
         },
         {
-          name: '区域2',
+          name: '淮海科技园2',
           itemStyle: {
-            color: '#EEEE00',
+            color: '#64b9ff',
             opacity: 1,
             borderWidth: 0.4,
             borderColor: '#5F9EA0'
@@ -104,6 +106,9 @@
 			]
 		}]
   })
+	chart.on('click', function (params) {
+		console.log(params);
+	});
 </script>
 </body>
 </html>
