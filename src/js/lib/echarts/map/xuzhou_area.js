@@ -318,17 +318,6 @@ let data =
 							]
 						]
 					}
-				},
-				{
-					"type": "Feature",
-					"properties": {"name": "金蝶"},
-					"geometry": {
-						"type": "Polygon",
-						"coordinates": [
-							[[117.19712734222412,
-								34.22713221745561]]
-						]
-					}
 				}
 			]
 		}
