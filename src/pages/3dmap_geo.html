@@ -23,15 +23,15 @@
     	name: '淮海烈士纪念塔',
       value: [
 	      117.19180099563599,
-	      34.235972331687666,
+	      34.232972331687666,
         600
       ]
     },
     {
     	name: '小区' ,
       value: [
-	      117.196766998291,
-	      34.23678304606286,
+	      117.197766998291,
+	      34.23378304606286,
         500
       ]
     },
@@ -39,7 +39,7 @@
     	name: '淮海科技园1' ,
       value: [
       	117.19447546386719,
-        34.22834675427225,
+        34.22634675427225,
         500
       ]
     },
@@ -52,7 +52,8 @@
       ]
     }
   ]
-  let coord = {
+
+  /*let coord = {
 		'淮海烈士纪念塔': [
 			117.19350099563599,
 			34.231372331687666
@@ -87,22 +88,25 @@
 			name: '淮海科技园2' ,
 			value: 100
 		}
-	]
+	]*/
+
 	const chart = echarts.init(document.getElementById('main'))
 	chart.setOption({
     geo3D: {
 			show: false,
-      map: 'xuzhou'
+      map: 'xuzhou',
+      boxHeight: 2,
+	    regionHeight: 2
     },
-		xAxis3D: {
-			show: true
-    },
-		yAxis3D: {
-			show: true
-    },
-		zAxis3D: {
-			show: true
-    },
+		// xAxis3D: {
+		// 	show: true
+    // },
+		// yAxis3D: {
+		// 	show: true
+    // },
+		// zAxis3D: {
+		// 	show: true
+    // },
     tooltip: {},
 		series: [
 			{
@@ -166,12 +170,12 @@
         },
 
         itemStyle: { // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-          color: 'rgba(150,237,137,0.8)', // 地图板块的颜色
+          color: 'rgba(150,240,140,0.4)', // 地图板块的颜色
           opacity: 0.5, // 图形的不透明度 [ default: 1 ]
           borderWidth: 0.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
           borderColor: '#404040' // 图形描边的颜色。[ default: #333 ]
         },
-        emphasis: { // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
+        /*emphasis: { // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
           label: { // label高亮时的配置
             show: true,
             textStyle: {
@@ -183,13 +187,65 @@
             color: '#e1d0b3', // 高亮时地图板块颜色改变
 	          opacity: 1
           }
-        },
+        },*/
 
         groundPlane: { // 地面可以让整个组件有个“摆放”的地方，从而使整个场景看起来更真实，更有模型感。
           show: false, // 是否显示地面。[ default: false ]
           color: '#aaa' // 地面颜色。[ default: '#aaa' ]
         }
-      }
+      },
+			{
+				type: 'lines3D',
+
+				coordinateSystem: 'geo3D',
+				silent: true,
+				effect: {
+					show: true,
+					trailColor: '#f61717',
+					trailWidth: 4,
+					trailOpacity: 0.8,
+					trailLength: 8,
+					// period: 20,
+					constantSpeed: 500
+				},
+				// 是否是多段线, 设置后， 曲线变换为直线
+				polyline: true,
+        // 混合模式
+				// blendMode: 'lighter',
+				blendMode: 'source-over',
+				lineStyle: {
+					width: 4,
+					opacity: 1,
+          color: 'rgba(0,0,0,0)'
+				},
+				data: [
+					{
+						coords: [
+							[117.19180099563599,34.232972331687666],
+							[117.197766998291,34.23378304606286],
+							[117.19967673110962,34.226531997090315],
+              [117.19447546386719,34.22634675427225],
+							[117.19180099563599,34.232972331687666]
+						],
+						// 数据值
+						value: 10,
+						// 数据名
+						name: 'foo',
+						// 线条样式
+						lineStyle: {}
+					}
+				]
+				/*data: [
+					[
+						[117.19180099563599,34.232972331687666],
+						[117.197766998291,34.23378304606286]
+					],
+					[
+						[117.19447546386719,34.22634675427225],
+						[117.197766998291,34.23378304606286]
+					]
+				]*/
+			}
     ]
   })
 	chart.on('click', function (params) {
