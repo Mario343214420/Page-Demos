@@ -31,10 +31,10 @@
 	// 	console.log(res);
 	// })
   async function getData (){
-	  console.log(1);
+	  console.log('异步事件开始执行');
 	  await funGet('/test').then((res) => {
 		  console.log(res);
-		  setTimeout(()=>console.log(2),1000)
+		  setTimeout(()=>console.log('完成异步之后延迟一秒执行'),1000)
 	  })
   }
 	getData().then(()=>console.log('结束'))
