@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <style>
+    .btn {
+      background-color: #00bff7;
+      color: #fff;
+      cursor: pointer;
+      padding: 4px 10px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="handle-wrapper">
+    <input type="text" placeholder="" v-model="addCode">
+    <span class="btn" @click="add" >添加</span>
+  </div>
+  <div class="list">
+    <ul>
+      <li v-for="(item, index) in list" :key="index">
+        <span><i>代码：</i><i>{{item.id}}</i></span>
+        <span><i>名称：</i><i>{{item.name}}</i></span>
+        <span class="btn" @click="del.call(this,index)">清除</span>
+      </li>
+    </ul>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+		    addCode: 519300,
+    		list: [
+          { id: 519300, name: '沪深300'}
+        ]
+      }
+    },
+    methods: {
+	    add(p){
+		    console.log(p)
+        this.getMsg(this.addCode)
+	    },
+	    del(index){
+		    console.log(index)
+		    this.list.splice(index, 1);
+	    },
+      getMsg(id){
+	    	let str = `http://fund.eastmoney.com/pingzhongdata/519300.js:fund.eastmoney.com/pingzhongdata/${id}.jsq=javascript&count=1`
+	      axios({
+          methods: 'get',
+          url: str,
+		      headers: {
+			      'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+		      .then(function (response) {
+			      console.log(response);
+		      })
+		      .catch(function (error) {
+			      console.log(error);
+		      });
+      },
+    }
+  })
+</script>
+</body>
+</html>

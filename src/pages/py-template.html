@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <script src="*******"></script>
+</head>
+<body>
+<div id="app">
+  <div class="main-container" ref="base"></div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+    	return {
+
+      }
+    },
+    mounted(){
+    	this.addChart()
+    },
+    methods: {
+    	addChart() {
+    		let div = document.createElement('div')
+    		this.$refs.base.appendChild(div)
+		    div.style.height = '600px'
+		    div.style.width = '800px'
+		    var myChart = echarts.init(div);
+
+		    // 指定图表的配置项和数据
+		    var option = {
+			    xAxis: {
+				    type: 'category',
+				    data: ['9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00']
+			    },
+			    yAxis: {
+				    type: 'value'
+			    },
+			    series: [
+			    	{
+              data: [150, 230, 224, 218, 135, 147, 260],
+              type: 'line'
+            },
+			    	{
+              data: [158, 240, 254, 228, 165, 137, 240],
+              type: 'line'
+            }
+			    ]
+		    };
+		    // 使用刚指定的配置项和数据显示图表。
+		    myChart.setOption(option);
+      }
+    }
+  })
+</script>
+</body>
+</html>

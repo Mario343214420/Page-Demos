@@ -20,9 +20,15 @@
     }
   </style>
   <script>
-	  (function(){window.BMAP_PROTOCOL = "https"; window.BMapGL_loadScriptTime = (new Date).getTime(); document.write('<script type="text/javascript" src="https://api.map.baidu.com/getscript?type=webgl&v=1.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ&services=&t=20201012111554"></script>');document.write('<link rel="stylesheet" type="text/css" href="https://api.map.baidu.com/res/webgl/10/bmap.css"/>');})();
+  (function(){
+	  window.BMAP_PROTOCOL = "https";
+	  window.BMapGL_loadScriptTime = (new Date).getTime();
+	  var script_src = "https://api.map.baidu.com/getscript?type=webgl&v=1.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ&services=&t=20201012111554"
+	  document.write(`<script type='text/javascript' src='${script_src}'><\/script>`);
+    document.write(`<link rel='stylesheet' type='text/css' href='https://api.map.baidu.com/res/webgl/10/bmap.css'/>`);
+  })();
   </script>
-  <script src="https://mapv.baidu.com/build/mapv.min.js"></script>
+  <script src='https://mapv.baidu.com/build/mapv.min.js"></script>
   <script>
 	  /**
 	   * 初始化地图
