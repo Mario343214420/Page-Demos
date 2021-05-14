@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/lib/three/build/three.min.js"></script>
+    <script src="../js/lib/three/js/controls/OrbitControls.js"></script>
+    <script src="../js/lib/axios.min.js"></script>
+    <style>
+        html, body, div {
+            padding: 0;
+            margin: 0;
+            display: block;
+        }
+        canvas{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div id="base"></div>
+<script>
+    axios.get('http://192.168.1.17:8000/json/tunnel.json')
+        .then(function (response) {
+            let geoList = response.data.features
+            // let x = response.data.features[0].geometry.coordinates[0] // x
+            // let y = response.data.features[0].geometry.coordinates[1] // y
+            console.log(geoList);
+            initThree(geoList)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    function initThree(list) {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+        const renderer = new THREE.WebGLRenderer();
+        // const geometry = new THREE.BoxGeometry();
+        // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        // const cube = new THREE.Mesh( geometry, material );
+        // scene.add( cube );
+        const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+        const materialLine = new THREE.LineBasicMaterial({
+            color: 0x00ff00
+        });
+        const points = [];
+        // points.push( new THREE.Vector3( 1, 2, 0 ) );
+        // points.push( new THREE.Vector3( 0, 1, 0 ) );
+        // points.push( new THREE.Vector3( 1, 1, 0 ) );
+        list.forEach(item => {
+            let coordinates = item.geometry.coordinates
+            let lineList = []
+            coordinates.forEach(c => {
+                lineList.push( new THREE.Vector3( (c[0] / 1000) - 4, (c[1] / 1000) - 3, 0 ) );
+            })
+            const geometryLine = new THREE.BufferGeometry().setFromPoints( lineList );
+            const line = new THREE.Line( geometryLine, materialLine );
+            scene.add( line );
+            // points.push(lineList)
+        })
+        console.log(points);
+        // const geometryLine = new THREE.BufferGeometry().setFromPoints( points );
+        // const line = new THREE.Line( geometryLine, materialLine );
+        // scene.add( line );
+
+        camera.position.z = 5;
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        function animate() {
+            requestAnimationFrame( animate );
+            controls.update();
+            renderer.render( scene, camera );
+        }
+        animate();
+    }
+</script>
+</body>
+</html>

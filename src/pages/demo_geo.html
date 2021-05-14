@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- <script src="../js/lib/vue.min.js"></script>-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.1/echarts.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts-gl/2.0.0/echarts-gl.min.js"></script>
+    <!--<script src="../js/lib/echarts/map/xuzhou_area.js"></script>-->
+    <script src="../js/lib/echarts/map/demo_area_full.js"></script>
+</head>
+<style>
+    #main {
+        width: 1000px;
+        height: 600px;
+        margin: 40px auto;
+    }
+    .drawer {
+      border: 1px solid #000;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      overflow: hidden;
+      background-color: #eee;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 4px #000;
+    }
+    .inner {
+      position: relative;
+    }
+    .inner .close {
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      color: #fff;
+      background-color: #ff4d51;
+      display: block;
+      width: 22px;
+      height: 22px;
+      text-align: center;
+      line-height: 22px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .drawer img {
+      display: block;
+    }
+</style>
+<body>
+<div id="app">
+  <div id="main" ref="main"></div>
+  <div class="drawer" id="drawer" v-show="flag">
+    <div class="inner">
+      <span class="close" ref="close">×</span>
+      <img src="../images/kuangdao.jpg" alt="">
+    </div>
+  </div>
+</div>
+<script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          flag: false
+        }
+      },
+      mounted() {
+        this.renderChart()
+        this.$refs.close.addEventListener('click', () => {
+          this.flag = false
+        })
+      },
+      methods: {
+        renderChart() {
+          const drawer = document.getElementById('drawer')
+          const chart = echarts.init(document.getElementById('main'))
+          chart.setOption({
+            geo3D: {
+              show: false,
+              map: 'demo',
+            },
+            tooltip: {},
+            series: [
+              {
+                shading: 'lambert', // 三维地图中三维图形的着色效果
+                coordinateSystem: 'geo3D', // 设置基准点参考系
+                type: 'map3D',
+                grid3DIndex: 0,
+                symbolSize: 50,
+                name: 'map3D', // 系列名称
+                map: 'demo', // 地图类型。echarts-gl 中使用的地图类型同 geo 组件相同(ECharts 中提供了两种格式的地图数据，一种是可以直接 script 标签引入的 js 文件，引入后会自动注册地图名字和数据。还有一种是 JSON 文件，需要通过 AJAX 异步加载后手动注册。)
+                // 环境贴图，支持純颜色值，渐变色，全景贴图的 url。默认为 'auto'，在配置有 light.ambientCubemap.texture 的时候会使用该纹理作为环境贴图。否则则不显示环境贴图。
+                label: { // 标签的相关设置
+                  show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
+                  // distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
+                  // formatter:, // 标签内容格式器
+                  textStyle: { // 标签的字体样式
+                    color: '#000', // 地图初始化区域字体颜色
+                    fontSize: 14, // 字体大小
+                    opacity: 1, // 字体透明度
+                    backgroundColor: 'rgba(0,23,11,0)' // 字体背景色
+                  },
+                },
+                regionHeight: 0.5,
+                itemStyle: { // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
+                  color: 'rgba(150,240,140,0.4)', // 地图板块的颜色
+                  opacity: 0.5, // 图形的不透明度 [ default: 1 ]
+                  borderWidth: 0.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+                  borderColor: '#404040' // 图形描边的颜色。[ default: #333 ]
+                },
+                groundPlane: { // 地面可以让整个组件有个“摆放”的地方，从而使整个场景看起来更真实，更有模型感。
+                  show: false, // 是否显示地面。[ default: false ]
+                  color: '#aaa' // 地面颜色。[ default: '#aaa' ]
+                }
+              }
+            ]
+          })
+          chart.on('click', params => {
+            this.flag = true
+              console.log(params);
+          });
+        }
+      }
+    })
+</script>
+</body>
+</html>

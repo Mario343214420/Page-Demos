@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+<script>
+    axios.get('http://192.168.2.17:8000/full.json')
+        .then(function (response) {
+            // console.log(response);
+            let base = response.data.features
+            let arr = [];
+            base.forEach(item => arr.push({name:item.attributes.Layer, geometry: item.geometry.paths}));
+            console.log(arr);
+            let list = []
+            arr.forEach(item => list.push(item.geometry))
+            console.log(list.flat().flat());
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+</script>
+</body>
+</html>

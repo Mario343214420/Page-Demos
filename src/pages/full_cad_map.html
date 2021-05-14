@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>MyMap</title>
+<body>
+<div id="main" style="height: 400px"></div>
+<script src="../js/lib/echarts/echarts.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts-gl/2.0.0/echarts-gl.min.js"></script>
+<script src="../js/lib/jquery.min.js"></script>
+<script type="text/javascript">
+    $.get("http://192.168.2.17:8000/煤巷_LineString.json",function(map){
+        var myChart = echarts.init(document.getElementById('main'));
+        echarts.registerMap("煤巷_LineString",map);
+        var option = {
+            series : [ {
+                map : "煤巷_LineString",
+                type : "linesGl",
+                aspectScale: 1.0 //长宽比. 默认是: 0.75，所以地图变形
+            } ]
+        };
+        myChart.setOption(option);
+    });
+</script>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body, div {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #app, .container{
+            width: 100%;
+            height: 100%;
+        }
+        .container {
+            /*height: 800px;*/
+            /*width: 1000px;*/
+            margin: 0 auto;
+        }
+    </style>
+    <script src="../js/lib/vue.min.js"></script>
+    <script src="../js/lib/three/build/three.min.js"></script>
+    <script src="../js/lib/three/js/loaders/OBJLoader.js"></script>
+    <script src="../js/lib/three/js/loaders/MTLLoader.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
+    <!--  <script src="../js/lib/three/js/lines/LineMaterial.js"></script>-->
+    <!--  <script src="../js/lib/three/js/lines/Wireframe.js"></script>-->
+    <!--  <script src="../js/lib/three/js/lines/LineSegmentsGeometry.js"></script>-->
+    <!--  <script src="../js/lib/three/js/lines/WireframeGeometry2.js"></script>-->
+</head>
+<body>
+<div id="app">
+    <div class="container" ref="container"></div>
+</div>
+<script type="module">
+
+    new Vue({
+        el: '#app',
+        mounted() {
+            this.render()
+        },
+        methods:{
+            render() {
+                const w = this.$refs.container.clientWidth
+                const h = this.$refs.container.clientHeight
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera( 75, w / h, 0.1, 2000 );
+                camera.position.y = 350
+                camera.position.x = 200
+                camera.position.z = 1000;
+                const renderer = new THREE.WebGLRenderer();
+                renderer.setSize( w, h );
+                this.$refs.container.appendChild( renderer.domElement );
+                const light = new THREE.AmbientLight( 0x404040 );
+                scene.add( light );
+                const objLoader = new THREE.OBJLoader();
+                let group = new THREE.Group()
+                objLoader.setPath('../model/')
+                objLoader.load('Rmk3.obj',obj => {
+                    /*for (let i = 0; i < 5; i++){
+                        let buildList = obj.children
+                        buildList.forEach((item) => {
+                            item.material.castShadow = true
+                            item.material.color = new THREE.Color(0x00aae7)
+                            item.material.blendSrc = new THREE.Color(100)
+                            item.material.blending = THREE.AdditiveBlending
+                            let geometry = this.createPointsCloud(item.geometry);
+                            geometry.position.z = i * 620
+                            scene.add(geometry);
+                        })
+                        let build = obj.clone()
+                        build.position.z = i * 620
+                        scene.add(build)
+                    }*/
+                    let buildList = obj.children
+                    buildList.forEach((item) => {
+                        item.material.castShadow = true
+                        item.material.color = new THREE.Color(0x00aae7)
+                        item.material.blendSrc = new THREE.Color(100)
+                        item.material.blending = THREE.AdditiveBlending
+                        let geometry = this.createPointsCloud(item.geometry);
+                        group.add(geometry);
+                    })
+                    let build = obj.clone()
+                    build.position.z = 0
+                    build.position.x = 0
+                    build.position.y = 0
+                    group.add(build)
+                    scene.add(group)
+                })
+                const animate = function () {
+                    // controls.update()
+                    group.rotation.y += 0.01
+                    requestAnimationFrame( animate );
+                    renderer.render( scene, camera );
+                };
+
+                animate();
+            },
+            generateSprite() {
+                var canvas = document.createElement('canvas');
+                canvas.width = 64;
+                canvas.height = 64;
+                var context = canvas.getContext('2d');
+                var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+                gradient.addColorStop(0, 'rgba(255,255,255,0.4)');
+                gradient.addColorStop(0.2, 'rgba(0,255,255,0.4)');
+                gradient.addColorStop(0.4, 'rgba(0,0,64,0.4)');
+                gradient.addColorStop(1, 'rgba(0,0,0,0.1)');
+                context.fillStyle = gradient;
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                var texture = new THREE.Texture(canvas);
+                texture.needsUpdate = true;
+                return texture;
+            },
+            createPointsCloud(geo) {
+                let spriteMaterial = new THREE.PointsMaterial({
+                    color: 0xffffff,
+                    size: 10,
+                    transparent: true,
+                    map: this.generateSprite(),
+                    blending: THREE.AdditiveBlending,
+                    depthTest: false,
+                });
+                let points = new THREE.Points(geo, spriteMaterial);
+                return points;
+            }
+        }
+    })
+</script>
+</body>
+</html>

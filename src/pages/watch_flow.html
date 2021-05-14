@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body, #app{
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        #app{
+            position: relative;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        i{
+            font-style: normal;
+        }
+        .top-title{
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            border-bottom: 1px solid #d5d5d5;
+        }
+        .main-wrapper{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 1200px;
+            height: 600px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 4px #333;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-wrapper{
+            flex: 1;
+        }
+        .footer{
+            background-color: #f5f5f5;
+            padding: 10px 20px;
+            border-top: 1px solid #d5d5d5;
+            display: flex;
+            justify-content: space-between;
+        }
+        [class$="-hbtn"]{
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 3px 8px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: ease-in-out .4s;
+            user-select:none;
+            border: 1px solid #8d8d8d;
+        }
+        [class$="-hbtn"]:active{
+            background-color: #bbbbbb;
+        }
+        .iconfont{
+            cursor: pointer;
+            user-select:none;
+        }
+        .start-hbtn{
+
+        }
+        .e-stop-hbtn{
+
+        }
+        .stop-hbtn{
+
+        }
+        .video-wrapper{
+            display: flex;
+            justify-content: space-around;
+        }
+        .video-wrapper .left, .video-wrapper .right {
+            width: 49%;
+            height: 100%;
+        }
+        .video-wrapper .right {
+            position: relative;
+        }
+        .video-wrapper .right .square {
+            position: absolute;
+            width: 100px;
+            height: 70px;
+            border: 4px solid #f33535;
+        }
+        .video-wrapper .right .tip {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 130px;
+            height: 42px;
+            padding-left: 10px;
+            border: 4px solid #f33535;
+        }
+        .video-wrapper .left video, .video-wrapper .right video{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2453352_v0ichig2r6h.css">
+    <!--<script src="../js/lib/vue.min.js"></script>-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+<div class="main-wrapper" ref="outer">
+    <div class="top-title">
+        <span>
+            <i>输运机自动调速系统</i>
+        </span>
+        <span>
+            <i class="iconfont icon-zuixiaohua" @click=""></i>
+            <i class="iconfont icon-zuidahua" @click="handleWindow"></i>
+            <i class="iconfont icon-guanbi"></i>
+        </span>
+    </div>
+    <div class="video-wrapper">
+        <div class="left">
+            <video ref="v1" muted autoplay="autoplay" loop="loop">
+                <source src="../video/flow.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="right">
+            <div class="square" ref="sq" :style="`top: ${sqPos.y}%; left: ${sqPos.x}%;`"></div>
+            <div class="tip">
+                <div><i>速率：</i><i>{{speed}}m/s</i></div>
+                <div><i>宽度：</i>{{w}}m</div>
+            </div>
+            <video ref="v2" muted autoplay="autoplay" loop="loop">
+                <source src="../video/flow.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+    <div class="footer">
+        <span><i>显示运转参数</i></span>
+        <span><i class="start-hbtn" @click="start">启动</i><i class="stop-hbtn" @click="stop">停止</i><i class="e-stop-hbtn" @click="stopQuick">急停</i></span>
+    </div>
+</div>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                flag: true,
+                speed: 3,
+                w: 0.8,
+                run: true,
+                sqPos: {
+                    x: 44, y: 40
+                },
+                startFlag: true
+            }
+        },
+        mounted() {
+            setInterval(()=>{
+                if(this.startFlag) {
+                    let a = Math.random() * 0.1
+                    let b = Math.random() * 0.8
+                    this.speed = 3 + a.toFixed(2)
+                    this.w = b.toFixed(2)
+                    this.sqPos.x = 44 + Math.random()
+                    this.sqPos.y = 40 + Math.random()
+                    this.$refs.sq.style.transform = `scale(${1 + Math.random()*0.2})`
+                }
+            },300)
+        },
+        methods: {
+            stopQuick() {
+                this.startFlag = false
+                this.$refs.v1.pause()
+                this.$refs.v2.pause()
+            },
+            stop() {
+                this.startFlag = false
+                // this.$refs.v1.pause()
+                this.$refs.v1.playbackRate = 0.7
+                this.$refs.v2.playbackRate = 0.7
+                setTimeout(()=>{
+                    this.$refs.v1.playbackRate = 0.3
+                    this.$refs.v2.playbackRate = 0.3
+                        setTimeout(()=>{
+                            this.$refs.v1.pause()
+                            this.$refs.v2.pause()
+                        })
+                },1000)
+            },
+            start() {
+                this.$refs.v1.playbackRate = 1
+                this.$refs.v2.playbackRate = 1
+                this.startFlag = true
+                this.$refs.v1.play()
+                this.$refs.v2.play()
+            },
+            handleWindow(e) {
+                if (this.flag){
+                    this.$refs.outer.style.width = '100%'
+                    this.$refs.outer.style.height = '100%'
+                }else{
+                    this.$refs.outer.style.width = '1200px'
+                    this.$refs.outer.style.height = '600px'
+                }
+                this.flag = !this.flag
+            }
+        }
+    })
+</script>
+</body>
+</html>
