@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="../../js/lib/mock.js"></script>
+</head>
+<body>
+<script>
+  Mock.mock('/test', 'get', () => 'ok')
+  Mock.setup({
+    timeout: '1000'
+  })
+  // axios.get('/test').then(res => {
+  //   console.log(res)
+  // })
+  // .catch(error => {
+  //   console.log(error);
+  // });
+  async function get(url) {
+    // await axios.get(url).then(res => {
+    //   console.log(res)
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // });
+    try {
+      return await axios.get(url)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+  get('/test').then(v => console.log('end', v))
+</script>
+</body>
+</html>

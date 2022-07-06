@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../js/lib/mock.js"></script>
+</head>
+<body>
+<script>
+    Mock.mock('/test', 'get', () => 'ok')
+    Mock.setup({
+        timeout: '1000'
+    })
+    let fun = (v) => {
+        let p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (v) {
+                    resolve(v)
+                } else {
+                    reject('err',v)
+                }
+            },2000)
+        })
+        return p
+    }
+    fun(4).then((res,rej) => {
+        console.log(res)
+    })
+    // console.log(v);
+    function getJSON (url) {
+        /*const promise = new Promise(function(resolve, reject){
+            const handler = function(){
+                console.log(this);
+                if(this.readyState !== 4) {
+                    return ({t: this, msg: '状态码不为4'})
+                }
+                /!*else if () {
+
+                } else if () {
+
+                }*!/
+                if ( this.status === 200){
+                    resolve(this.response);
+                } else {
+                    reject(new Error(this.statusText));
+                }
+            }
+            const client = new XMLHttpRequest();
+            client.open("GET", url);
+            client.onreadystatechange = handler;
+            // client.responseType = "json";
+            client.setRequestHeader("Accept", "application/json");
+            client.send();
+        })*/
+        return new Promise((resolve, reject) => {
+            const handler = () => {
+                // console.log(params)
+                if(this.readyState !== 4) {
+                    return ({t: this, msg: '状态码不为4'})
+                }
+                /*else if () {
+
+                } else if () {
+
+                }*/
+                if ( this.status === 200){
+                    resolve(this.response);
+                } else {
+                    reject(new Error(this.statusText));
+                }
+            }
+            const client = new XMLHttpRequest();
+            client.open("GET", url);
+            // handler.bind(client)
+            client.onreadystatechange = handler.bind(client);
+            client.responseType = "json";
+            client.setRequestHeader("Accept", "application/json");
+            client.send();
+        })
+        return promise
+    }
+
+    getJSON("/test").then(function(json) {
+        console.log('Contents: ' + json);
+    }, function(error) {
+        console.error('出错了', error);
+    });
+
+
+    /*
+    // 假设遇到一群人在围观
+    // 交通事故-未来潜力才能-3年内出现-机会运气会在没有准备情况下出现，建议多尝试
+    // 情侣争吵-三年后出现-注意自己感兴趣的东西-希望你不要灰心，要稳住当下
+    // 命案-需要时间，只有不停沉淀，积累，会出现很大转变，建议好好学习，十年才会出现较大转变
+    // 超市促销-典型的大器晚成，努力吧。
+    */
+    /*
+    // 在家发生以下五件事
+    // 婴儿在哭 爱情
+    // 突然想去上厕所 自己
+    // 电话铃声响了 工作
+    // 门铃响了 朋友
+    // 你发现浴室水龙头没关 钱
+    */
+
+</script>
+</body>
+</html>

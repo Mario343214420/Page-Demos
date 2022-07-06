@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <script src="../js/lib/vue.min.js"></script>
+  <script src="../js/lib/three/build/three.min.js"></script>
+  <script src="../js/lib/three/js/controls/OrbitControls.js"></script>
+  <script src="../js/lib/three/js/loaders/FBXLoader.js"></script>
+  <script src="../js/lib/three/js/libs/inflate.min.js"></script>
+<!--  <script src="../js/lib/axios.min.js"></script>-->
+  <style>
+    #app{
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<div id="app" ref="app">
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        progress: 0,
+        renderer: null,
+        scene: null,
+        baseGroup: null,
+        camera: null,
+        curve: null,
+        rob: null
+      }
+    },
+    mounted() {
+      this.init()
+      this.animate()
+    },
+    methods: {
+      init() {
+        this.renderer = new THREE.WebGLRenderer()
+        this.renderer .setSize(window.innerWidth, window.innerHeight)
+        this.$refs.app.appendChild(this.renderer.domElement)
+        this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 5000 );
+        this.camera.position.set( 0, 0, 30 );
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        const material = new THREE.LineBasicMaterial( { color: 0xffffff } )
+        let loader = new THREE.FBXLoader()
+        loader.load('http://192.168.1.89:8000/rob.fbx', fbx => {
+          console.log(fbx);
+          this.rob = fbx
+          this.rob.rotation.set(0, Math.PI / 2, Math.PI / 2)
+          this.rob.scale.set(0.0001, 0.0001, 0.0001)
+          this.baseGroup.add( this.rob );
+          const light = new THREE.AmbientLight( 0xffffff, 0.8 ); // soft white light
+          this.scene.add( light );
+          this.scene.add(this.baseGroup)
+          this.curve = this.makeCurve(this.rob, [[-10, 0, 10], [-5, 5, 5], [0, 0, 0], [5, -5, 5], [10, 0, 10]], 0.2, this.baseGroup)
+          this.renderer .render( this.scene, this.camera );
+        })
+        this.scene = new THREE.Scene();
+        this.baseGroup = new THREE.Group()
+        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        const cube = new THREE.Mesh( geometry, material );
+
+      },
+      makeCurve(obj, lines, tension = 0, fatherGroup) {
+        let curves = []
+        if(lines.length > 0) {
+          lines.forEach((item, index) => {
+            console.log(item);
+            curves.push(new THREE.Vector3(item[0]), new THREE.Vector3(item[1]), new THREE.Vector3(item[2]))
+          })
+        }
+        //Create a closed wavey loop
+        // console.log(curves);
+        console.log(curves);
+        // const curve = new THREE.CatmullRomCurve3(curves);
+        const curve = new THREE.CatmullRomCurve3( [
+          new THREE.Vector3( -10, 0, 10 ),
+          new THREE.Vector3( -5, 5, 5 ),
+          new THREE.Vector3( 0, 0, 0 ),
+          new THREE.Vector3( 5, 10, 5 ),
+          new THREE.Vector3( 10, 0, 10 )
+        ] );
+        curve.curveType = "catmullrom";
+        // 设置是否闭环
+        curve.closed = true;
+        // 设置线的张力，0为无弧度折线
+        curve.tension = tension;
+
+        // 为曲线添加材质在场景中显示出来，不显示也不会影响运动轨迹，相当于一个Helper
+        const points = curve.getPoints(50);
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+        // Create the final object to add to the scene
+        const curveObject = new THREE.Line(geometry, material);
+        this.scene.add(curveObject)
+        return curve
+      },
+      // 物体沿线移动方法
+      moveOnCurve(curve, model) {
+        let velocity = 0.001
+        if (curve == null) {
+          console.log("Loading")
+        } else {
+          if (this.progress <= 1 - velocity) {
+            //获取样条曲线指定点坐标
+            const point = curve.getPointAt(this.progress);
+            //获取样条曲线指定点坐标
+            const pointBox = curve.getPointAt(this.progress + velocity);
+            if (point && pointBox) {
+              model.position.set(point.x, point.y, point.z);
+              // model.lookAt(pointBox.x, pointBox.y, pointBox.z);
+              // 因为这个模型加载进来默认面部是正对Z轴负方向的，
+              // 所以直接lookAt会导致出现倒着跑的现象，
+              // 这里用重新设置朝向的方法来解决。
+              // 目标位置点
+              let targetPos = pointBox
+              //目标移动时的朝向偏移
+              let offsetAngle = 0
+              // 以下代码在多段路径时可重复执行
+              let mtx = new THREE.Matrix4()  //创建一个4维矩阵
+              // .lookAt ( eye : Vector3, target : Vector3, up : Vector3 ) : this,构造一个旋转矩阵，从eye 指向 target，由向量 up 定向。
+              //设置朝向
+              mtx.lookAt(model.position, targetPos, model.up)
+              mtx.multiply(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, offsetAngle, 0)))
+              // 计算出需要进行旋转的四元数值
+              let toRot = new THREE.Quaternion().setFromRotationMatrix(mtx)
+              model.quaternion.slerp(toRot, 0.2)
+            }
+            this.progress += velocity;
+          } else {
+            this.progress = 0;
+          }
+        }
+      },
+      animate() {
+        requestAnimationFrame(this.animate);
+        if(this.baseGroup && this.baseGroup.children[0]) {
+          this.moveOnCurve(this.curve, this.baseGroup.children[0]);
+        }
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+  })
+</script>
+</body>
+</html>

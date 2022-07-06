@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../styles/reset.css">
+  <script src="../js/lib/vue.min.js"></script>
+  <script src="../js/lib/three/build/three.min.js"></script>
+  <script src="../js/lib/three/js/controls/OrbitControls.js"></script>
+  <script src="../js/lib/axios.min.js"></script>
+  <style>
+    #app{
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<div id="app" ref="app">
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {}
+    },
+    mounted() {
+      this.init()
+    },
+    methods: {
+      init() {
+        const renderer = new THREE.WebGLRenderer()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        this.$refs.app.appendChild(renderer.domElement)
+        const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 5000 );
+        camera.position.set( 0, 0, 100 );
+        camera.lookAt( new THREE.Vector3(621, -0.5, 0));
+        const material = new THREE.LineBasicMaterial( { color: 0xffffff } )
+        const scene = new THREE.Scene();
+        const baseGroup = new THREE.Group()
+        // const controls = new THREE.OrbitControls( camera, renderer.domElement );
+        axios.get('http://192.168.1.89:8000/RasterT_png1_FeaturesToJSON.json').then(function (response) {
+          let arr = response.data.features
+          for (let i = 0; i < arr.length; i++) {
+            let item = arr[i].geometry.rings
+            let points = []
+            item.forEach(i => {
+              console.log(i);
+              points.push(new THREE.Vector3(i[0], i[1], 0))
+            })
+            let geo = new THREE.BufferGeometry().setFromPoints(points)
+            let line = new THREE.Line(geo, material)
+            baseGroup.add(line)
+          }
+          // const geometry = new THREE.BufferGeometry().setFromPoints( points )
+          // const line = new THREE.Line( geometry, material );
+        }).catch(function (error) {
+          console.log(error);
+        });
+
+        const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        scene.add( light );
+        scene.add(baseGroup)
+        renderer.render( scene, camera );
+      },
+      animate() {
+
+      }
+    }
+  })
+</script>
+</body>
+</html>
