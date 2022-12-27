@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<span id="testCall">测试call</span>
+<script>
+    // let testCall = document.getElementById('testCall')
+    function testCall(x, y) {
+        console.log(this, x, y)
+    }
+    testCall.bind({a: 'this is a'}, 1, 2)()
+    testCall.call({b: 'this is b'}, 3, 4)
+    testCall.apply({c: 'this is c'}, [5, 6])
+</script>
+</body>
+</html>

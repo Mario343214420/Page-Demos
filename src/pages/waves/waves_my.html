@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="cvs" width="600" height="400"></canvas>
+<script>
+    const cvs = document.getElementById('cvs')
+    function WaterRipple(canvas, settings) {
+        function loadImg(path) {
+            const loaded = new Promise((resolve, reject) => {
+                const img = new Image()
+                img.src = path
+                img.onload = () => { resolve(img) }
+            })
+            return loaded
+        }
+        loadImg('./test.png').then((res) => {
+            console.dir(res);
+        })
+        const cvsWidth = canvas.width
+        const cvsHeight = canvas.height
+        const ctx = canvas.getContext('2d')
+        // ctx.fillStyle = settings
+        // const defaults = {
+        //     imagePath: '',
+        //     dropRadius: 3,
+        //     width: cvsWidth,
+        //     height: cvsHeight,
+        //     delay: 1,
+        //     attenuation: 5, // 衰减
+        //     maxAmplitude: 1024, // 最大振幅
+        //     sourceAmplitude: 512, // 震源振幅
+        //     auto: !0
+        // }
+
+        // for(let item in defaults) {
+        //     if (!settings.hasOwnProperty(item)) {
+        //         settings[item] = defaults[item]
+        //     }
+        // }
+
+        // Object.keys(defaults).forEach(item => {
+        //     console.log(item);
+        // })
+
+        const defaults = new Map([
+            ['imagePath', ''],
+            ['dropRadius', 3],
+            ['width', cvsWidth],
+            ['height', cvsHeight],
+            ['delay', 1],
+            ['attenuation', 5],
+            ['maxAmplitude', 1024],
+            ['sourceAmplitude', 512],
+            ['auto', !0],
+        ])
+        if(defaults.has) {
+
+        }
+        const {
+            width,
+            height,
+            dropRadius,
+            delay,
+            attenuation,
+            maxAmplitude,
+            sourceAmplitude
+        } = defaults
+        const half_width = width >> 1,
+            half_height = height >> 1,
+            amplitude_size = width * (height + 2) * 2,
+            old_index = width,
+            new_index = width * (height + 3),
+            map_index = null,  // 振幅数组索引
+            texture = null,   // 原始图像像素信息
+            ripple = null,    // 参数波纹的图像像素信息
+            image = null,  // Image对象
+            autoRepeat = null, // 自动产生波源的重复事件
+            ripple_map = [],
+            last_map = [];
+    }
+
+    // 在指定像素点产生波源
+    function disturb(circleX, circleY) {
+        // 将值向下取整
+        circleX <<= 0;
+        circleY <<= 0;
+
+        var maxDistanceX = circleX + dropRadius,
+            maxDistanceY = circleY + dropRadius;
+        for (var y = circleY - dropRadius; y < maxDistanceY; y++) {
+            for (var x = circleX - dropRadius; x < maxDistanceX; x++) {
+                ripple_map[old_index + y * width + x] += sourceAmplitude;
+            }
+        }
+    }
+
+    WaterRipple(cvs, {
+        imagePath: '',
+        dropRadius: 3,
+        width: 600,
+        height: 400,
+        delay: 1,
+        attenuation: 5, // 衰减
+        maxAmplitude: 1024, // 最大振幅
+        sourceAmplitude: 512, // 震源振幅
+        auto: !0
+    })
+</script>
+</body>
+</html>

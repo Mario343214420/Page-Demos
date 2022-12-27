@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    html, body{
+      padding: 0;
+      margin: 0;
+    }
+    canvas {
+      display: block;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/three/build/three.min.js"></script>
+  <script src="../../js/lib/three/js/controls/OrbitControls.js"></script>
+  <script src="../../js/tween.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="three-render-container">
+    <canvas ref="cvs" @click="onDocumentMouseDown"></canvas>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+      return {
+        scene: null,
+        camera: null,
+        renderer: null,
+        controls: null,
+        group: null,
+        w: 900,
+        h: 600,
+        tween: null,
+        cameraPos: {
+          x: 0,
+          y: 0,
+          z: 0
+        },
+        targetPos: {
+          x: 0,
+          y: 0,
+          z: 0
+        }
+      }
+    },
+    mounted() {
+      this.$nextTick(() =>{
+        this.render()
+        this.animate()
+      })
+    },
+    methods: {
+      render() {
+        const aspect = this.w / this.h
+        // const canvas = document.createElement('canvas')
+        const canvas = this.$refs.cvs
+        canvas.height = this.h
+        canvas.width = this.w
+        this.scene = new THREE.Scene()
+        this.group = new THREE.Group()
+        this.camera = new THREE.PerspectiveCamera(50, aspect, 1, 1000)
+        this.camera.position.set(0, 30, 40)
+        this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false })
+        this.renderer.setSize(this.w, this.h)
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement)
+
+        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        const material1 = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        const material2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+        const material3 = new THREE.MeshBasicMaterial( {color: 0xff0f00} );
+        const cube = new THREE.Mesh( geometry, material1 );
+        const copy1 = cube.clone()
+        const copy2 = cube.clone()
+        copy1.material = material2
+        copy2.material = material3
+        copy1.position.set(10, 10, 10)
+        copy2.position.set(10, 0, 10)
+        this.group.add( cube );
+        this.group.add( copy1 );
+        this.group.add( copy2 );
+        this.scene.add( this.group );
+
+        const _ambient = new THREE.AmbientLight(0xffffff);
+        this.scene.add(_ambient);
+
+        // const axesHelper = new THREE.AxesHelper( 20 );
+        // this.scene.add(axesHelper)
+
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement)
+        this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false })
+        this.renderer.setSize(this.w, this.h)
+
+        this.renderer.render(this.scene, this.camera)
+      },
+      animate() {
+        if (this.tween) {
+          this.tween.update()
+        }
+        if(this.controls) {
+          this.controls.update()
+        }
+        this.renderer.render(this.scene, this.camera)
+        requestAnimationFrame(this.animate)
+      },
+      tweenChange(resPosition, resTarget, cPos1, tPos1, cPos2, tPos2) {
+        let t = new TWEEN.Tween({
+          x1: cPos1.x, // 相机当前位置x
+          y1: cPos1.y, // 相机当前位置y
+          z1: cPos1.z, // 相机当前位置z
+          x2: cPos2.x, // 控制当前的中心点x
+          y2: cPos2.y, // 控制当前的中心点y
+          z2: cPos2.z // 控制当前的中心点z
+        });
+        t.to({
+          x1: tPos1.x, // 新的相机位置x
+          y1: tPos1.y, // 新的相机位置y
+          z1: tPos1.z, // 新的相机位置z
+          x2: tPos2.x, // 新的控制中心点位置x
+          y2: tPos2.y, // 新的控制中心点位置x
+          z2: tPos2.z // 新的控制中心点位置x
+        }, 1000);
+        t.onUpdate(function () {
+          resPosition = {
+            x: this.x1,
+            y: this.y1,
+            z: this.z1
+          }
+          resTarget = {
+            x: this.x2,
+            y: this.y2,
+            z: this.z2
+          }
+        })
+        // t.easing(TWEEN.Easing.Cubic.InOut);
+        // t.start();
+        return t
+      },
+      animateCamera(current1, target1, current2, target2) {
+        console.log(current1, target1, current2, target2);
+        const _self = this
+        this.tween = new TWEEN.Tween({
+          x1: current1.x, // 相机当前位置x
+          y1: current1.y, // 相机当前位置y
+          z1: current1.z, // 相机当前位置z
+          x2: current2.x, // 控制当前的中心点x
+          y2: current2.y, // 控制当前的中心点y
+          z2: current2.z // 控制当前的中心点z
+        });
+        this.tween.to({
+          x1: target1.x, // 新的相机位置x
+          y1: target1.y, // 新的相机位置y
+          z1: target1.z, // 新的相机位置z
+          x2: target2.x, // 新的控制中心点位置x
+          y2: target2.y, // 新的控制中心点位置x
+          z2: target2.z // 新的控制中心点位置x
+        }, 1000);
+        this.tween.onUpdate(function () {
+          console.log(this);
+          _self.cameraPos.x = this.x1;
+          _self.cameraPos.y = this.y1;
+          _self.cameraPos.z = this.z1;
+          _self.targetPos.x = this.x2;
+          _self.targetPos.y = this.y2;
+          _self.targetPos.z = this.z2;
+        })
+        this.tween.easing(TWEEN.Easing.Cubic.InOut);
+        this.tween.start();
+      },
+      onDocumentMouseDown(event) {
+        // 点击屏幕创建一个向量
+        let vector = new THREE.Vector3((event.clientX / this.w) * 2 - 1, -(event.clientY / this.h) * 2 + 1, 0.5);
+        vector = vector.unproject(this.camera); // 将屏幕的坐标转换成三维场景中的坐标
+        let raycaster = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize());
+        let intersects = raycaster.intersectObjects(this.group.children, true);
+        if (intersects.length > 0) {
+          // 随机坐标
+          let x = Math.round((Math.random() * 100));
+          let y = Math.round((Math.random() * 100));
+          let z = 50;
+
+          let x2 = Math.round((Math.random() * 50));
+          let y2 = Math.round((Math.random() * 50));
+          let z2 = 5;
+
+          let pos = new THREE.Vector3(x, y, z);
+          let pos2 = new THREE.Vector3(x2, y2, z2);
+          intersects[0].object.material.color.set("#00aaaa");
+          this.animateCamera(this.camera.position.__ob__.value, pos, this.controls.target.__ob__.value, pos2);
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>

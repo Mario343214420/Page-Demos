@@ -47,17 +47,18 @@
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
         const material = new THREE.LineBasicMaterial( { color: 0xffffff } )
         let loader = new THREE.FBXLoader()
-        loader.load('http://192.168.1.89:8000/rob.fbx', fbx => {
+        loader.load('http://192.168.1.89:8000/xuanzhuanceshi_04.fbx', fbx => {
           console.log(fbx);
+          fbx.up = new THREE.Vector3(1, 0, 0)
+          fbx.rotation.set(Math.PI / 2, 0, 0)
           this.rob = fbx
-          this.rob.rotation.set(0, Math.PI / 2, Math.PI / 2)
           this.rob.scale.set(0.0001, 0.0001, 0.0001)
           this.baseGroup.add( this.rob );
           const light = new THREE.AmbientLight( 0xffffff, 0.8 ); // soft white light
           this.scene.add( light );
           this.scene.add(this.baseGroup)
           this.curve = this.makeCurve(this.rob, [[-10, 0, 10], [-5, 5, 5], [0, 0, 0], [5, -5, 5], [10, 0, 10]], 0.2, this.baseGroup)
-          this.renderer .render( this.scene, this.camera );
+          this.renderer.render( this.scene, this.camera );
         })
         this.scene = new THREE.Scene();
         this.baseGroup = new THREE.Group()
