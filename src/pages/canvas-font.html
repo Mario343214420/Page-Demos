@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="cvs" height="400" width="800"></canvas>
+<script>
+  var canvas = document.getElementById('cvs')
+  var ctx = canvas.getContext('2d')
+
+  var w = 600
+  var h = 600
+  drawText('❤', w / 2, h / 2, 500)
+  var copy = ctx.getImageData(0, 0, w, h)
+  ctx.clearRect(0, 0, w, h)
+  /* ----------------- */
+
+  /* 面向对象的小球 */
+  // 运动次数
+  var times = 100
+  // step1：定义小球类
+  function Ball(xEnd, yEnd) {
+    // 起始位置，随机
+    this.xStart = rand(w)
+    this.yStart = rand(h)
+    // 结束位置，固定
+    this.xEnd = xEnd
+    this.yEnd = yEnd
+    // 小球运动的中心点
+    this.x = this.xStart
+    this.y = this.yStart
+    // 计算运动速度，通过起始点和结束点
+    this.xSpeed = (this.xEnd - this.xStart) / times
+    this.ySpeed = (this.yEnd - this.yStart) / times
+    // 设置半径和颜色
+    this.r = 5
+    // this.color = 'pink'
+    // 设置填充文字和颜色
+    this.text = '❤'
+    // this.color = '#' + parseInt(Math.random()*0xFFFFFF).toString(16)
+    this.color = 'rgb(255,' + rand(255) + ',' + rand(255) + ')'
+    // this.color = 'rgb(' + rand(255) + ',' + rand(255) + ',' + rand(255) + ')'
+  }
+
+  Ball.prototype.show = function () {
+    // 计算每次运动的坐标位置
+    this.x += this.xSpeed
+    this.y += this.ySpeed
+    // drawCircle(this.x,this.y,this.r,this.color)
+    love(this.text, this.x, this.y, this.color)
+  }
+
+
+  /* ---------------- */
+  var leap = 10 // 间隔
+  var ballArr = [] // 小球数组
+  // 获取有效像素带点
+  for (var y = 0; y < h; y += leap) {
+    for (var x = 0; x < w; x += leap) {
+      var index = x + y * w
+      var a = copy.data[index * 4 + 3]
+      // step4：画圆
+      if (a > 128) {
+        //    调用小球类画圆
+        var ball = new Ball(x, y)
+        //存入数组
+        ballArr.push(ball)
+        // 显示小球
+        ball.show()
+      }
+    }
+  }
+  // 产生随机数
+  function rand(num) {
+    return parseInt(Math.random() * num)
+  }
+
+  //    小球动起来
+  var count = 1
+  var timer = setInterval(function () {
+    count++
+    // 清画布
+    ctx.clearRect(0, 0, w, h)
+    for (var i = 0; i < ballArr.length; i++) {
+      ballArr[i].show()
+
+    }
+    // 判断何时清除定时器
+    if (count === times) {
+      clearInterval(timer)
+    }
+  }, 10)
+
+
+  // 写字方法
+  function drawText(word, x, y, w) {
+    ctx.font = '300px 微软雅黑'
+    ctx.textAlign = 'center' // 水平居中
+    ctx.textBaseline = 'middle' //垂直居中
+    ctx.fillText(word, x, y, w)
+  }
+
+  // 画圆
+  function drawCircle(x, y, r, color) {
+    ctx.beginPath()
+    ctx.arc(x, y, r, 0, Math.PI * 2)
+    ctx.fillStyle = color || '#000'
+    ctx.fill()
+    ctx.closePath()
+  }
+
+  // 画填充文字
+  function love(text, x, y, color) {
+    ctx.font = '12px 微软雅黑'
+    ctx.fillStyle = color
+    ctx.textAlign = 'center' // 水平居中
+    ctx.textBaseline = 'middle' //垂直居中
+    ctx.fillText(text, x, y)
+  }
+</script>
+</body>
+</html>
