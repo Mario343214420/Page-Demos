@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Super Mario Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            background-color: #70c5ce;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="640" height="480"></canvas>
+
+<script>
+    // 获取画布和上下文
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // 定义玛丽的初始位置和速度
+    let marioX = 50;
+    let marioY = 380;
+    let marioVelocityX = 0;
+
+    // 绘制玛丽
+    function drawMario() {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(marioX, marioY, 40, 40);
+    }
+
+    // 更新玛丽的位置
+    function updateMario() {
+        // 更新玛丽的水平速度
+        marioX += marioVelocityX;
+
+        // 玛丽在画布左侧时，移到画布右侧
+        if (marioX < 0) {
+            marioX = canvas.width;
+        }
+
+        // 玛丽在画布右侧时，移到画布左侧
+        if (marioX > canvas.width) {
+            marioX = 0;
+        }
+    }
+
+    // 游戏循环
+    function gameLoop() {
+        // 清空画布
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 更新玛丽的位置
+        updateMario();
+
+        // 绘制玛丽
+        drawMario();
+
+        // 循环调用游戏循环函数
+        requestAnimationFrame(gameLoop);
+    }
+
+    // 监听键盘按下事件
+    document.addEventListener('keydown', (event) => {
+        // 按下左箭头键，玛丽向左移动
+        if (event.keyCode === 37) {
+            marioVelocityX = -3;
+        }
+        // 按下右箭头键，玛丽向右移动
+        else if (event.keyCode === 39) {
+            marioVelocityX = 3;
+        }
+    });
+
+    // 监听键盘松开事件
+    document.addEventListener('keyup', (event) => {
+        // 松开左箭头键或右箭头键，停止玛丽的移动
+        if (event.keyCode === 37 || event.keyCode === 39) {
+            marioVelocityX = 0;
+        }
+    });
+
+    // 启动游戏循环
+    gameLoop();
+</script>
+</body>
+</html>

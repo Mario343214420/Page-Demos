@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, html, div {
+            padding: 0;
+            margin: 0;
+        }
+        #app{
+
+        }
+        canvas {
+            display: block;
+        }
+        .control-group {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+    <script src="../../js/lib/vue.min.js"></script>
+    <script src="../../js/lib/three.min.js"></script>
+    <script src="../../js/lib/three/js/loaders/FBXLoader.js"></script>
+    <script src="../../js/lib/three/js/libs/inflate.min.js"></script>
+    <script src="../../js/lib/three/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="control-group">
+        <span>url:</span><input type="text" v-model="url">
+        <span>scale:</span><input type="text" v-model="scale"><button @click="addModel">添加</button>
+    </div>
+    <canvas id="cvs"></canvas>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                camera: null,
+                scene: null,
+                renderer: null,
+                group: null,
+                controls: null,
+                scale: 1,
+                url: ''
+            }
+        },
+        mounted() {
+            this.render()
+        },
+        methods: {
+            initCvsSize() {
+                let w = window.innerWidth
+                let h = window.innerHeight
+                let cvs = document.getElementById('cvs')
+                cvs.width = w
+                cvs.height = h
+                return cvs
+            },
+            addModel() {
+                const fbxLoader = new THREE.FBXLoader()
+                fbxLoader.load(this.url, fbx => {
+                    console.log(fbx);
+                    fbx.scale.set(this.scale,this.scale,this.scale)
+                    this.scene.add(fbx)
+                })
+            },
+            render() {
+                let cvs = this.initCvsSize()
+                this.camera = new THREE.PerspectiveCamera(45, cvs.width / cvs.height, 1, 5000)
+                this.camera.position.z = 1000;
+                this.camera.position.y = 1000;
+                this.scene = new THREE.Scene()
+                this.renderer = new THREE.WebGLRenderer({canvas: cvs,antialias: true})
+                this.renderer.setSize(cvs.width, cvs.height)
+                this.controls = new THREE.OrbitControls(this.camera, cvs)
+                this.controls.addEventListener('change', () => {
+                    this.renderer.render(this.scene, this.camera)
+                })
+
+                const _ambient = new THREE.AmbientLight(0xffffff);
+                this.scene.add(_ambient);
+                const axesHelper = new THREE.AxesHelper( 200 );
+                this.scene.add( axesHelper );
+
+                animate = () => {
+                    this.renderer.render(this.scene, this.camera)
+                    requestAnimationFrame(animate)
+                    // update()
+                }
+                animate()
+            }
+        }
+    })
+</script>
+</body>
+</html>

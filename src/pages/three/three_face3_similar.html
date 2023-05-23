@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, html, div {
+            padding: 0;
+            margin: 0;
+        }
+        #app{
+
+        }
+        canvas {
+            display: block;
+        }
+        .control-group {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+    <script src="../../js/lib/vue.min.js"></script>
+    <script src="../../js/lib/three.min.js"></script>
+    <script src="../../js/lib/three/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+<div id="app">
+    <canvas id="cvs"></canvas>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                camera: null,
+                scene: null,
+                renderer: null,
+                group: null,
+                controls: null,
+            }
+        },
+        mounted() {
+            this.render()
+        },
+        methods: {
+            initCvsSize() {
+                let w = window.innerWidth
+                let h = window.innerHeight
+                let cvs = document.getElementById('cvs')
+                cvs.width = w
+                cvs.height = h
+                return cvs
+            },
+            render() {
+                let cvs = this.initCvsSize()
+                this.camera = new THREE.PerspectiveCamera(45, cvs.width / cvs.height, 1, 5000)
+                this.camera.position.z = 10;
+                this.camera.position.y = 10;
+                this.scene = new THREE.Scene()
+                this.renderer = new THREE.WebGLRenderer({canvas: cvs,antialias: true})
+                this.renderer.setSize(cvs.width, cvs.height)
+                this.controls = new THREE.OrbitControls(this.camera, cvs)
+                this.controls.addEventListener('change', () => {
+                    this.renderer.render(this.scene, this.camera)
+                })
+
+                const _ambient = new THREE.AmbientLight(0xffffff);
+                this.scene.add(_ambient);
+                const axesHelper = new THREE.AxesHelper( 200 );
+                this.scene.add( axesHelper );
+
+                // 创建原始面上的点(红)
+                var originalPoints = [
+                    new THREE.Vector3(0, 0, 0),
+                    new THREE.Vector3(1, 0, 0),
+                    new THREE.Vector3(0, 0, 1)
+                ];
+
+                // 创建目标面上的点（绿）
+                var targetPoints = [
+                    new THREE.Vector3(0, 0, 0),
+                    new THREE.Vector3(1, 0, 0),
+                    new THREE.Vector3(0, 1, 0)
+                ];
+
+                // 计算原始面和目标面的变换矩阵
+                var originalPlane = new THREE.Plane().setFromCoplanarPoints(originalPoints[0], originalPoints[1], originalPoints[2]);
+                var targetPlane = new THREE.Plane().setFromCoplanarPoints(targetPoints[0], targetPoints[1], targetPoints[2]);
+                var rotationMatrix = new THREE.Matrix4().makeRotationFromQuaternion(
+                    new THREE.Quaternion().setFromUnitVectors(originalPlane.normal, targetPlane.normal)
+                );
+
+                // 创建表示原始面上的点的几何体
+                var originalGeometry = new THREE.Geometry();
+                originalGeometry.vertices = originalPoints;
+                originalGeometry.faces.push(new THREE.Face3(0, 1, 2));
+                originalGeometry.computeFaceNormals();
+                var originalMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+                var originalMesh = new THREE.Mesh(originalGeometry, originalMaterial);
+                this.scene.add(originalMesh);
+
+                // 创建表示目标面上的点的几何体
+                var targetGeometry = new THREE.Geometry();
+                targetGeometry.vertices = targetPoints;
+                targetGeometry.faces.push(new THREE.Face3(0, 1, 2));
+                targetGeometry.computeFaceNormals();
+                var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+                var targetMesh = new THREE.Mesh(targetGeometry, targetMaterial);
+                this.scene.add(targetMesh);
+
+                // 将原始面上的点应用旋转变换
+                var rotatedPoints = originalPoints.map(function(point) {
+                    return point.clone().applyMatrix4(rotationMatrix);
+                });
+
+                // 创建表示旋转后的面上的点的几何体
+                var rotatedGeometry = new THREE.Geometry();
+                rotatedGeometry.vertices = rotatedPoints;
+                rotatedGeometry.faces.push(new THREE.Face3(0, 1, 2));
+                rotatedGeometry.computeFaceNormals();
+                var rotatedMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide });
+                var rotatedMesh = new THREE.Mesh(rotatedGeometry, rotatedMaterial);
+                this.scene.add(rotatedMesh);
+
+                animate = () => {
+                    this.renderer.render(this.scene, this.camera)
+                    requestAnimationFrame(animate)
+                    // update()
+                }
+                animate()
+            }
+        }
+    })
+</script>
+</body>
+</html>

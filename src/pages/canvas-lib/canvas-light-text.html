@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    p {
+      font-size: 25vmin;
+      --hue: 0;
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke-width: 4px;
+      -webkit-text-stroke-color: hsl(var(--hue), 50%, 95%);
+      text-shadow:
+              0 0 15px hsl(var(--hue), 60%, 90%, .80),
+              0 0 20px hsl(var(--hue), 70%, 80%, .85),
+              0 0 40px hsl(var(--hue), 80%, 70%, .90),
+              0 0 60px hsl(var(--hue), 90%, 60%, .95),
+              0 0 80px hsl(var(--hue), 100%, 50%, 1)
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<p>MARIO</p>
+<script src="https://cdn.bootcdn.net/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+<script>
+
+  const colors = gsap.to('p', {
+    paused: true,
+    duration: 20,
+    repeat: -1,
+    '--hue': 360,
+  })
+
+  const doRandom = () => {
+    gsap.timeline()
+            .to('p', {
+              duration: 0.1,
+              opacity: function(){ return gsap.utils.random(.90, .95) },
+              delay: function(){ return gsap.utils.random(.1, 2) },
+            }).to('p', {
+      duration: 0.1,
+      opacity: 1,
+      onComplete: function(){
+        doRandom()
+      }
+    })
+  }
+
+  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (! mediaQuery || ! mediaQuery.matches) {
+    colors.play();
+    doRandom();
+  }
+</script>
+</body>
+</html>

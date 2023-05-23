@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../../js/lib/vue.min.js"></script>
+  <script src="../../js/lib/three.min.js"></script>
+  <script src="../../js/lib/three/js/controls/OrbitControls.js"></script>
+  <style>
+    .view{
+        width: 1600px;
+        height: 900px;
+    }
+    #app {
+      display: flex;
+    }
+    .handler {
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="view" ref="main"></div>
+  <div class="handler">
+    <span></span>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+    	return {
+		    camera: null,
+		    scene: null,
+		    renderer: null,
+		    group: null,
+            controls: null,
+            dom: null
+        }
+    },
+    mounted() {
+    	this.init()
+    },
+    methods: {
+      renderLine(linePoints, color) {
+        const material = new THREE.LineBasicMaterial({
+          color
+        });
+        const points = [];
+        linePoints.forEach(item => {
+          if(linePoints.length > 0) {
+            points.push(new THREE.Vector3(item.x,item.y,item.z))
+          }
+        })
+        console.log(points);
+        const geometry = new THREE.BufferGeometry().setFromPoints( points );
+        return new THREE.Line( geometry, material );
+      },
+    	init() {
+          let lineArr1 = [
+            {x: 0, y: 0, z: 0},
+            {x:1314.4157825721772,y:-1.8517483148752945,z:1600.798560870681},
+            {x: 2365.2010289980035,y: -8.389394682219518,z: 3303.1886439323434}
+          ]
+          let lineArr2 = [
+            {x: 0, y: 0, z: 0},
+            {x: 1314.4484258815776, y: -2.5539336538624866, z: 1601.0228444373597},
+            {x: 2365.2017967979937, y: -8.581342213340122, z: 3303.1489130365226}
+          ]
+          let lineArr3 = [
+            {x: 0, y: 0, z: 0},
+            {x: 0, y: 100, z: 0},
+            {x: 0, y: 100, z: 100},
+          ]
+          const container = this.$refs.main
+          // const size = 600;
+          // const divisions = 600;
+          // const gridHelper = new THREE.GridHelper( size, divisions );
+          const axesHelper = new THREE.AxesHelper( 200 );
+          this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 5000)
+          this.scene = new THREE.Scene()
+          this.camera.position.z = 3000;
+          this.camera.position.y = 3000;
+          this.camera.lookAt(new THREE.Vector3(0,-1,-1))
+          this.group = new THREE.Group()
+          this.scene.add(this.group)
+          // this.scene.add(gridHelper)
+          this.scene.add( axesHelper );
+          this.renderer = new THREE.WebGLRenderer({antialias: true})
+          this.renderer.setSize(container.clientWidth, container.clientHeight)
+          this.controls = new THREE.OrbitControls(this.camera, container)
+          this.controls.addEventListener('change', () => {
+            this.renderer.render(this.scene, this.camera)
+          })
+          container.appendChild(this.renderer.domElement)
+          let line1 = this.renderLine(lineArr1, 0x0000ff)
+          let line2 = this.renderLine(lineArr2, 0x00ff00)
+          let qua = new THREE.Quaternion().setFromUnitVectors(
+                  new THREE.Vector3(1314.4157825721772,-1.8517483148752945,1600.798560870681).normalize(),
+                  new THREE.Vector3(1314.4484258815776,-2.5539336538624866,1601.0228444373597).normalize()
+          )
+          console.log('qua', qua);
+          line1.applyQuaternion(qua)
+          this.group.add(line1);
+          this.group.add(line2);
+
+          // 创建两个起始和目标 Vector3 对象
+          const startVector = new THREE.Vector3(1, 0, 0); // 起始向量
+          const targetVector = new THREE.Vector3(0, 1, 0); // 目标向量
+          // 创建 Quaternion 对象来表示从起始向量到目标向量的旋转
+          const quaternion = new THREE.Quaternion().setFromUnitVectors(startVector.normalize(), targetVector.normalize());
+          // 创建一个 Vector3 对象，表示需要进行旋转的向量
+          const vectorToRotate = new THREE.Vector3(0, 0, 1); // 需要旋转的向量
+          // 将向量应用旋转
+          vectorToRotate.applyQuaternion(quaternion);
+          console.log(vectorToRotate); // 输出旋转后的向量
+
+          animate = () => {
+            this.renderer.render(this.scene, this.camera)
+            requestAnimationFrame(animate)
+              // update()
+          }
+          animate()
+      }
+    }
+  })
+</script>
+</body>
+</html>

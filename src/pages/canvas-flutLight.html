@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="cvs" width="900" height="500" style="border: 1px solid #fff;"></canvas>
+<script>
+  function drawCanvas4() {
+    let c = document.getElementById("cvs");
+    let context = c.getContext("2d");
+
+    let width = 900;//画布宽度
+    let height = 500;//画布高度
+
+    // let fPoints = [{x: 452, y: 410,r:1.5}, {x: 452, y: 410,r:1.5},{x:368,y:0,r:2},{x:536,y:0,r:2}];//初始点坐标
+    let fPoints = [{x: 452, y: 410,r:1.5}, {x: 452, y: 410,r:1.5},{x:368,y:0,r:2},{x:536,y:0,r:2}];//初始点坐标
+
+    function drawCircle() {
+      for (let i = 0; i < fPoints.length; i++) {
+        context.lineWidth = 0; //线条宽度-空心圆
+        // context.strokeStyle = 'rgba(2, 179, 253,0.02)'; //颜色
+        context.shadowBlur = 0;// 设置或返回用于阴影的颜色
+        context.shadowColor = 'rgba(2, 179, 253,1)';     // 设置或返回用于阴影的模糊级别
+        context.fillStyle = 'rgba(2, 179, 253,1)';//填充颜色-实心圆
+        context.fill();//画实心圆
+        context.beginPath();
+        context.arc(fPoints[i].x, fPoints[i].y, fPoints[i].r, 0, Math.PI * 2);
+        context.closePath();
+      }
+
+      if (fPoints[0].y > 265) {
+        fPoints[0].x -= 2;
+        fPoints[0].y -= 1.15;
+        fPoints[1].x += 2;
+        fPoints[1].y -= 1.15;
+      } else if (fPoints[0].y > 0) {
+        fPoints[0].y -= 2.5;
+        fPoints[1].y -= 2.5;
+      } else if (fPoints[0].y < 0) {
+        fPoints = [{x: 452, y: 410,r:1.5}, {x: 452, y: 410,r:1.5},{x:368,y:0,r:2},{x:536,y:0,r:2}];//初始点坐标
+      }
+
+      if(fPoints[2].y < 264){
+        fPoints[2].y += 2;
+        fPoints[3].y += 2;
+      }else if(fPoints[2].y<310){
+        fPoints[2].x += 2;
+        fPoints[2].y += 1.15;
+        fPoints[3].x -= 2;
+        fPoints[3].y += 1.15;
+      }
+    }
+
+    function render() {
+      //默认值为source-over
+      let prev = context.globalCompositeOperation;
+      //只显示canvas上原图像的重叠部分
+      context.globalCompositeOperation = 'destination-in';
+      //设置主canvas的绘制透明度
+      context.globalAlpha = 0.9;
+      //这一步目的是将canvas上的图像变的透明
+      context.fillRect(0, 0, width, height);
+      //在原图像上重叠新图像
+      context.globalCompositeOperation = prev;
+      //在主canvas上画新圆
+      drawCircle();
+      if (width !== 0) {
+        //在动画没有结束前，递归渲染
+        window.requestAnimationFrame(render);
+      }
+    }
+    window.requestAnimationFrame(render);
+  }
+  drawCanvas4()
+</script>
+</body>
+</html>
